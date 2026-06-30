@@ -135,7 +135,7 @@
             border: 1px solid rgba(255, 215, 0, 0.2);
         }
 
-        /* ============ ЭФФЕКТЫ КЛИКА ============ */
+        /* ============ ЭФФЕКТЫ ============ */
         .click-effect {
             position: fixed;
             pointer-events: none;
@@ -153,7 +153,6 @@
                 transform: translate(var(--tx), var(--ty)) scale(1.5);
             }
         }
-
         .sparkle {
             position: fixed;
             pointer-events: none;
@@ -292,12 +291,7 @@
             color: #c8d6e5;
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .btn-success {
-            background: linear-gradient(135deg, #00b894, #00a381);
-            color: white;
-            box-shadow: 0 4px 20px rgba(0, 184, 148, 0.2);
-        }
-        .btn-quiz {
+        .btn-word {
             background: linear-gradient(135deg, #6c5ce7, #a29bfe);
             color: white;
             box-shadow: 0 4px 20px rgba(108, 92, 231, 0.3);
@@ -306,7 +300,7 @@
             grid-column: 1 / -1;
         }
 
-        /* ============ МОДАЛЬНОЕ ОКНО МАГАЗИНА ============ */
+        /* ============ МАГАЗИН ============ */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -375,7 +369,6 @@
             transform: rotate(90deg);
         }
 
-        /* ============ СКИНЫ В МАГАЗИНЕ ============ */
         .skin-item {
             display: flex;
             justify-content: space-between;
@@ -451,8 +444,8 @@
             font-weight: 700;
         }
 
-        /* ============ ВИКТОРИНА ============ */
-        .quiz-overlay {
+        /* ============ УГАДАЙ СЛОВО ============ */
+        .word-overlay {
             display: none;
             position: fixed;
             top: 0;
@@ -467,10 +460,10 @@
             padding: 20px;
             animation: fadeIn 0.4s ease;
         }
-        .quiz-overlay.active {
+        .word-overlay.active {
             display: flex;
         }
-        .quiz-box {
+        .word-box {
             background: linear-gradient(145deg, #1a1a3e, #0f0f2a);
             border-radius: 30px;
             padding: 30px 24px;
@@ -480,87 +473,102 @@
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
             animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .quiz-box .quiz-title {
+        .word-box .word-title {
             color: #ffd700;
             font-size: 22px;
             text-align: center;
             margin-bottom: 8px;
         }
-        .quiz-box .quiz-question {
-            color: #c8d6e5;
-            font-size: 18px;
+        .word-box .word-hint {
+            color: #8395a7;
+            font-size: 14px;
             text-align: center;
-            margin: 16px 0;
-            line-height: 1.5;
-            min-height: 60px;
+            margin-bottom: 16px;
         }
-        .quiz-box .quiz-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+        .word-box .word-display {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 12px;
+            color: #c8d6e5;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 16px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            font-family: 'Courier New', monospace;
         }
-        .quiz-box .quiz-options button {
+        .word-box .word-input {
+            width: 100%;
             padding: 14px;
             border: 2px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(0, 0, 0, 0.3);
             color: #c8d6e5;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .quiz-box .quiz-options button:hover {
-            background: rgba(255, 215, 0, 0.1);
-            border-color: rgba(255, 215, 0, 0.3);
-        }
-        .quiz-box .quiz-options button:active {
-            transform: scale(0.95);
-        }
-        .quiz-box .quiz-options button.correct {
-            background: rgba(0, 184, 148, 0.3);
-            border-color: #00b894;
-            color: #00b894;
-        }
-        .quiz-box .quiz-options button.wrong {
-            background: rgba(255, 107, 107, 0.3);
-            border-color: #ff6b6b;
-            color: #ff6b6b;
-        }
-        .quiz-box .quiz-options button:disabled {
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-        .quiz-box .quiz-result {
-            text-align: center;
-            margin-top: 16px;
             font-size: 18px;
+            text-align: center;
+            outline: none;
+            transition: 0.3s;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+        .word-box .word-input:focus {
+            border-color: #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.1);
+        }
+        .word-box .word-attempts {
+            text-align: center;
+            color: #8395a7;
+            font-size: 14px;
+            margin: 12px 0;
+        }
+        .word-box .word-attempts span {
+            color: #ffd700;
             font-weight: 700;
         }
-        .quiz-box .quiz-result .reward {
+        .word-box .word-result {
+            text-align: center;
+            margin: 12px 0;
+            font-size: 18px;
+            font-weight: 700;
+            min-height: 40px;
+        }
+        .word-box .word-result .reward {
             color: #ffd700;
         }
-        .quiz-box .quiz-close-btn {
-            margin-top: 16px;
-            padding: 12px;
-            width: 100%;
+        .word-box .word-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .word-box .word-buttons button {
+            padding: 14px;
             border: none;
             border-radius: 16px;
-            background: linear-gradient(135deg, #ffd700, #f0a500);
-            color: #0a0a12;
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
             transition: 0.3s;
         }
-        .quiz-box .quiz-close-btn:active {
+        .word-box .word-buttons button:active {
             transform: scale(0.95);
         }
-        .quiz-box .quiz-progress {
+        .word-box .word-buttons .guess-btn {
+            background: linear-gradient(135deg, #ffd700, #f0a500);
+            color: #0a0a12;
+        }
+        .word-box .word-buttons .close-btn {
+            background: rgba(255, 255, 255, 0.06);
+            color: #c8d6e5;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .word-box .word-status {
             text-align: center;
             color: #8395a7;
             font-size: 13px;
-            margin-bottom: 8px;
+            margin-top: 10px;
         }
 
         /* ============ ТОСТЫ ============ */
@@ -599,7 +607,7 @@
             background: rgba(255, 215, 0, 0.15);
             font-size: 20px;
         }
-        .toast.quiz-toast {
+        .toast.word-toast {
             border-color: rgba(108, 92, 231, 0.5);
             background: rgba(108, 92, 231, 0.15);
         }
@@ -642,7 +650,7 @@
             }
         }
 
-        /* ============ СКИНЫ (ВИЗУАЛ) ============ */
+        /* ============ СКИНЫ ============ */
         .skin-gold .click-area {
             border-color: #ffd700;
             box-shadow: 0 0 80px rgba(255, 215, 0, 0.2), inset 0 -10px 30px rgba(0, 0, 0, 0.5);
@@ -695,8 +703,9 @@
                 font-size: 12px;
                 padding: 12px;
             }
-            .quiz-box .quiz-options {
-                grid-template-columns: 1fr;
+            .word-box .word-display {
+                font-size: 24px;
+                letter-spacing: 8px;
             }
         }
         @media (min-width: 500px) {
@@ -739,7 +748,7 @@
         <div class="action-buttons">
             <button class="btn btn-primary" id="boostBtn">⚡ +50%</button>
             <button class="btn btn-secondary" id="shopBtn">🛒 Магазин</button>
-            <button class="btn btn-quiz btn-block" id="quizBtn">📜 Викторина</button>
+            <button class="btn btn-word btn-block" id="wordBtn">🔤 Угадай слово</button>
             <button class="btn btn-secondary btn-block" id="statsBtn">📊 Статистика</button>
         </div>
     </div>
@@ -754,15 +763,20 @@
         </div>
     </div>
 
-    <!-- ============ ВИКТОРИНА ============ -->
-    <div class="quiz-overlay" id="quizOverlay">
-        <div class="quiz-box">
-            <div class="quiz-progress" id="quizProgress">Вопрос 1 из 10</div>
-            <div class="quiz-title">📜 Средневековая викторина</div>
-            <div class="quiz-question" id="quizQuestion">Загрузка вопроса...</div>
-            <div class="quiz-options" id="quizOptions"></div>
-            <div class="quiz-result" id="quizResult"></div>
-            <button class="quiz-close-btn" id="quizCloseBtn">✕ Закрыть</button>
+    <!-- ============ УГАДАЙ СЛОВО ============ -->
+    <div class="word-overlay" id="wordOverlay">
+        <div class="word-box">
+            <div class="word-title">🔤 Угадай слово</div>
+            <div class="word-hint" id="wordHint">Подсказка: загружается...</div>
+            <div class="word-display" id="wordDisplay">_ _ _ _ _</div>
+            <input class="word-input" id="wordInput" maxlength="1" placeholder="Введите букву" autofocus>
+            <div class="word-attempts">Попыток: <span id="wordAttempts">3</span></div>
+            <div class="word-result" id="wordResult"></div>
+            <div class="word-buttons">
+                <button class="guess-btn" id="wordGuessBtn">🔍 Угадать</button>
+                <button class="close-btn" id="wordCloseBtn">✕ Закрыть</button>
+            </div>
+            <div class="word-status" id="wordStatus">Новое слово каждый день!</div>
         </div>
     </div>
 
@@ -774,62 +788,43 @@
         tg.expand();
         tg.ready();
 
-        // ============= ВОПРОСЫ ВИКТОРИНЫ (СРЕДНЕВЕКОВЬЕ) =============
-        const QUIZ_QUESTIONS = [{
-            question: 'В каком году началось строительство собора Парижской Богоматери?',
-            options: ['1163', '1204', '1100', '1250'],
-            correct: 0,
-            fact: '🏰 Строительство длилось почти 200 лет!'
-        }, {
-            question: 'Кто был королём Англии во время подписания Великой хартии вольностей?',
-            options: ['Генрих II', 'Ричард I', 'Иоанн Безземельный', 'Эдуард I'],
-            correct: 2,
-            fact: '📜 Великая хартия вольностей была подписана в 1215 году!'
-        }, {
-            question: 'Какая династия правила во Франции в XII веке?',
-            options: ['Меровинги', 'Каролинги', 'Капетинги', 'Валуа'],
-            correct: 2,
-            fact: '👑 Династия Капетингов правила Францией с 987 по 1328 год!'
-        }, {
-            question: 'Что такое "норманнское завоевание" Англии?',
-            options: ['Вторжение викингов', 'Завоевание Вильгельмом I', 'Римское вторжение', 'Крестовый поход'],
-            correct: 1,
-            fact: '⚔️ Норманнское завоевание произошло в 1066 году!'
-        }, {
-            question: 'Какой город был центром торговли и культуры в Средневековой Европе?',
-            options: ['Лондон', 'Париж', 'Венеция', 'Рим'],
-            correct: 2,
-            fact: '🛶 Венеция была главным торговым узлом между Востоком и Западом!'
-        }, {
-            question: 'Кто основал орден тамплиеров?',
-            options: ['Гуго де Пейн', 'Бернард Клервоский', 'Ричард Львиное Сердце', 'Фридрих Барбаросса'],
-            correct: 0,
-            fact: '⚔️ Тамплиеры основаны в 1119 году для защиты паломников!'
-        }, {
-            question: 'В каком году начался Первый крестовый поход?',
-            options: ['1095', '1096', '1099', '1100'],
-            correct: 0,
-            fact: '✝️ Первый крестовый поход начался в 1095 году по призыву Папы Урбана II!'
-        }, {
-            question: 'Что такое "феодальная раздробленность"?',
-            options: ['Объединение земель', 'Разделение власти между феодалами', 'Война с соседями', 'Строительство замков'],
-            correct: 1,
-            fact: '🏰 Феодальная раздробленность — это период, когда власть принадлежала местным феодалам!'
-        }, {
-            question: 'Какое оружие было самым популярным у рыцарей в XIII веке?',
-            options: ['Меч', 'Лук', 'Копьё', 'Арбалет'],
-            correct: 0,
-            fact: '⚔️ Меч был главным оружием рыцаря и символом его статуса!'
-        }, {
-            question: 'Как назывался налог, который крестьяне платили феодалу?',
-            options: ['Налог', 'Оброк', 'Подать', 'Деньги'],
-            correct: 1,
-            fact: '🌾 Оброк — это часть урожая или денег, которую крестьяне платили феодалу!'
-        }];
+        // ============= СЛОВА ДЛЯ КАЖДОГО ДНЯ =============
+        function getDailyWord() {
+            const words = [
+                { word: 'ЗАМОК', hint: '🏰 Средневековое сооружение для защиты' },
+                { word: 'РЫЦАРЬ', hint: '⚔️ Воин в доспехах на коне' },
+                { word: 'КОРОНА', hint: '👑 Символ власти монарха' },
+                { word: 'МЕЧ', hint: '⚔️ Главное оружие рыцаря' },
+                { word: 'ЩИТ', hint: '🛡️ Защита в бою' },
+                { word: 'ТРОН', hint: '👑 Место короля' },
+                { word: 'ДРАКОН', hint: '🐉 Огнедышащее существо' },
+                { word: 'ГИЛЬДИЯ', hint: '🏛️ Объединение ремесленников или воинов' },
+                { word: 'ПАРЧА', hint: '✨ Дорогая ткань с золотом' },
+                { word: 'КРЕСТ', hint: '✝️ Символ веры' },
+                { word: 'ВЕНОК', hint: '🌿 Головной убор из цветов' },
+                { word: 'САПОГИ', hint: '👢 Обувь рыцаря' },
+                { word: 'ПЛАЩ', hint: '🧥 Накидка с капюшоном' },
+                { word: 'КОЛЧАН', hint: '🏹 Чехол для стрел' },
+                { word: 'ШПАГА', hint: '🗡️ Тонкий меч для фехтования' },
+                { word: 'АРБАЛЕТ', hint: '🏹 Средневековый лук с механизмом' },
+                { word: 'БАРБАКАН', hint: '🏰 Оборонительное сооружение у входа' },
+                { word: 'ПАЖ', hint: '👦 Молодой слуга при рыцаре' },
+                { word: 'ГЕРБ', hint: '🛡️ Символ рода или государства' },
+                { word: 'МАНТИЯ', hint: '👑 Длинная накидка правителя' }
+            ];
 
-        // ============= ДАННЫЕ СКИНОВ С БОНУСАМИ =============
+            // Используем день года для выбора слова
+            const now = new Date();
+            const start = new Date(now.getFullYear(), 0, 0);
+            const diff = now - start;
+            const dayOfYear = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const index = dayOfYear % words.length;
+            return words[index];
+        }
+
+        // ============= ДАННЫЕ СКИНОВ =============
         const SKINS = [
-            { id: 'default', name: '⚔️ Обычный', price: 0, bonus: 0, emoji: '⚔️' },
+            { id: 'default', name: '⚔️ Обычный', price: 0, bonus: 1, emoji: '⚔️' },
             { id: 'gold', name: '👑 Золотой', price: 3000, bonus: 1.2, emoji: '👑', desc: '+20% к заработку' },
             { id: 'fire', name: '🔥 Огненный', price: 8000, bonus: 1.5, emoji: '🔥', desc: '+50% к заработку' },
             { id: 'cosmic', name: '🌌 Космический', price: 15000, bonus: 2.0, emoji: '🌌', desc: '+100% к заработку' },
@@ -850,9 +845,9 @@
             ownedSkins: ['default'],
             lastClickTime: 0,
             comboCount: 0,
-            quizCooldown: 0,
-            quizScore: 0,
-            quizAnswered: 0
+            wordAttempts: 3,
+            wordGuessed: false,
+            wordCooldown: 0
         };
 
         // ============= DOM =============
@@ -874,15 +869,21 @@
         const shopBalance = $('shopBalance');
         const skinList = $('skinList');
         const closeShop = $('closeShop');
-        const quizOverlay = $('quizOverlay');
-        const quizQuestion = $('quizQuestion');
-        const quizOptions = $('quizOptions');
-        const quizResult = $('quizResult');
-        const quizProgress = $('quizProgress');
-        const quizCloseBtn = $('quizCloseBtn');
+        const wordOverlay = $('wordOverlay');
+        const wordHint = $('wordHint');
+        const wordDisplay = $('wordDisplay');
+        const wordInput = $('wordInput');
+        const wordAttempts = $('wordAttempts');
+        const wordResult = $('wordResult');
+        const wordStatus = $('wordStatus');
+        const wordGuessBtn = $('wordGuessBtn');
+        const wordCloseBtn = $('wordCloseBtn');
 
-        let currentQuizIndex = 0;
-        let quizActive = false;
+        let currentWord = '';
+        let currentHint = '';
+        let guessedLetters = [];
+        let attemptsLeft = 3;
+        let gameOver = false;
 
         // ============= ТОСТЫ =============
         function showToast(text, type = 'success', duration = 2000) {
@@ -897,7 +898,7 @@
             }, duration);
         }
 
-        // ============= ЭФФЕКТЫ КЛИКА =============
+        // ============= ЭФФЕКТЫ =============
         function spawnClickEffect(x, y, emoji = '✨') {
             const el = document.createElement('div');
             el.className = 'click-effect';
@@ -925,7 +926,6 @@
             }
         }
 
-        // ============= ПАРТИКЛЫ =============
         function spawnCoins(x, y, count = 3) {
             const emojis = ['🪙', '⭐', '💎'];
             for (let i = 0; i < count; i++) {
@@ -947,6 +947,146 @@
             return skin ? skin.bonus : 1;
         }
 
+        // ============= УГАДАЙ СЛОВО =============
+        function initWordGame() {
+            const now = Date.now();
+            if (now - state.wordCooldown < 86400000) {
+                const left = Math.ceil((86400000 - (now - state.wordCooldown)) / 3600000);
+                showToast(`⏳ Новое слово через ${left} час(ов)`, 'error');
+                return;
+            }
+
+            // Проверяем, отгадано ли сегодня
+            const today = new Date().toDateString();
+            if (localStorage.getItem('word_guessed_' + today) === 'true') {
+                showToast('✅ Ты уже отгадал слово сегодня! Возвращайся завтра', 'error');
+                return;
+            }
+
+            const daily = getDailyWord();
+            currentWord = daily.word;
+            currentHint = daily.hint;
+            guessedLetters = [];
+            attemptsLeft = 3;
+            gameOver = false;
+
+            wordHint.textContent = '💡 ' + currentHint;
+            wordAttempts.textContent = attemptsLeft;
+            wordResult.textContent = '';
+            wordInput.value = '';
+            wordInput.disabled = false;
+            wordGuessBtn.disabled = false;
+            wordStatus.textContent = '🔍 У тебя 3 попытки!';
+            wordOverlay.classList.add('active');
+            updateWordDisplay();
+            setTimeout(() => wordInput.focus(), 300);
+        }
+
+        function updateWordDisplay() {
+            let display = '';
+            for (let char of currentWord) {
+                if (guessedLetters.includes(char)) {
+                    display += char + ' ';
+                } else {
+                    display += '_ ';
+                }
+            }
+            wordDisplay.textContent = display.trim();
+        }
+
+        function guessWord() {
+            if (gameOver) return;
+
+            const input = wordInput.value.toUpperCase().trim();
+            if (!input) {
+                showToast('Введите букву!', 'error');
+                return;
+            }
+
+            if (input.length > 1) {
+                // Проверка целого слова
+                if (input === currentWord) {
+                    winGame();
+                    return;
+                } else {
+                    attemptsLeft--;
+                    wordAttempts.textContent = attemptsLeft;
+                    showToast(`❌ Неправильно! Осталось ${attemptsLeft} попыток`, 'error');
+                    if (attemptsLeft <= 0) {
+                        loseGame();
+                    }
+                    return;
+                }
+            }
+
+            const letter = input[0];
+            if (guessedLetters.includes(letter)) {
+                showToast('Эта буква уже открыта!', 'error');
+                return;
+            }
+
+            if (currentWord.includes(letter)) {
+                guessedLetters.push(letter);
+                updateWordDisplay();
+                showToast(`✅ Буква "${letter}" есть в слове!`, 'success');
+                spawnSparkles(window.innerWidth / 2, window.innerHeight / 2, 8);
+
+                // Проверка победы
+                let allGuessed = true;
+                for (let char of currentWord) {
+                    if (!guessedLetters.includes(char)) {
+                        allGuessed = false;
+                        break;
+                    }
+                }
+                if (allGuessed) {
+                    winGame();
+                }
+            } else {
+                attemptsLeft--;
+                wordAttempts.textContent = attemptsLeft;
+                showToast(`❌ Буквы "${letter}" нет в слове!`, 'error');
+                if (attemptsLeft <= 0) {
+                    loseGame();
+                }
+            }
+
+            wordInput.value = '';
+            setTimeout(() => wordInput.focus(), 100);
+        }
+
+        function winGame() {
+            gameOver = true;
+            wordInput.disabled = true;
+            wordGuessBtn.disabled = true;
+
+            const reward = 1000;
+            state.coins += reward;
+            state.wordCooldown = Date.now();
+            const today = new Date().toDateString();
+            localStorage.setItem('word_guessed_' + today, 'true');
+
+            wordResult.innerHTML = `🎉 <span class="reward">ПОБЕДА!</span> Ты отгадал слово "${currentWord}"!<br>💰 +${reward} монет!`;
+            wordStatus.textContent = '🏆 Отлично! Завтра новое слово!';
+            updateUI();
+
+            spawnCoins(window.innerWidth / 2, window.innerHeight / 2, 20);
+            spawnSparkles(window.innerWidth / 2, window.innerHeight / 2, 30);
+            showToast(`💰 +${reward} монет за угаданное слово!`, 'word-toast', 3000);
+        }
+
+        function loseGame() {
+            gameOver = true;
+            wordInput.disabled = true;
+            wordGuessBtn.disabled = true;
+            wordResult.innerHTML = `😢 Не повезло! Загаданное слово: <strong>${currentWord}</strong>`;
+            wordStatus.textContent = '🔄 Попробуй завтра!';
+        }
+
+        function closeWordGame() {
+            wordOverlay.classList.remove('active');
+        }
+
         // ============= ОБНОВЛЕНИЕ UI =============
         function updateUI() {
             coinsEl.textContent = state.coins;
@@ -965,11 +1105,6 @@
             const skin = SKINS.find(s => s.id === state.skin);
             clickEmoji.textContent = skin ? skin.emoji : '⚔️';
             shopBalance.textContent = state.coins;
-
-            // Анимация если есть бонус
-            if (getSkinBonus() > 1) {
-                clickArea.style.boxShadow = `0 0 80px rgba(255,215,0,${0.1 + (getSkinBonus() - 1) * 0.1}), inset 0 -10px 30px rgba(0,0,0,0.5)`;
-            }
         }
 
         // ============= МАГАЗИН =============
@@ -1074,127 +1209,6 @@
             }));
         }
 
-        // ============= ВИКТОРИНА =============
-        function openQuiz() {
-            const now = Date.now();
-            if (now - state.quizCooldown < 60000) {
-                const left = Math.ceil((60000 - (now - state.quizCooldown)) / 1000);
-                showToast(`⏳ Викторина доступна через ${left} секунд`, 'error');
-                return;
-            }
-
-            currentQuizIndex = 0;
-            state.quizScore = 0;
-            state.quizAnswered = 0;
-            quizActive = true;
-            quizOverlay.classList.add('active');
-            showQuizQuestion();
-        }
-
-        function closeQuiz() {
-            quizOverlay.classList.remove('active');
-            quizActive = false;
-        }
-
-        function showQuizQuestion() {
-            if (currentQuizIndex >= QUIZ_QUESTIONS.length) {
-                // Викторина завершена
-                const reward = state.quizScore * 10;
-                const bonus = state.quizScore >= 8 ? 50 : 0;
-                const totalReward = reward + bonus;
-                state.coins += totalReward;
-                state.quizCooldown = Date.now();
-
-                quizResult.innerHTML = `
-                            🎉 Викторина завершена!
-                            <br>Правильных ответов: ${state.quizScore} из ${QUIZ_QUESTIONS.length}
-                            <br>💰 Награда: +${totalReward} монет
-                            ${bonus > 0 ? '<br>🌟 Бонус за отличный результат! +50 монет' : ''}
-                            <div class="reward">🔥 Ты крут!</div>
-                        `;
-                quizOptions.style.display = 'none';
-                quizQuestion.textContent = '📜 Викторина окончена!';
-                quizProgress.textContent = `Результат: ${state.quizScore}/${QUIZ_QUESTIONS.length}`;
-                quizCloseBtn.textContent = '🏆 Получить награду!';
-                updateUI();
-                showToast(`💰 +${totalReward} монет за викторину!`, 'quiz-toast', 2500);
-                return;
-            }
-
-            const q = QUIZ_QUESTIONS[currentQuizIndex];
-            quizQuestion.textContent = q.question;
-            quizProgress.textContent = `Вопрос ${currentQuizIndex + 1} из ${QUIZ_QUESTIONS.length}`;
-            quizResult.innerHTML = '';
-            quizCloseBtn.textContent = '✕ Закрыть';
-            quizOptions.style.display = 'grid';
-
-            quizOptions.innerHTML = '';
-            q.options.forEach((opt, idx) => {
-                const btn = document.createElement('button');
-                btn.textContent = opt;
-                btn.dataset.idx = idx;
-                btn.addEventListener('click', () => handleQuizAnswer(idx));
-                quizOptions.appendChild(btn);
-            });
-        }
-
-        function handleQuizAnswer(selected) {
-            const q = QUIZ_QUESTIONS[currentQuizIndex];
-            const buttons = quizOptions.querySelectorAll('button');
-
-            // Блокируем кнопки
-            buttons.forEach(b => b.disabled = true);
-
-            // Подсвечиваем правильный/неправильный
-            buttons.forEach((b, idx) => {
-                if (idx === q.correct) b.classList.add('correct');
-                else if (idx === selected && idx !== q.correct) b.classList.add('wrong');
-            });
-
-            state.quizAnswered++;
-
-            if (selected === q.correct) {
-                state.quizScore++;
-                quizResult.innerHTML = `✅ Правильно! ${q.fact}`;
-                spawnSparkles(window.innerWidth / 2, window.innerHeight / 2, 12);
-            } else {
-                quizResult.innerHTML = `❌ Неправильно. Правильный ответ: ${q.options[q.correct]}`;
-            }
-
-            currentQuizIndex++;
-
-            setTimeout(() => {
-                if (currentQuizIndex < QUIZ_QUESTIONS.length) {
-                    showQuizQuestion();
-                } else {
-                    // Завершаем викторину
-                    const reward = state.quizScore * 10;
-                    const bonus = state.quizScore >= 8 ? 50 : 0;
-                    const totalReward = reward + bonus;
-                    state.coins += totalReward;
-                    state.quizCooldown = Date.now();
-
-                    quizResult.innerHTML = `
-                                🎉 Викторина завершена!
-                                <br>Правильных ответов: ${state.quizScore} из ${QUIZ_QUESTIONS.length}
-                                <br>💰 Награда: +${totalReward} монет
-                                ${bonus > 0 ? '<br>🌟 Бонус за отличный результат! +50 монет' : ''}
-                                <div class="reward">🔥 Ты крут!</div>
-                            `;
-                    quizOptions.style.display = 'none';
-                    quizQuestion.textContent = '📜 Викторина окончена!';
-                    quizProgress.textContent = `Результат: ${state.quizScore}/${QUIZ_QUESTIONS.length}`;
-                    quizCloseBtn.textContent = '🏆 Получить награду!';
-                    updateUI();
-                    showToast(`💰 +${totalReward} монет за викторину!`, 'quiz-toast', 2500);
-
-                    if (state.quizScore >= 8) {
-                        spawnCoins(window.innerWidth / 2, window.innerHeight / 2, 15);
-                    }
-                }
-            }, 2500);
-        }
-
         // ============= КЛИК =============
         function handleClick(e) {
             if (state.energy <= 0) {
@@ -1207,9 +1221,9 @@
             else state.comboCount = 1;
             state.lastClickTime = now;
 
-            // Базовый заработок
+            // Базовый заработок — ВСЕГДА даёт монеты!
             let earned = Math.floor(Math.random() * 5) + 1 + Math.floor(state.comboCount / 10);
-            // Применяем бонус от скина
+            // Применяем бонус от скина (для обычного скина бонус = 1)
             const bonus = getSkinBonus();
             earned = Math.floor(earned * bonus);
 
@@ -1232,7 +1246,6 @@
             const cx = rect.left + rect.width / 2;
             const cy = rect.top + rect.height / 2;
 
-            // Эффекты
             const emojis = ['✨', '⭐', '💫', '🌟', '🔥'];
             spawnClickEffect(
                 cx + (Math.random() - 0.5) * 60,
@@ -1246,7 +1259,6 @@
 
             updateUI();
 
-            // Показываем сколько заработали с учётом бонуса
             const bonusText = bonus > 1 ? ` (x${bonus.toFixed(1)})` : '';
             showToast(`+${earned} 🪙${bonusText}`, 'success', 600);
         }
@@ -1306,10 +1318,14 @@
         shopModal.addEventListener('click', (e) => {
             if (e.target === shopModal) closeShopModal();
         });
-        $('quizBtn').addEventListener('click', openQuiz);
-        quizCloseBtn.addEventListener('click', closeQuiz);
-        quizOverlay.addEventListener('click', (e) => {
-            if (e.target === quizOverlay) closeQuiz();
+        $('wordBtn').addEventListener('click', initWordGame);
+        wordGuessBtn.addEventListener('click', guessWord);
+        wordInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') guessWord();
+        });
+        wordCloseBtn.addEventListener('click', closeWordGame);
+        wordOverlay.addEventListener('click', (e) => {
+            if (e.target === wordOverlay) closeWordGame();
         });
         $('statsBtn').addEventListener('click', () => {
             const bonus = getSkinBonus();
