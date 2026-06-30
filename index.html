@@ -35,8 +35,6 @@
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
             position: relative;
         }
-
-        /* ============ ШАПКА ============ */
         .header {
             display: flex;
             justify-content: space-between;
@@ -60,8 +58,6 @@
         .header-item .icon {
             font-size: 16px;
         }
-
-        /* ============ ЭПОХА ============ */
         .era-display {
             display: flex;
             align-items: center;
@@ -88,8 +84,6 @@
             font-size: 10px;
             color: #636e72;
         }
-
-        /* ============ ПРОГРЕСС ============ */
         .level-progress {
             margin: 6px 0 4px;
             background: rgba(0, 0, 0, 0.2);
@@ -129,8 +123,6 @@
             min-width: 35px;
             text-align: right;
         }
-
-        /* ============ БАННЕР БУСТА ============ */
         .boost-banner {
             margin: 4px 0 6px;
             padding: 4px 10px;
@@ -162,8 +154,6 @@
                 transform: scale(1.02);
             }
         }
-
-        /* ============ КЛИК ============ */
         .click-wrapper {
             position: relative;
             margin: 8px auto 6px;
@@ -277,8 +267,6 @@
                 transform: translate(-50%, -50%) scale(1.05);
             }
         }
-
-        /* ============ ЛЕТАЮЩИЕ ЦИФРЫ ============ */
         .fly-number {
             position: fixed;
             pointer-events: none;
@@ -305,8 +293,6 @@
                 transform: translate(var(--tx), var(--ty)) scale(1.3);
             }
         }
-
-        /* ============ СТАТИСТИКА ============ */
         .stats {
             display: flex;
             justify-content: space-between;
@@ -329,8 +315,6 @@
             text-transform: uppercase;
             letter-spacing: 0.3px;
         }
-
-        /* ============ ЭНЕРГИЯ ============ */
         .energy-section {
             margin: 6px 0 8px;
         }
@@ -359,11 +343,9 @@
             transition: width 0.3s ease;
             width: 100%;
         }
-
-        /* ============ НИЖНЕЕ МЕНЮ ============ */
         .bottom-menu {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(6, 1fr);
             gap: 4px;
             margin-top: 6px;
         }
@@ -411,8 +393,19 @@
                 opacity: 1;
             }
         }
-
-        /* ============ МОДАЛКИ ============ */
+        .bottom-menu .btn.exchange {
+            color: #a29bfe;
+            animation: exchangePulse 2s ease-in-out infinite;
+        }
+        @keyframes exchangePulse {
+            0%,
+            100% {
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
         .modal-overlay {
             display: none;
             position: fixed;
@@ -490,8 +483,6 @@
             color: #ffd700;
             font-weight: 700;
         }
-
-        /* ============ ЭЛЕМЕНТЫ СПИСКОВ ============ */
         .item {
             display: flex;
             justify-content: space-between;
@@ -538,13 +529,18 @@
             color: #636e72;
             cursor: not-allowed;
         }
-        .item .action-btn.locked {
-            background: #6c5ce7;
+        .item .action-btn.exchange-btn {
+            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
             color: #fff;
+        }
+        .item .action-btn.exchange-btn:active {
+            transform: scale(0.92);
+        }
+        .item .action-btn.exchange-btn.disabled {
+            background: #2d3436;
+            color: #636e72;
             cursor: not-allowed;
         }
-
-        /* ============ НАБЕГ ============ */
         .raid-result {
             text-align: center;
             padding: 14px;
@@ -569,8 +565,6 @@
         .raid-result .big.lose {
             color: #ff6b6b;
         }
-
-        /* ============ ТОСТЫ ============ */
         .toast-container {
             position: fixed;
             top: 12px;
@@ -609,6 +603,11 @@
         .toast.boost {
             border-color: rgba(255, 107, 107, 0.2);
             background: rgba(255, 107, 107, 0.05);
+            font-size: 14px;
+        }
+        .toast.exchange {
+            border-color: rgba(162, 155, 254, 0.2);
+            background: rgba(162, 155, 254, 0.05);
             font-size: 14px;
         }
         @keyframes toastIn {
@@ -729,6 +728,7 @@
             <button class="btn active" id="shopBtn">🛒<span class="label">Магазин</span></button>
             <button class="btn" id="skillsBtn">⚡<span class="label">Навыки</span></button>
             <button class="btn raid" id="raidBtn">⚔️<span class="label">Набег</span></button>
+            <button class="btn exchange" id="exchangeBtn">🔄<span class="label">Обмен</span></button>
             <button class="btn" id="airdropBtn">💎<span class="label">Airdrop</span></button>
             <button class="btn" id="buildBtn">🏠<span class="label">Город</span></button>
         </div>
@@ -738,6 +738,7 @@
     <div class="modal-overlay" id="shopModal"><div class="modal"><div class="head"><h2>🛒 Магазин</h2><button class="close" id="closeShop">✕</button></div><div class="balance">💰 <span id="shopBalance">150</span></div><div id="shopList"></div></div></div>
     <div class="modal-overlay" id="skillsModal"><div class="modal"><div class="head"><h2>⚡ Навыки</h2><button class="close" id="closeSkills">✕</button></div><div class="balance">💰 <span id="skillsBalance">150</span></div><div id="skillsList"></div></div></div>
     <div class="modal-overlay" id="raidModal"><div class="modal"><div class="head"><h2>⚔️ Набег</h2><button class="close" id="closeRaid">✕</button></div><div id="raidContent"></div></div></div>
+    <div class="modal-overlay" id="exchangeModal"><div class="modal"><div class="head"><h2>🔄 Обмен монет → Stars</h2><button class="close" id="closeExchange">✕</button></div><div class="balance">💰 <span id="exchangeBalance">150</span></div><div id="exchangeList"></div></div></div>
     <div class="modal-overlay" id="airdropModal"><div class="modal"><div class="head"><h2>💎 Airdrop</h2><button class="close" id="closeAirdrop">✕</button></div><div id="airdropContent"></div></div></div>
     <div class="modal-overlay" id="buildModal"><div class="modal"><div class="head"><h2>🏠 Город</h2><button class="close" id="closeBuild">✕</button></div><div class="balance">💰 <span id="buildBalance">150</span></div><div id="buildList"></div></div></div>
 
@@ -775,99 +776,10 @@
             return null;
         }
 
-        // ============= ДАННЫЕ =============
-        const MAX_LEVEL = 100;
-
-        const BOOSTS = [
-            { id: 'x2_1min', name: '⚡ Быстрый клик', price: 500, multiplier: 2, duration: 60, desc: 'x2 монет на 1 минуту' },
-            { id: 'x3_1min', name: '🔥 Огненный тап', price: 1000, multiplier: 3, duration: 60, desc: 'x3 монет на 1 минуту' },
-            { id: 'x5_1min', name: '💎 Легендарный тап', price: 2500, multiplier: 5, duration: 60,
-            desc: 'x5 монет на 1 минуту' },
-            { id: 'x2_5min', name: '⏳ Замедление', price: 3000, multiplier: 2, duration: 300, desc: 'x2 монет на 5 минут' },
-            { id: 'x10_30sec', name: '🚀 Режим бога', price: 10000, multiplier: 10, duration: 30,
-            desc: 'x10 монет на 30 секунд' }
-        ];
-
-        // ============= НАВЫКИ =============
-        // Функция для получения бонуса клика по уровню
-        function getClickBonus(level) {
-            if (level <= 0) return 0;
-            // Уровень 1: +1, 2: +2, 3: +4, 4: +6, 5: +8, 6: +10, 7: +12...
-            const values = [0, 1, 2, 4, 6, 8, 10];
-            if (level <= 6) return values[level];
-            return 10 + (level - 6) * 2;
-        }
-
-        // Функция для получения цены улучшения клика
-        function getClickPrice(level) {
-            if (level <= 0) return 50;
-            // 1: 50, 2: 100, 3: 200, 4: 400, 5: 800, 6: 1600, 7: 3200...
-            if (level === 1) return 100;
-            return 50 * Math.pow(2, level - 1);
-        }
-
-        const SKILLS = [
-            { 
-                id: 'click_upgrade', 
-                name: '⚡ Улучшение клика', 
-                price: 50, 
-                priceMultiplier: 0, 
-                maxLevel: Infinity, 
-                desc: (level) => `+${getClickBonus(level)} монеты за клик (ур.${level})`,
-                isPermanent: false,
-                getPrice: (level) => getClickPrice(level)
-            },
-            { 
-                id: 'income', 
-                name: '💰 Пассивный доход', 
-                price: 50, 
-                priceMultiplier: 1.5, 
-                maxLevel: Infinity, 
-                desc: (level) => `+1 монета в час (ур.${level})`,
-                isPermanent: false 
-            },
-            { 
-                id: 'boost_power', 
-                name: '🔥 Усиление буста', 
-                price: 5000, 
-                priceMultiplier: 0, 
-                maxLevel: 1, 
-                desc: () => 'Сила буста +10%', 
-                isPermanent: true 
-            },
-            { 
-                id: 'energy_saver', 
-                name: '🛡️ Экономия энергии', 
-                price: 10000, 
-                priceMultiplier: 0, 
-                maxLevel: 1, 
-                desc: () => 'Энергия тратится на 20% медленнее', 
-                isPermanent: true 
-            },
-            { 
-                id: 'coin_magnet', 
-                name: '🧲 Магнит монет', 
-                price: 20000, 
-                priceMultiplier: 0, 
-                maxLevel: 1, 
-                desc: () => '+5% к монетам за клик', 
-                isPermanent: true 
-            }
-        ];
-
-        const BUILDINGS = [
-            { id: 'hut', name: 'Хижина', price: 100, minLevel: 1, power: 1, passive: 0 },
-            { id: 'house', name: 'Дом', price: 500, minLevel: 2, power: 3, passive: 5 },
-            { id: 'quarter', name: 'Квартал', price: 2000, minLevel: 4, power: 8, passive: 20 },
-            { id: 'townhall', name: 'Ратуша', price: 5000, minLevel: 6, power: 15, passive: 50 },
-            { id: 'castle', name: 'Замок', price: 15000, minLevel: 10, power: 30, passive: 100 },
-            { id: 'citadel', name: 'Цитадель', price: 50000, minLevel: 15, power: 60, passive: 250 }
-        ];
-
-        // ============= ФУНКЦИИ =============
+        // ============= НОВАЯ ФОРМУЛА ОПЫТА (30+ дней) =============
         function getExpForLevel(lvl) {
             if (lvl <= 1) return 0;
-            return 1000 + (lvl - 2) * 200;
+            return 500 + (lvl - 1) * 500;
         }
 
         function getExpForNext() {
@@ -875,6 +787,144 @@
             return getExpForLevel(state.level + 1);
         }
 
+        // ============= ДАННЫЕ =============
+        const MAX_LEVEL = 100;
+
+        // ============= БУСТЫ =============
+        const BOOSTS = [
+            { id: 'x2_2min', name: '⚡ Быстрый тап', price: 200, multiplier: 2, duration: 120, desc: 'x2 монет на 2 минуты' },
+            { id: 'x3_2min', name: '🔥 Огненный тап', price: 600, multiplier: 3, duration: 120, desc: 'x3 монет на 2 минуты' },
+            { id: 'x5_2min', name: '💎 Легендарный тап', price: 1500, multiplier: 5, duration: 120, desc: 'x5 монет на 2 минуты' },
+            { id: 'x2exp_5min', name: '🧠 Мозговой штурм', price: 400, multiplier: 1, duration: 300, desc: 'x2 опыт на 5 минут', isExp: true },
+            { id: 'x2_10min', name: '⏳ Замедление', price: 1200, multiplier: 2, duration: 600, desc: 'x2 монет на 10 минут' },
+            { id: 'x8_1min', name: '🚀 Режим бога', price: 4000, multiplier: 8, duration: 60, desc: 'x8 монет на 1 минуту' },
+            { id: 'energy_boost', name: '⚡ Энергетик', price: 150, multiplier: 0, duration: 0, desc: '+50 энергии мгновенно', isEnergy: true }
+        ];
+
+        // ============= ТОВАРЫ В МАГАЗИНЕ (НОВЫЕ) =============
+        const SHOP_ITEMS = [
+            { id: 'amulet', name: '💎 Амулет удачи', price: 10000, desc: '+5% к монетам за клик (постоянно)', type: 'permanent' },
+            { id: 'trophy', name: '🏆 Трофей героя', price: 25000, desc: '+10% к опыту (постоянно)', type: 'permanent' },
+            { id: 'crystal', name: '⚡ Кристалл энергии', price: 50000, desc: '+50 к макс. энергии', type: 'permanent' },
+            { id: 'grimoire', name: '🧙 Гримуар', price: 100000, desc: 'x1.5 к пассивному доходу', type: 'permanent' },
+            { id: 'crown', name: '👑 Корона императора', price: 250000, desc: '+20% ко всем бонусам', type: 'permanent' },
+            { id: 'sword', name: '🗡️ Меч легенды', price: 500000, desc: 'x2 к монетам за клик', type: 'permanent' },
+            { id: 'shield', name: '🛡️ Щит бессмертия', price: 1000000, desc: 'Защита от потери монет', type: 'permanent' },
+            { id: 'star', name: '🌟 Звезда судьбы', price: 5000000, desc: 'x3 ко всем бонусам', type: 'permanent' },
+            { id: 'temple', name: '🏛️ Храм бесконечности', price: 10000000, desc: 'x5 к пассивному доходу', type: 'permanent' }
+        ];
+
+        // ============= ОБМЕННИК =============
+        const EXCHANGE_OFFERS = [
+            { level: 50, coins: 100000, stars: 10, cooldown: 7 },
+            { level: 60, coins: 200000, stars: 20, cooldown: 7 },
+            { level: 70, coins: 500000, stars: 50, cooldown: 7 },
+            { level: 80, coins: 1000000, stars: 100, cooldown: 7 },
+            { level: 90, coins: 2000000, stars: 200, cooldown: 7 },
+            { level: 100, coins: 5000000, stars: 500, cooldown: 7 }
+        ];
+
+        // ============= НАВЫКИ =============
+        function getClickBonus(level) {
+            if (level <= 0) return 0;
+            if (level === 1) return 1;
+            if (level === 2) return 2;
+            return Math.pow(2, level - 1);
+        }
+
+        function getClickPrice(level) {
+            if (level <= 0) return 50;
+            if (level === 1) return 50;
+            if (level === 2) return 100;
+            return 50 * Math.pow(2, level - 1);
+        }
+
+        const SKILLS = [
+            {
+                id: 'click_upgrade',
+                name: '⚡ Улучшение клика',
+                price: 50,
+                priceMultiplier: 0,
+                maxLevel: Infinity,
+                desc: (level) => `+${getClickBonus(level)} монеты за клик (ур.${level})`,
+                isPermanent: false,
+                getPrice: (level) => getClickPrice(level)
+            },
+            {
+                id: 'income',
+                name: '💰 Пассивный доход',
+                price: 50,
+                priceMultiplier: 1.5,
+                maxLevel: Infinity,
+                desc: (level) => `+1 монета в час (ур.${level})`,
+                isPermanent: false
+            },
+            {
+                id: 'bookworm',
+                name: '📚 Книжный червь',
+                price: 300,
+                priceMultiplier: 2,
+                maxLevel: 20,
+                desc: (level) => `+10% к опыту (ур.${level})`,
+                isPermanent: false
+            },
+            {
+                id: 'regen',
+                name: '🔄 Регенерация',
+                price: 200,
+                priceMultiplier: 2,
+                maxLevel: 15,
+                desc: (level) => `+1 энергия/мин (ур.${level})`,
+                isPermanent: false
+            },
+            {
+                id: 'luck',
+                name: '💎 Удача',
+                price: 500,
+                priceMultiplier: 2,
+                maxLevel: 20,
+                desc: (level) => `+1% шанс двойной монеты (ур.${level})`,
+                isPermanent: false
+            },
+            {
+                id: 'magic',
+                name: '🧙 Магия',
+                price: 10000,
+                priceMultiplier: 0,
+                maxLevel: 1,
+                desc: () => 'x1.5 ко всем бонусам',
+                isPermanent: true
+            },
+            {
+                id: 'dragon',
+                name: '🐉 Наследие дракона',
+                price: 25000,
+                priceMultiplier: 0,
+                maxLevel: 1,
+                desc: () => 'x2 к пассивному доходу',
+                isPermanent: true
+            },
+            {
+                id: 'timekeeper',
+                name: '🕰️ Хранитель времени',
+                price: 4000,
+                priceMultiplier: 2,
+                maxLevel: 10,
+                desc: (level) => `+5% длительность бустов (ур.${level})`,
+                isPermanent: false
+            }
+        ];
+
+        const BUILDINGS = [
+            { id: 'hut', name: 'Хижина', price: 100, minLevel: 1, passive: 0 },
+            { id: 'house', name: 'Дом', price: 500, minLevel: 2, passive: 5 },
+            { id: 'quarter', name: 'Квартал', price: 2000, minLevel: 4, passive: 20 },
+            { id: 'townhall', name: 'Ратуша', price: 5000, minLevel: 6, passive: 50 },
+            { id: 'castle', name: 'Замок', price: 15000, minLevel: 10, passive: 100 },
+            { id: 'citadel', name: 'Цитадель', price: 50000, minLevel: 15, passive: 250 }
+        ];
+
+        // ============= ФУНКЦИИ =============
         function getPassiveIncome() {
             let inc = 0;
             for (const [id, lvl] of Object.entries(state.buildings)) {
@@ -883,6 +933,8 @@
             }
             const incomeLevel = state.skills.income || 0;
             inc += incomeLevel;
+            const dragon = state.skills.dragon || 0;
+            if (dragon > 0) inc *= 2;
             return inc;
         }
 
@@ -891,21 +943,38 @@
             return getClickBonus(level);
         }
 
-        function getBoostPowerBonus() {
-            return state.skills.boost_power || 0;
+        function getBookwormBonus() {
+            const level = state.skills.bookworm || 0;
+            return level * 0.1;
         }
 
-        function getEnergySaverBonus() {
-            return state.skills.energy_saver || 0;
+        function getRegenBonus() {
+            const level = state.skills.regen || 0;
+            return level;
         }
 
-        function getCoinMagnetBonus() {
-            return state.skills.coin_magnet || 0;
+        function getLuckBonus() {
+            const level = state.skills.luck || 0;
+            return level;
+        }
+
+        function getMagicBonus() {
+            return state.skills.magic || 0;
+        }
+
+        function getTimekeeperBonus() {
+            const level = state.skills.timekeeper || 0;
+            return level * 0.05;
+        }
+
+        function getBoostDurationMultiplier(base) {
+            const bonus = getTimekeeperBonus();
+            return base * (1 + bonus);
         }
 
         function getBoostMultiplier(base) {
-            const bonus = getBoostPowerBonus();
-            return base + (base * bonus * 0.1);
+            const magic = getMagicBonus();
+            return base * (1 + (magic * 0.5));
         }
 
         // ============= СОСТОЯНИЕ =============
@@ -921,7 +990,9 @@
             raidCooldown: 0,
             boostActive: null,
             boostTimer: null,
-            skills: {}
+            skills: {},
+            shopItems: {},
+            lastExchange: {}
         };
 
         // ============= DOM =============
@@ -1002,8 +1073,8 @@
 
             clicksEl.textContent = state.clicks;
             const clickBonus = getClickBonusFromSkill();
-            const magnetBonus = getCoinMagnetBonus();
-            const basePerClick = 1 + clickBonus + (magnetBonus * 0.05);
+            const magic = getMagicBonus();
+            const basePerClick = 1 + clickBonus + (magic * 0.5);
             perClickEl.textContent = basePerClick.toFixed(2);
             todayEl.textContent = state.earnedToday;
 
@@ -1023,10 +1094,10 @@
             if (state.boostActive) {
                 const boost = BOOSTS.find(b => b.id === state.boostActive);
                 if (boost) {
-                    const mult = getBoostMultiplier(boost.multiplier);
-                    boostBanner.textContent = '🔥 ' + boost.name + ' активен! x' + mult.toFixed(1);
+                    const mult = boost.isExp ? 'x2 EXP' : 'x' + boost.multiplier;
+                    boostBanner.textContent = '🔥 ' + boost.name + ' активен! ' + mult;
                     boostBanner.className = 'boost-banner active';
-                    boostMultiplier.textContent = 'x' + mult.toFixed(1);
+                    boostMultiplier.textContent = boost.isExp ? 'x2 🧠' : 'x' + boost.multiplier;
                 }
             } else {
                 boostBanner.textContent = '💪 Купи усиление в магазине!';
@@ -1071,30 +1142,49 @@
             }
 
             let multiplier = 1;
+            let expMultiplier = 1;
+
             if (state.boostActive) {
                 const boost = BOOSTS.find(b => b.id === state.boostActive);
-                if (boost) multiplier = getBoostMultiplier(boost.multiplier);
+                if (boost) {
+                    if (boost.isExp) {
+                        expMultiplier = 2;
+                    } else {
+                        multiplier = getBoostMultiplier(boost.multiplier);
+                    }
+                }
             }
 
             const clickBonus = getClickBonusFromSkill();
-            const magnetBonus = getCoinMagnetBonus();
-            // Базовый клик = 1 + бонус от навыка + бонус от магнита
-            let earned = 1 + clickBonus + (magnetBonus * 0.05);
-            earned = earned * multiplier;
+            const magic = getMagicBonus();
+            const luck = getLuckBonus();
+
+            let earned = (1 + clickBonus + (magic * 0.5)) * multiplier;
+
+            // Удача
+            if (Math.random() * 100 < luck) {
+                earned *= 2;
+            }
 
             state.coins += earned;
             state.energy -= 1;
 
-            // Экономия энергии
-            const saver = getEnergySaverBonus();
-            if (saver > 0 && Math.random() < 0.2) {
+            // Регенерация (шанс восстановить энергию)
+            const regen = getRegenBonus();
+            if (regen > 0 && Math.random() * 100 < regen) {
                 state.energy += 1;
+                if (state.energy > state.maxEnergy) state.energy = state.maxEnergy;
             }
 
             state.clicks += 1;
             state.earnedToday += earned;
+
+            // Опыт
+            let expGain = 1;
+            const bookworm = getBookwormBonus();
+            expGain = Math.floor(expGain * (1 + bookworm) * expMultiplier);
             if (state.level < MAX_LEVEL) {
-                state.exp += 1;
+                state.exp += expGain;
                 checkLevelUp();
             }
 
@@ -1103,7 +1193,7 @@
             const cy = rect.top + rect.height / 2;
 
             const text = earned >= 1 ? '+' + Math.floor(earned) : '+' + earned.toFixed(2);
-            const isBig = multiplier > 1 || earned > 5;
+            const isBig = multiplier > 1 || earned > 10;
             flyNumber(cx + (Math.random() - 0.5) * 80, cy + (Math.random() - 0.5) * 80, text, isBig);
 
             if (multiplier > 1) {
@@ -1169,18 +1259,79 @@
                 btn.addEventListener('click', () => {
                     if (isActive) return;
                     if (state.coins < boost.price) { toast('⛔ Нет монет', 'error', 800); return; }
+                    if (boost.isEnergy) {
+                        state.coins -= boost.price;
+                        state.energy = Math.min(state.maxEnergy, state.energy + 50);
+                        updateUI();
+                        openShop();
+                        toast('⚡ +50 энергии!', 'success', 1000);
+                        return;
+                    }
                     state.coins -= boost.price;
                     state.boostActive = boost.id;
                     if (state.boostTimer) clearTimeout(state.boostTimer);
+                    const duration = getBoostDurationMultiplier(boost.duration);
                     state.boostTimer = setTimeout(() => {
                         state.boostActive = null;
                         state.boostTimer = null;
                         updateUI();
                         toast('⏳ Усиление закончилось!', 'error', 2000);
-                    }, boost.duration * 1000);
+                    }, duration * 1000);
                     updateUI();
                     openShop();
                     toast('🔥 ' + boost.name + ' активирован!', 'boost', 2000);
+                });
+                list.appendChild(div);
+            });
+
+            // Постоянные товары
+            SHOP_ITEMS.forEach(item => {
+                const owned = state.shopItems[item.id] || 0;
+                const canBuy = state.coins >= item.price && !owned;
+
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.innerHTML = `
+                    <div class="info">
+                        <div class="name">${item.name}</div>
+                        <div class="desc">${item.desc}</div>
+                        <div class="desc">💰 ${item.price} монет</div>
+                    </div>
+                    <button class="action-btn ${owned ? 'owned' : (!canBuy ? 'disabled' : '')}" ${owned || !canBuy ? 'disabled' : ''}>
+                        ${owned ? '✅ Куплен' : 'Купить'}
+                    </button>
+                `;
+                const btn = div.querySelector('.action-btn');
+                btn.addEventListener('click', () => {
+                    if (owned) return;
+                    if (state.coins < item.price) { toast('⛔ Нет монет', 'error', 800); return; }
+                    state.coins -= item.price;
+                    state.shopItems[item.id] = 1;
+
+                    // Применяем эффект
+                    if (item.id === 'amulet') {
+                        // +5% к монетам за клик (будет учтено в клике)
+                    } else if (item.id === 'trophy') {
+                        // +10% к опыту (будет учтено в клике)
+                    } else if (item.id === 'crystal') {
+                        state.maxEnergy += 50;
+                    } else if (item.id === 'grimoire') {
+                        // x1.5 к пассивному доходу
+                    } else if (item.id === 'crown') {
+                        // +20% ко всем бонусам
+                    } else if (item.id === 'sword') {
+                        // x2 к монетам за клик
+                    } else if (item.id === 'shield') {
+                        // Защита от потери монет
+                    } else if (item.id === 'star') {
+                        // x3 ко всем бонусам
+                    } else if (item.id === 'temple') {
+                        // x5 к пассивному доходу
+                    }
+
+                    updateUI();
+                    openShop();
+                    toast('🎉 ' + item.name + ' куплен!', 'success', 2000);
                 });
                 list.appendChild(div);
             });
@@ -1246,6 +1397,76 @@
             openModal('skillsModal');
         }
 
+        // ============= ОБМЕННИК =============
+        function openExchange() {
+            const list = $('exchangeList');
+            list.innerHTML = '';
+
+            EXCHANGE_OFFERS.forEach(offer => {
+                const canExchange = state.level >= offer.level && state.coins >= offer.coins;
+                const lastExchange = state.lastExchange[offer.level] || 0;
+                const cooldown = offer.cooldown * 24 * 60 * 60 * 1000; // в миллисекундах
+                const now = Date.now();
+                const isOnCooldown = now - lastExchange < cooldown;
+                const available = canExchange && !isOnCooldown;
+
+                let cooldownText = '';
+                if (isOnCooldown) {
+                    const left = Math.ceil((cooldown - (now - lastExchange)) / (24 * 60 * 60 * 1000));
+                    cooldownText = `⏳ ${left} дн.`;
+                }
+
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.innerHTML = `
+                    <div class="info">
+                        <div class="name">${offer.coins.toLocaleString()} монет → ${offer.stars} ⭐</div>
+                        <div class="desc">🔒 Требуется Lv.${offer.level}</div>
+                        <div class="desc">${cooldownText ? '⏳ ' + cooldownText : '✅ Доступно'}</div>
+                    </div>
+                    <button class="action-btn exchange-btn ${!available ? 'disabled' : ''}" ${!available ? 'disabled' : ''}>
+                        Обменять
+                    </button>
+                `;
+                const btn = div.querySelector('.action-btn');
+                btn.addEventListener('click', () => {
+                    if (!available) return;
+                    if (state.coins < offer.coins) { toast('⛔ Нет монет', 'error', 800); return; }
+                    if (state.level < offer.level) { toast('⛔ Нужен Lv.' + offer.level, 'error', 800); return; }
+
+                    state.coins -= offer.coins;
+                    state.lastExchange[offer.level] = Date.now();
+
+                    // Отправляем запрос админу
+                    const user = tg.initDataUnsafe?.user;
+                    const username = user?.username || 'Аноним';
+                    const userId = user?.id || 'Неизвестно';
+
+                    // Здесь будет отправка админу (в Telegram боте)
+                    const message = `📨 НОВЫЙ ЗАПРОС НА ОБМЕН!\n\n👤 Игрок: @${username}\n🆔 ID: ${userId}\n🏆 Уровень: ${state.level}\n💰 Монет списано: ${offer.coins.toLocaleString()}\n🎁 Выдать: ${offer.stars} ⭐\n\n📅 Запрос создан: ${new Date().toLocaleString()}`;
+
+                    // Отправляем через WebApp
+                    tg.sendData(JSON.stringify({
+                        action: 'exchange',
+                        userId: userId,
+                        username: username,
+                        level: state.level,
+                        coins: offer.coins,
+                        stars: offer.stars,
+                        message: message
+                    }));
+
+                    updateUI();
+                    openExchange();
+                    toast('📨 Запрос на обмен отправлен!', 'exchange', 3000);
+                });
+                list.appendChild(div);
+            });
+
+            $('exchangeBalance').textContent = Math.floor(state.coins);
+            openModal('exchangeModal');
+        }
+
         // ============= НАБЕГ =============
         function openRaid() {
             const now = Date.now();
@@ -1267,10 +1488,18 @@
                 toast('⚔️ +' + reward, 'success', 1500);
             } else {
                 const loss = Math.floor(50 + power * 0.5);
-                state.coins = Math.max(0, state.coins - loss);
-                html =
-                    `<div class="raid-result lose"><div class="big lose">💀 ПОРАЖЕНИЕ!</div><div style="color:#ff6b6b;">-${loss} 💰</div></div>`;
-                toast('💀 -' + loss, 'error', 1500);
+                // Проверка на щит
+                const shield = state.shopItems.shield || 0;
+                if (shield > 0) {
+                    html =
+                        `<div class="raid-result lose"><div class="big lose">🛡️ ПОРАЖЕНИЕ ОТРАЖЕНО!</div><div style="color:#00b894;">Щит спас твои монеты!</div></div>`;
+                    toast('🛡️ Щит спас монеты!', 'success', 2000);
+                } else {
+                    state.coins = Math.max(0, state.coins - loss);
+                    html =
+                        `<div class="raid-result lose"><div class="big lose">💀 ПОРАЖЕНИЕ!</div><div style="color:#ff6b6b;">-${loss} 💰</div></div>`;
+                    toast('💀 -' + loss, 'error', 1500);
+                }
             }
             state.raidCooldown = Date.now();
             updateUI();
@@ -1360,7 +1589,17 @@
             }
         }, 1000);
 
-        // Пассивный доход раз в минуту
+        // Регенерация (навык)
+        setInterval(() => {
+            const regen = getRegenBonus();
+            if (regen > 0 && state.energy < state.maxEnergy) {
+                state.energy += regen / 60;
+                if (state.energy > state.maxEnergy) state.energy = state.maxEnergy;
+                updateUI();
+            }
+        }, 1000);
+
+        // Пассивный доход
         setInterval(() => {
             const inc = getPassiveIncome();
             if (inc > 0) {
@@ -1401,6 +1640,9 @@
         $('raidBtn').addEventListener('click', openRaid);
         $('closeRaid').addEventListener('click', () => closeModal('raidModal'));
         $('raidModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('raidModal'); });
+        $('exchangeBtn').addEventListener('click', openExchange);
+        $('closeExchange').addEventListener('click', () => closeModal('exchangeModal'));
+        $('exchangeModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('exchangeModal'); });
         $('airdropBtn').addEventListener('click', openAirdrop);
         $('closeAirdrop').addEventListener('click', () => closeModal('airdropModal'));
         $('airdropModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('airdropModal'); });
@@ -1413,13 +1655,11 @@
         updateUI();
         setInterval(saveState, 15000);
 
-        console.log('⚔️ Эпоха Империй (новая система клика)');
-        console.log('🏆 Уровень:', state.level);
-        console.log('🏛️ Эпоха:', getEra(state.level).name);
+        console.log('⚔️ Эпоха Империй (с обменником и товарами)');
+        console.log('🏆 Уровень:', state.level, '/', MAX_LEVEL);
         console.log('💰 Баланс:', Math.floor(state.coins));
         console.log('⚡ Энергия:', Math.floor(state.energy), '/', state.maxEnergy);
-        console.log('⚡ Навыки:', Object.keys(state.skills).length);
-        console.log('💪 Бонус клика:', getClickBonusFromSkill());
+        console.log('🔄 Обменов:', Object.keys(state.lastExchange).length);
     </script>
 </body>
 </html>
