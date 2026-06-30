@@ -37,13 +37,96 @@
             max-height: 850px;
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(12px);
-            border-radius: 0;
-            padding: 14px 14px 10px;
-            border: none;
-            box-shadow: none;
-            position: relative;
+            padding: 12px 14px 10px;
             display: flex;
             flex-direction: column;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        /* ============ СТИЛИ ============ */
+        .style-ancient .game-container {
+            background: rgba(139, 69, 19, 0.05);
+            border: 1px solid rgba(139, 69, 19, 0.1);
+        }
+        .style-ancient .click-area {
+            border-color: #cd7f32;
+        }
+        .style-ancient .click-area::before {
+            background: conic-gradient(from 0deg, #cd7f32, #8b6914, #cd7f32);
+        }
+        .style-ancient .header-item .value,
+        .style-ancient .era-name,
+        .style-ancient .stats .item .num,
+        .style-ancient .energy-header .current {
+            color: #cd7f32;
+        }
+        .style-ancient .bottom-menu .btn.active {
+            color: #cd7f32;
+            border-color: rgba(205, 127, 50, 0.2);
+        }
+
+        .style-cosmic .game-container {
+            background: rgba(108, 92, 231, 0.05);
+            border: 1px solid rgba(108, 92, 231, 0.1);
+        }
+        .style-cosmic .click-area {
+            border-color: #a29bfe;
+        }
+        .style-cosmic .click-area::before {
+            background: conic-gradient(from 0deg, #a29bfe, #6c5ce7, #a29bfe);
+        }
+        .style-cosmic .header-item .value,
+        .style-cosmic .era-name,
+        .style-cosmic .stats .item .num,
+        .style-cosmic .energy-header .current {
+            color: #a29bfe;
+        }
+        .style-cosmic .bottom-menu .btn.active {
+            color: #a29bfe;
+            border-color: rgba(162, 155, 254, 0.2);
+        }
+
+        .style-fire .game-container {
+            background: rgba(255, 107, 107, 0.05);
+            border: 1px solid rgba(255, 107, 107, 0.1);
+        }
+        .style-fire .click-area {
+            border-color: #ff6b6b;
+        }
+        .style-fire .click-area::before {
+            background: conic-gradient(from 0deg, #ff6b6b, #ee5a24, #ff6b6b);
+        }
+        .style-fire .header-item .value,
+        .style-fire .era-name,
+        .style-fire .stats .item .num,
+        .style-fire .energy-header .current {
+            color: #ff6b6b;
+        }
+        .style-fire .bottom-menu .btn.active {
+            color: #ff6b6b;
+            border-color: rgba(255, 107, 107, 0.2);
+        }
+
+        .style-diamond .game-container {
+            background: rgba(0, 206, 209, 0.05);
+            border: 1px solid rgba(0, 206, 209, 0.1);
+        }
+        .style-diamond .click-area {
+            border-color: #00ced1;
+        }
+        .style-diamond .click-area::before {
+            background: conic-gradient(from 0deg, #00ced1, #20b2aa, #00ced1);
+        }
+        .style-diamond .header-item .value,
+        .style-diamond .era-name,
+        .style-diamond .stats .item .num,
+        .style-diamond .energy-header .current {
+            color: #00ced1;
+        }
+        .style-diamond .bottom-menu .btn.active {
+            color: #00ced1;
+            border-color: rgba(0, 206, 209, 0.2);
         }
 
         /* ============ ВЕРХНЯЯ ПАНЕЛЬ ============ */
@@ -60,19 +143,19 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: #8395a7;
         }
 
         .header-item .value {
             color: #ffd700;
-            font-size: 16px;
+            font-size: 15px;
             min-width: 30px;
         }
 
         .header-item .icon {
-            font-size: 17px;
+            font-size: 16px;
         }
 
         /* ============ ЭПОХА ============ */
@@ -83,27 +166,24 @@
             background: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
             padding: 4px 10px;
-            margin: 4px 0 3px;
+            margin: 3px 0;
             border: 1px solid rgba(255, 215, 0, 0.08);
             flex-shrink: 0;
         }
 
         .era-display .era-icon {
-            font-size: 17px;
+            font-size: 16px;
         }
-
         .era-display .era-name {
             font-size: 13px;
             font-weight: 700;
             color: #ffd700;
         }
-
         .era-display .era-next {
             font-size: 10px;
             color: #636e72;
         }
 
-        /* ============ ПРОГРЕСС ============ */
         .level-progress {
             margin: 3px 0 4px;
             background: rgba(0, 0, 0, 0.2);
@@ -157,13 +237,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 200px;
-            padding: 6px 0;
+            min-height: 160px;
+            padding: 4px 0;
         }
 
         .click-area {
-            width: 200px;
-            height: 200px;
+            width: 170px;
+            height: 170px;
             border-radius: 50%;
             background: radial-gradient(circle at 30% 30%, #2a2a5e, #0f0f1f);
             display: flex;
@@ -171,8 +251,8 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            border: 3px solid rgba(255, 215, 0, 0.25);
-            box-shadow: 0 0 50px rgba(255, 215, 0, 0.04), inset 0 -4px 15px rgba(0, 0, 0, 0.4);
+            border: 3px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.03), inset 0 -4px 15px rgba(0, 0, 0, 0.4);
             transition: transform 0.07s, box-shadow 0.07s;
             position: relative;
             user-select: none;
@@ -186,7 +266,7 @@
             inset: -3px;
             border-radius: 50%;
             background: conic-gradient(from 0deg, #ffd700, #ff6b6b, #ffd700);
-            opacity: 0.15;
+            opacity: 0.12;
             z-index: -1;
             animation: rotateBorder 8s linear infinite;
         }
@@ -200,13 +280,13 @@
         .click-area:active {
             transform: scale(0.93);
             border-color: #ffd700;
-            box-shadow: 0 0 60px rgba(255, 215, 0, 0.1);
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.08);
         }
 
         .click-area .emoji {
-            font-size: 55px;
+            font-size: 50px;
             line-height: 1;
-            filter: drop-shadow(0 2px 15px rgba(255, 215, 0, 0.15));
+            filter: drop-shadow(0 2px 15px rgba(255, 215, 0, 0.1));
             transition: transform 0.07s;
             will-change: transform;
         }
@@ -220,7 +300,6 @@
             font-weight: 700;
             margin-top: 2px;
             color: #ffd700;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.05);
             letter-spacing: 1.5px;
             text-transform: uppercase;
         }
@@ -229,14 +308,13 @@
             position: absolute;
             top: 6px;
             right: 6px;
-            background: rgba(255, 215, 0, 0.12);
-            backdrop-filter: blur(4px);
+            background: rgba(255, 215, 0, 0.1);
             border-radius: 12px;
             padding: 2px 8px;
             font-size: 9px;
             font-weight: 700;
             color: #ffd700;
-            border: 1px solid rgba(255, 215, 0, 0.06);
+            border: 1px solid rgba(255, 215, 0, 0.05);
         }
 
         .click-area .boost-badge {
@@ -244,10 +322,9 @@
             bottom: 6px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 800;
             color: #ff6b6b;
-            text-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
             background: rgba(0, 0, 0, 0.5);
             padding: 2px 12px;
             border-radius: 12px;
@@ -264,10 +341,9 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 800;
             color: #ff6b6b;
-            text-shadow: 0 0 30px rgba(255, 107, 107, 0.5);
             animation: warnPulse 0.5s ease-in-out infinite alternate;
             display: none;
             background: rgba(0, 0, 0, 0.7);
@@ -291,29 +367,29 @@
             }
         }
 
-        /* ============ АНИМАЦИЯ КЛИКА ============ */
+        /* ============ ЛЕТАЮЩИЕ ЦИФРЫ ============ */
         .fly-number {
             position: fixed;
             pointer-events: none;
             z-index: 999;
-            font-size: 30px;
+            font-size: 28px;
             font-weight: 800;
             color: #ffd700;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
             animation: flyNumber 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             will-change: transform, opacity;
         }
 
         .fly-number.big {
-            font-size: 44px;
+            font-size: 40px;
             color: #ff6b6b;
-            text-shadow: 0 0 40px rgba(255, 107, 107, 0.5);
+            text-shadow: 0 0 40px rgba(255, 107, 107, 0.4);
         }
 
         .fly-number.era-up {
-            font-size: 36px;
+            font-size: 34px;
             color: #a29bfe;
-            text-shadow: 0 0 50px rgba(162, 155, 254, 0.6);
+            text-shadow: 0 0 50px rgba(162, 155, 254, 0.5);
         }
 
         @keyframes flyNumber {
@@ -341,7 +417,7 @@
         }
 
         .stats .item .num {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 800;
             color: #ffd700;
             display: block;
@@ -349,7 +425,7 @@
         }
 
         .stats .item .label {
-            font-size: 9px;
+            font-size: 8px;
             color: #8395a7;
             text-transform: uppercase;
             letter-spacing: 0.3px;
@@ -390,7 +466,7 @@
             width: 100%;
         }
 
-        /* ============ НИЖНЕЕ МЕНЮ (5 КНОПОК) ============ */
+        /* ============ НИЖНЕЕ МЕНЮ ============ */
         .bottom-menu {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -613,34 +689,33 @@
             cursor: not-allowed;
         }
 
-        /* ============ НАБЕГ ============ */
-        .raid-result {
+        /* ============ БОСС ============ */
+        .boss-result {
             text-align: center;
             padding: 14px;
             border-radius: 14px;
             margin: 8px 0;
         }
 
-        .raid-result.win {
+        .boss-result.win {
             background: rgba(0, 184, 148, 0.12);
             border: 1px solid rgba(0, 184, 148, 0.2);
         }
 
-        .raid-result.lose {
+        .boss-result.lose {
             background: rgba(255, 107, 107, 0.12);
             border: 1px solid rgba(255, 107, 107, 0.2);
         }
 
-        .raid-result .big {
+        .boss-result .big {
             font-size: 22px;
             font-weight: 800;
         }
 
-        .raid-result .big.win {
+        .boss-result .big.win {
             color: #00b894;
         }
-
-        .raid-result .big.lose {
+        .boss-result .big.lose {
             color: #ff6b6b;
         }
 
@@ -674,32 +749,32 @@
         .toast.success {
             border-color: rgba(0, 184, 148, 0.2);
         }
-
         .toast.error {
             border-color: rgba(255, 107, 107, 0.2);
         }
-
         .toast.level {
             border-color: rgba(255, 215, 0, 0.2);
             background: rgba(255, 215, 0, 0.05);
             font-size: 14px;
         }
-
         .toast.boost {
             border-color: rgba(255, 107, 107, 0.2);
             background: rgba(255, 107, 107, 0.05);
             font-size: 14px;
         }
-
         .toast.exchange {
             border-color: rgba(162, 155, 254, 0.2);
             background: rgba(162, 155, 254, 0.05);
             font-size: 14px;
         }
-
         .toast.era {
             border-color: rgba(162, 155, 254, 0.3);
             background: rgba(162, 155, 254, 0.1);
+            font-size: 16px;
+        }
+        .toast.boss {
+            border-color: rgba(255, 215, 0, 0.3);
+            background: rgba(255, 215, 0, 0.1);
             font-size: 16px;
         }
 
@@ -728,31 +803,25 @@
         /* ============ АДАПТИВ ============ */
         @media (max-width: 400px) {
             .click-area {
-                width: 160px;
-                height: 160px;
+                width: 150px;
+                height: 150px;
             }
-
             .click-area .emoji {
                 font-size: 40px;
             }
-
             .bottom-menu .btn {
                 font-size: 15px;
                 padding: 8px 2px;
             }
-
             .bottom-menu .btn .label {
                 font-size: 6px;
             }
-
             .header-item {
                 font-size: 12px;
             }
-
             .header-item .value {
                 font-size: 14px;
             }
-
             .fly-number {
                 font-size: 22px;
             }
@@ -763,23 +832,18 @@
                 width: 130px;
                 height: 130px;
             }
-
             .click-area .emoji {
                 font-size: 32px;
             }
-
             .click-area .text {
                 font-size: 9px;
             }
-
             .header-item {
                 font-size: 10px;
             }
-
             .header-item .value {
                 font-size: 12px;
             }
-
             .stats .item .num {
                 font-size: 13px;
             }
@@ -787,16 +851,14 @@
 
         @media (min-width: 500px) {
             .click-area {
-                width: 240px;
-                height: 240px;
+                width: 220px;
+                height: 220px;
             }
-
             .click-area .emoji {
-                font-size: 70px;
+                font-size: 65px;
             }
-
             .fly-number {
-                font-size: 38px;
+                font-size: 34px;
             }
         }
     </style>
@@ -806,8 +868,8 @@
         <!-- ============ ВЕРХНЯЯ ПАНЕЛЬ ============ -->
         <div class="header">
             <div class="header-item"><span class="icon">🏆</span><span class="value" id="level">1</span></div>
-            <div class="header-item"><span class="icon">💰</span><span class="value" id="coins">150</span></div>
-            <div class="header-item"><span class="icon">⚡</span><span class="value" id="energyDisplay">250</span></div>
+            <div class="header-item"><span class="icon">💰</span><span class="value" id="coins">0</span></div>
+            <div class="header-item"><span class="icon">⚡</span><span class="value" id="energyDisplay">500</span></div>
         </div>
 
         <!-- ============ ЭПОХА ============ -->
@@ -839,16 +901,16 @@
         <div class="stats">
             <div class="item"><span class="num" id="clicks">0</span><span class="label">Кликов</span></div>
             <div class="item"><span class="num" id="perClick">1</span><span class="label">За клик</span></div>
-            <div class="item"><span class="num" id="today">0</span><span class="label">За день</span></div>
+            <div class="item"><span class="num" id="bosses">0</span><span class="label">Боссов</span></div>
         </div>
 
         <!-- ============ ЭНЕРГИЯ ============ -->
         <div class="energy-section">
-            <div class="energy-header"><span>⚡ Энергия</span><span class="current"><span id="energyCurrent">250</span>/250</span></div>
+            <div class="energy-header"><span>⚡ Энергия</span><span class="current"><span id="energyCurrent">500</span>/500</span></div>
             <div class="energy-bar"><div class="energy-fill" id="energyFill" style="width:100%"></div></div>
         </div>
 
-        <!-- ============ НИЖНЕЕ МЕНЮ (5 КНОПОК) ============ -->
+        <!-- ============ НИЖНЕЕ МЕНЮ ============ -->
         <div class="bottom-menu">
             <button class="btn active" id="shopBtn">🛒<span class="label">Маг.</span></button>
             <button class="btn" id="skillsBtn">⚡<span class="label">Нав.</span></button>
@@ -859,10 +921,10 @@
     </div>
 
     <!-- ============ МОДАЛКИ ============ -->
-    <div class="modal-overlay" id="shopModal"><div class="modal"><div class="head"><h2>🛒 Магазин</h2><button class="close" id="closeShop">✕</button></div><div class="balance">💰 <span id="shopBalance">150</span></div><div id="shopList"></div></div></div>
-    <div class="modal-overlay" id="skillsModal"><div class="modal"><div class="head"><h2>⚡ Навыки</h2><button class="close" id="closeSkills">✕</button></div><div class="balance">💰 <span id="skillsBalance">150</span></div><div id="skillsList"></div></div></div>
+    <div class="modal-overlay" id="shopModal"><div class="modal"><div class="head"><h2>🛒 Магазин</h2><button class="close" id="closeShop">✕</button></div><div class="balance">💰 <span id="shopBalance">0</span></div><div id="shopList"></div></div></div>
+    <div class="modal-overlay" id="skillsModal"><div class="modal"><div class="head"><h2>⚡ Навыки</h2><button class="close" id="closeSkills">✕</button></div><div class="balance">💰 <span id="skillsBalance">0</span></div><div id="skillsList"></div></div></div>
     <div class="modal-overlay" id="raidModal"><div class="modal"><div class="head"><h2>⚔️ Набег</h2><button class="close" id="closeRaid">✕</button></div><div id="raidContent"></div></div></div>
-    <div class="modal-overlay" id="exchangeModal"><div class="modal"><div class="head"><h2>🔄 Обмен</h2><button class="close" id="closeExchange">✕</button></div><div class="balance">💰 <span id="exchangeBalance">150</span></div><div id="exchangeList"></div></div></div>
+    <div class="modal-overlay" id="exchangeModal"><div class="modal"><div class="head"><h2>🔄 Обмен</h2><button class="close" id="closeExchange">✕</button></div><div class="balance">💰 <span id="exchangeBalance">0</span></div><div id="exchangeList"></div></div></div>
     <div class="modal-overlay" id="airdropModal"><div class="modal"><div class="head"><h2>💎 Airdrop</h2><button class="close" id="closeAirdrop">✕</button></div><div id="airdropContent"></div></div></div>
 
     <div class="toast-container" id="toastContainer"></div>
@@ -900,10 +962,10 @@
             return null;
         }
 
-        // ============= ОПЫТ =============
+        // ============= ОПЫТ (СБАЛАНСИРОВАННЫЙ) =============
         function getExpForLevel(lvl) {
             if (lvl <= 1) return 0;
-            return 500 + (lvl - 1) * 500;
+            return lvl * 100;
         }
 
         function getExpForNext() {
@@ -914,36 +976,60 @@
         // ============= ДАННЫЕ =============
         const MAX_LEVEL = 100;
 
+        // ============= БУСТЫ (НОВЫЕ) =============
         const BOOSTS = [
-            { id: 'x2_2min', name: '⚡ Быстрый тап', price: 200, multiplier: 2, duration: 120, desc: 'x2 монет на 2 минуты' },
-            { id: 'x3_2min', name: '🔥 Огненный тап', price: 600, multiplier: 3, duration: 120, desc: 'x3 монет на 2 минуты' },
-            { id: 'x5_2min', name: '💎 Легендарный тап', price: 1500, multiplier: 5, duration: 120, desc: 'x5 монет на 2 минуты' },
-            { id: 'x2exp_5min', name: '🧠 Мозговой штурм', price: 400, multiplier: 1, duration: 300, desc: 'x2 опыт на 5 минут', isExp: true },
-            { id: 'x2_10min', name: '⏳ Замедление', price: 1200, multiplier: 2, duration: 600, desc: 'x2 монет на 10 минут' },
-            { id: 'x8_1min', name: '🚀 Режим бога', price: 4000, multiplier: 8, duration: 60, desc: 'x8 монет на 1 минуту' },
+            { id: 'x2_2min', name: '⚡ Двойной клик', price: 150, multiplier: 2, duration: 120, desc: 'x2 монет на 2 минуты' },
+            { id: 'x3_2min', name: '🔥 Тройной клик', price: 400, multiplier: 3, duration: 120, desc: 'x3 монет на 2 минуты' },
+            { id: 'x5_2min', name: '💎 Легендарный клик', price: 1200, multiplier: 5, duration: 120, desc: 'x5 монет на 2 минуты' },
+            { id: 'x2exp_5min', name: '📚 Мудрость', price: 300, multiplier: 1, duration: 300, desc: 'x2 опыт на 5 минут', isExp: true },
+            { id: 'x2_10min', name: '⏳ Замедление', price: 800, multiplier: 2, duration: 600, desc: 'x2 монет на 10 минут' },
+            { id: 'x8_1min', name: '🚀 Режим бога', price: 2500, multiplier: 8, duration: 60, desc: 'x8 монет на 1 минуту' },
+            { id: 'army_boost', name: '⚔️ Ярость', price: 500, multiplier: 1, duration: 0, desc: '+50% сила армии на 1 бой', isArmy: true },
+            { id: 'shield_boost', name: '🛡️ Неуязвимость', price: 800, multiplier: 1, duration: 0, desc: 'Защита на 1 поражение', isShield: true },
+            { id: 'auto_boost', name: '🌀 Ускорение', price: 600, multiplier: 1, duration: 300, desc: 'x2 скорость автокликера на 5 минут', isAuto: true },
             { id: 'energy_boost', name: '⚡ Энергетик', price: 150, multiplier: 0, duration: 0, desc: '+50 энергии мгновенно', isEnergy: true }
         ];
 
+        // ============= МАГАЗИН (ПРОРЫВЫ И УЛУЧШЕНИЯ) =============
         const SHOP_ITEMS = [
-            { id: 'amulet', name: '💎 Амулет удачи', price: 10000, desc: '+5% к монетам за клик', type: 'permanent' },
-            { id: 'trophy', name: '🏆 Трофей героя', price: 25000, desc: '+10% к опыту', type: 'permanent' },
-            { id: 'crystal', name: '⚡ Кристалл энергии', price: 50000, desc: '+50 к макс. энергии', type: 'permanent' },
-            { id: 'grimoire', name: '🧙 Гримуар', price: 100000, desc: 'x1.5 к пассивному доходу', type: 'permanent' },
-            { id: 'crown', name: '👑 Корона императора', price: 250000, desc: '+20% ко всем бонусам', type: 'permanent' },
-            { id: 'sword', name: '🗡️ Меч легенды', price: 500000, desc: 'x2 к монетам за клик', type: 'permanent' },
-            { id: 'shield', name: '🛡️ Щит бессмертия', price: 1000000, desc: 'Защита от потери монет', type: 'permanent' },
-            { id: 'star', name: '🌟 Звезда судьбы', price: 5000000, desc: 'x3 ко всем бонусам', type: 'permanent' },
-            { id: 'temple', name: '🏛️ Храм бесконечности', price: 10000000, desc: 'x5 к пассивному доходу', type: 'permanent' }
+            { id: 'spear', name: '⚔️ Копьё воина', price: 1000, desc: '+0.5 монеты за клик', type: 'permanent', bonus: 0.5 },
+            { id: 'shield', name: '🛡️ Щит героя', price: 5000, desc: 'Защита от потери монет в набегах', type: 'permanent', bonus: 0 },
+            { id: 'bow', name: '🏹 Лук эльфов', price: 15000, desc: '+2 монеты за клик', type: 'permanent', bonus: 2 },
+            { id: 'sword', name: '🗡️ Меч короля', price: 50000, desc: '+5 монет за клик', type: 'permanent', bonus: 5 },
+            { id: 'dragon_egg', name: '🐉 Яйцо дракона', price: 200000, desc: '+15 монет за клик', type: 'permanent', bonus: 15 },
+            { id: 'crown', name: '👑 Корона императора', price: 1000000, desc: 'x2 ко всем бонусам', type: 'permanent', bonus: 2 },
+            { id: 'star', name: '🌟 Звезда судьбы', price: 5000000, desc: 'x3 ко всем бонусам', type: 'permanent', bonus: 3 },
+            { id: 'temple', name: '🏛️ Храм бесконечности', price: 10000000, desc: 'x5 к пассивному доходу', type: 'permanent', bonus: 5 },
+            { id: 'auto1', name: '🖥️ Автоматизация I', price: 50000, desc: 'Автокликер 0.5 клик/сек', type: 'auto', bonus: 0.5 },
+            { id: 'auto2', name: '🖥️ Автоматизация II', price: 200000, desc: 'Автокликер 1 клик/сек', type: 'auto', bonus: 1 },
+            { id: 'auto3', name: '🖥️ Автоматизация III', price: 1000000, desc: 'Автокликер 2 клик/сек', type: 'auto', bonus: 2 },
+            { id: 'auto4', name: '🖥️ Автоматизация IV', price: 5000000, desc: 'Автокликер 5 клик/сек', type: 'auto', bonus: 5 },
+            { id: 'dark_matter', name: '💫 Тёмная материя', price: 500000, desc: 'x1.5 к опыту', type: 'permanent', bonus: 1.5 },
+            { id: 'quantum', name: '💫 Квантовый скачок', price: 2000000, desc: 'x2 к опыту', type: 'permanent', bonus: 2 },
+            { id: 'infinity', name: '💫 Бесконечность', price: 10000000, desc: 'x3 к опыту', type: 'permanent', bonus: 3 },
+            { id: 'style_ancient', name: '🎨 Древний стиль', price: 1500000, desc: 'Меняет тему интерфейса', type: 'style', style: 'ancient' },
+            { id: 'style_cosmic', name: '🎨 Космический стиль', price: 5000000, desc: 'Меняет тему интерфейса', type: 'style', style: 'cosmic' },
+            { id: 'style_fire', name: '🎨 Огненный стиль', price: 10000000, desc: 'Меняет тему интерфейса', type: 'style', style: 'fire' },
+            { id: 'style_diamond', name: '🎨 Алмазный стиль', price: 25000000, desc: 'Меняет тему интерфейса', type: 'style', style: 'diamond' },
+            { id: 'crystal_ball', name: '🔮 Хрустальный шар', price: 15000, desc: '+10% к монетам на 10 минут', type: 'temporary', bonus: 1.1 }
         ];
 
-        const EXCHANGE_OFFERS = [
-            { level: 50, coins: 100000, stars: 10, cooldown: 7 },
-            { level: 60, coins: 200000, stars: 20, cooldown: 7 },
-            { level: 70, coins: 500000, stars: 50, cooldown: 7 },
-            { level: 80, coins: 1000000, stars: 100, cooldown: 7 },
-            { level: 90, coins: 2000000, stars: 200, cooldown: 7 },
-            { level: 100, coins: 5000000, stars: 500, cooldown: 7 }
+        // ============= БОССЫ =============
+        const BOSSES = [
+            { level: 10, name: '🐺 Волк-оборотень', power: 50, reward: 1000 },
+            { level: 20, name: '🧟 Скелет-воин', power: 150, reward: 5000 },
+            { level: 30, name: '🐉 Чёрный дракон', power: 500, reward: 20000 },
+            { level: 40, name: '👹 Демон', power: 1500, reward: 100000 },
+            { level: 50, name: '🦁 Гидра', power: 5000, reward: 500000 },
+            { level: 60, name: '💀 Бог смерти', power: 20000, reward: 2000000 }
         ];
+
+        function getCurrentBoss(level) {
+            for (let boss of BOSSES) {
+                if (level >= boss.level) return boss;
+            }
+            return null;
+        }
 
         // ============= НАВЫКИ =============
         function getClickBonus(level) {
@@ -960,142 +1046,29 @@
             return 50 * Math.pow(2, level - 1);
         }
 
-        const SKILLS = [{
-            id: 'click_upgrade',
-            name: '⚡ Улучшение клика',
-            price: 50,
-            priceMultiplier: 0,
-            maxLevel: Infinity,
-            desc: (level) => `+${getClickBonus(level)} монеты (ур.${level})`,
-            isPermanent: false,
-            getPrice: (level) => getClickPrice(level)
-        }, {
-            id: 'income',
-            name: '💰 Пассивный доход',
-            price: 50,
-            priceMultiplier: 1.5,
-            maxLevel: Infinity,
-            desc: (level) => `+1 монета/час (ур.${level})`,
-            isPermanent: false
-        }, {
-            id: 'bookworm',
-            name: '📚 Книжный червь',
-            price: 300,
-            priceMultiplier: 2,
-            maxLevel: 20,
-            desc: (level) => `+10% к опыту (ур.${level})`,
-            isPermanent: false
-        }, {
-            id: 'regen',
-            name: '🔄 Регенерация',
-            price: 200,
-            priceMultiplier: 2,
-            maxLevel: 15,
-            desc: (level) => `+1 энергия/мин (ур.${level})`,
-            isPermanent: false
-        }, {
-            id: 'luck',
-            name: '💎 Удача',
-            price: 500,
-            priceMultiplier: 2,
-            maxLevel: 20,
-            desc: (level) => `+1% шанс x2 (ур.${level})`,
-            isPermanent: false
-        }, {
-            id: 'magic',
-            name: '🧙 Магия',
-            price: 10000,
-            priceMultiplier: 0,
-            maxLevel: 1,
-            desc: () => 'x1.5 ко всем бонусам',
-            isPermanent: true
-        }, {
-            id: 'dragon',
-            name: '🐉 Наследие дракона',
-            price: 25000,
-            priceMultiplier: 0,
-            maxLevel: 1,
-            desc: () => 'x2 к пассивному доходу',
-            isPermanent: true
-        }, {
-            id: 'timekeeper',
-            name: '🕰️ Хранитель времени',
-            price: 4000,
-            priceMultiplier: 2,
-            maxLevel: 10,
-            desc: (level) => `+5% длительность бустов (ур.${level})`,
-            isPermanent: false
-        }];
-
-        // ============= ФУНКЦИИ =============
-        function getPassiveIncome() {
-            let inc = 0;
-            const incomeLevel = state.skills.income || 0;
-            inc += incomeLevel;
-            const dragon = state.skills.dragon || 0;
-            if (dragon > 0) inc *= 2;
-            return inc;
-        }
-
-        function getClickBonusFromSkill() {
-            const level = state.skills.click_upgrade || 0;
-            return getClickBonus(level);
-        }
-
-        function getBookwormBonus() {
-            const level = state.skills.bookworm || 0;
-            return level * 0.1;
-        }
-
-        function getRegenBonus() {
-            const level = state.skills.regen || 0;
-            return level;
-        }
-
-        function getLuckBonus() {
-            const level = state.skills.luck || 0;
-            return level;
-        }
-
-        function getMagicBonus() {
-            return state.skills.magic || 0;
-        }
-
-        function getTimekeeperBonus() {
-            const level = state.skills.timekeeper || 0;
-            return level * 0.05;
-        }
-
-        function getBoostDurationMultiplier(base) {
-            const bonus = getTimekeeperBonus();
-            return base * (1 + bonus);
-        }
-
-        function getBoostMultiplier(base) {
-            const magic = getMagicBonus();
-            return base * (1 + (magic * 0.5));
-        }
-
-        function getEraBonus() {
-            const era = getEra(state.level);
-            return era.bonus || 0;
-        }
-
         // ============= СОСТОЯНИЕ =============
         const state = {
-            coins: 150,
-            energy: 250,
-            maxEnergy: 250,
+            coins: 0,
+            energy: 500,
+            maxEnergy: 500,
             level: 1,
             exp: 0,
             clicks: 0,
             earnedToday: 0,
-            raidCooldown: 0,
             boostActive: null,
             boostTimer: null,
             skills: {},
             shopItems: {},
-            lastExchange: {}
+            lastExchange: {},
+            style: 'default',
+            bossesDefeated: 0,
+            autoclickLevel: 0,
+            autoclickTimer: null,
+            armyPower: 0,
+            lastBossDefeated: 0,
+            boostArmy: false,
+            boostShield: false,
+            boostAuto: false
         };
 
         // ============= DOM =============
@@ -1111,9 +1084,10 @@
         const badge = $('badge');
         const clickEmoji = $('clickEmoji');
         const clicksEl = $('clicks');
-        const todayEl = $('today');
         const perClickEl = $('perClick');
+        const bossesEl = $('bosses');
         const clickArea = $('clickArea');
+        const container = $('app');
         const eraIcon = $('eraIcon');
         const eraName = $('eraName');
         const eraNext = $('eraNext');
@@ -1153,6 +1127,91 @@
             setTimeout(() => el.remove(), 1000);
         }
 
+        // ============= ФУНКЦИИ =============
+        function getPassiveIncome() {
+            let inc = 0;
+            const incomeLevel = state.skills.income || 0;
+            inc += incomeLevel;
+            const crown = state.shopItems.crown || 0;
+            const star = state.shopItems.star || 0;
+            const temple = state.shopItems.temple || 0;
+            if (crown > 0) inc *= 2;
+            if (star > 0) inc *= 3;
+            if (temple > 0) inc *= 5;
+            return inc;
+        }
+
+        function getClickBonusFromSkill() {
+            const level = state.skills.click_upgrade || 0;
+            return getClickBonus(level);
+        }
+
+        function getBookwormBonus() {
+            const level = state.skills.bookworm || 0;
+            return level * 0.05;
+        }
+
+        function getLuckBonus() {
+            const level = state.skills.luck || 0;
+            return level;
+        }
+
+        function getMagicBonus() {
+            return state.skills.magic || 0;
+        }
+
+        function getEraBonus() {
+            const era = getEra(state.level);
+            return era.bonus || 0;
+        }
+
+        function getAutoClickSpeed() {
+            const autoLevel = state.autoclickLevel || 0;
+            const speeds = [0, 0.5, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 7, 8, 9, 10];
+            if (autoLevel >= speeds.length) return speeds[speeds.length - 1];
+            return speeds[autoLevel] || 0;
+        }
+
+        function getArmyPower() {
+            let power = state.level;
+            const spear = state.shopItems.spear || 0;
+            const sword = state.shopItems.sword || 0;
+            const bow = state.shopItems.bow || 0;
+            const dragon = state.shopItems.dragon_egg || 0;
+            power += spear * 0.5;
+            power += sword * 5;
+            power += bow * 2;
+            power += dragon * 15;
+            return Math.floor(power);
+        }
+
+        function getTotalClickBonus() {
+            const clickBonus = getClickBonusFromSkill();
+            const eraBonus = getEraBonus();
+            const spear = state.shopItems.spear || 0;
+            const bow = state.shopItems.bow || 0;
+            const sword = state.shopItems.sword || 0;
+            const dragon = state.shopItems.dragon_egg || 0;
+            const crown = state.shopItems.crown || 0;
+            const star = state.shopItems.star || 0;
+
+            let total = 1 + clickBonus + eraBonus + spear * 0.5 + bow * 2 + sword * 5 + dragon * 15;
+            if (crown > 0) total *= 2;
+            if (star > 0) total *= 3;
+            return total;
+        }
+
+        function getExpMultiplier() {
+            const dark = state.shopItems.dark_matter || 0;
+            const quantum = state.shopItems.quantum || 0;
+            const infinity = state.shopItems.infinity || 0;
+            let mult = 1;
+            if (dark > 0) mult *= 1.5;
+            if (quantum > 0) mult *= 2;
+            if (infinity > 0) mult *= 3;
+            return mult;
+        }
+
         // ============= ОБНОВЛЕНИЕ UI =============
         function updateUI() {
             coinsEl.textContent = Math.floor(state.coins);
@@ -1175,12 +1234,8 @@
             }
 
             clicksEl.textContent = state.clicks;
-            const clickBonus = getClickBonusFromSkill();
-            const magic = getMagicBonus();
-            const eraBonus = getEraBonus();
-            const basePerClick = 1 + clickBonus + (magic * 0.5) + eraBonus;
-            perClickEl.textContent = basePerClick.toFixed(1);
-            todayEl.textContent = state.earnedToday;
+            perClickEl.textContent = getTotalClickBonus().toFixed(1);
+            bossesEl.textContent = state.bossesDefeated;
 
             const era = getEra(state.level);
             const nextEra = getNextEra(state.level);
@@ -1188,6 +1243,13 @@
             eraName.textContent = era.name;
             eraNext.textContent = nextEra ? '▶ Lv.' + nextEra.minLevel : '🏆 MAX';
 
+            // Стиль
+            container.className = 'game-container';
+            if (state.style !== 'default') {
+                container.classList.add('style-' + state.style);
+            }
+
+            // Буст
             if (state.boostActive) {
                 const boost = BOOSTS.find(b => b.id === state.boostActive);
                 if (boost) {
@@ -1226,10 +1288,57 @@
                 if (state.level === MAX_LEVEL) {
                     toast('👑 МАКСИМАЛЬНЫЙ УРОВЕНЬ!', 'level', 3000);
                 }
+
+                // Проверка босса
+                const boss = getCurrentBoss(state.level);
+                if (boss && state.level >= boss.level && state.bossesDefeated < BOSSES.indexOf(boss) + 1) {
+                    toast('⚔️ БОСС ДОСТУПЕН! ' + boss.name, 'boss', 3000);
+                }
+
                 updateUI();
                 return true;
             }
             return false;
+        }
+
+        // ============= АВТОКЛИКЕР =============
+        function startAutoclick() {
+            if (state.autoclickTimer) clearInterval(state.autoclickTimer);
+            const speed = getAutoClickSpeed();
+            if (speed > 0) {
+                state.autoclickTimer = setInterval(() => {
+                    // Автокликер работает только если есть энергия
+                    if (state.energy <= 0) return;
+
+                    let multiplier = 1;
+                    if (state.boostActive) {
+                        const boost = BOOSTS.find(b => b.id === state.boostActive);
+                        if (boost && !boost.isExp && !boost.isAuto) {
+                            multiplier = boost.multiplier;
+                        }
+                    }
+                    if (state.boostAuto) {
+                        multiplier *= 2;
+                    }
+
+                    const totalBonus = getTotalClickBonus();
+                    const earned = totalBonus * multiplier;
+                    state.coins += earned;
+                    state.energy -= 1;
+
+                    // Опыт
+                    let expGain = 1;
+                    const bookworm = getBookwormBonus();
+                    const expMult = getExpMultiplier();
+                    expGain = Math.floor(expGain * (1 + bookworm) * expMult);
+                    if (state.level < MAX_LEVEL) {
+                        state.exp += expGain;
+                        checkLevelUp();
+                    }
+
+                    updateUI();
+                }, 1000 / speed);
+            }
         }
 
         // ============= КЛИК =============
@@ -1250,18 +1359,17 @@
                 if (boost) {
                     if (boost.isExp) {
                         expMultiplier = 2;
-                    } else {
-                        multiplier = getBoostMultiplier(boost.multiplier);
+                    } else if (!boost.isAuto) {
+                        multiplier = boost.multiplier;
                     }
                 }
             }
 
-            const clickBonus = getClickBonusFromSkill();
-            const magic = getMagicBonus();
+            const totalBonus = getTotalClickBonus();
             const luck = getLuckBonus();
-            const eraBonus = getEraBonus();
+            const expMult = getExpMultiplier();
 
-            let earned = (1 + clickBonus + (magic * 0.5) + eraBonus) * multiplier;
+            let earned = totalBonus * multiplier;
 
             if (Math.random() * 100 < luck) {
                 earned *= 2;
@@ -1271,18 +1379,12 @@
             state.coins += earned;
             state.energy -= 1;
 
-            const regen = getRegenBonus();
-            if (regen > 0 && Math.random() * 100 < regen) {
-                state.energy += 1;
-                if (state.energy > state.maxEnergy) state.energy = state.maxEnergy;
-            }
-
             state.clicks += 1;
             state.earnedToday += earned;
 
             let expGain = 1;
             const bookworm = getBookwormBonus();
-            expGain = Math.floor(expGain * (1 + bookworm) * expMultiplier);
+            expGain = Math.floor(expGain * (1 + bookworm) * expMultiplier * expMult);
             if (state.level < MAX_LEVEL) {
                 state.exp += expGain;
                 checkLevelUp();
@@ -1314,22 +1416,23 @@
             const list = $('shopList');
             list.innerHTML = '';
 
+            // Покупка энергии (новая цена)
             const energyDiv = document.createElement('div');
             energyDiv.className = 'item';
             energyDiv.innerHTML = `
                 <div class="info">
-                    <div class="name">⚡ Восстановить энергию</div>
-                    <div class="desc">+${state.maxEnergy} энергии за 150 монет</div>
+                    <div class="name">⚡ Пополнить энергию</div>
+                    <div class="desc">+500 энергии за 2500 монет</div>
                 </div>
-                <button class="action-btn ${state.coins < 150 ? 'disabled' : ''}" ${state.coins < 150 ? 'disabled' : ''}>
-                    Купить 150💰
+                <button class="action-btn ${state.coins < 2500 ? 'disabled' : ''}" ${state.coins < 2500 ? 'disabled' : ''}>
+                    Купить 2500💰
                 </button>
             `;
             const energyBtn = energyDiv.querySelector('.action-btn');
             energyBtn.addEventListener('click', () => {
-                if (state.coins < 150) { toast('⛔ Нет монет', 'error', 800); return; }
+                if (state.coins < 2500) { toast('⛔ Нет монет', 'error', 800); return; }
                 if (state.energy >= state.maxEnergy) { toast('⚡ Энергия уже полная', 'error', 800); return; }
-                state.coins -= 150;
+                state.coins -= 2500;
                 state.energy = state.maxEnergy;
                 updateUI();
                 openShop();
@@ -1337,16 +1440,22 @@
             });
             list.appendChild(energyDiv);
 
+            // Бусты
             BOOSTS.forEach(boost => {
                 const isActive = state.boostActive === boost.id;
                 const canBuy = state.coins >= boost.price && !isActive;
 
                 const div = document.createElement('div');
                 div.className = 'item';
+                let descText = boost.desc;
+                if (boost.isArmy) descText = '⚔️ +50% сила армии на 1 бой';
+                if (boost.isShield) descText = '🛡️ Защита от 1 поражения';
+                if (boost.isAuto) descText = '🌀 x2 скорость автокликера на 5 минут';
+
                 div.innerHTML = `
                     <div class="info">
                         <div class="name">${boost.name}</div>
-                        <div class="desc">${boost.desc}</div>
+                        <div class="desc">${descText}</div>
                         <div class="desc">💰 ${boost.price} монет</div>
                     </div>
                     <button class="action-btn ${isActive ? 'owned' : (!canBuy ? 'disabled' : '')}" ${isActive || !canBuy ? 'disabled' : ''}>
@@ -1365,16 +1474,44 @@
                         toast('⚡ +50 энергии!', 'success', 1000);
                         return;
                     }
+                    if (boost.isArmy) {
+                        state.coins -= boost.price;
+                        state.boostArmy = true;
+                        updateUI();
+                        openShop();
+                        toast('⚔️ Ярость активирована на 1 бой!', 'boost', 2000);
+                        return;
+                    }
+                    if (boost.isShield) {
+                        state.coins -= boost.price;
+                        state.boostShield = true;
+                        updateUI();
+                        openShop();
+                        toast('🛡️ Неуязвимость активирована!', 'boost', 2000);
+                        return;
+                    }
+                    if (boost.isAuto) {
+                        state.coins -= boost.price;
+                        state.boostAuto = true;
+                        setTimeout(() => {
+                            state.boostAuto = false;
+                            updateUI();
+                            toast('⏳ Ускорение закончилось!', 'error', 2000);
+                        }, boost.duration * 1000);
+                        updateUI();
+                        openShop();
+                        toast('🌀 Ускорение активировано!', 'boost', 2000);
+                        return;
+                    }
                     state.coins -= boost.price;
                     state.boostActive = boost.id;
                     if (state.boostTimer) clearTimeout(state.boostTimer);
-                    const duration = getBoostDurationMultiplier(boost.duration);
                     state.boostTimer = setTimeout(() => {
                         state.boostActive = null;
                         state.boostTimer = null;
                         updateUI();
                         toast('⏳ Усиление закончилось!', 'error', 2000);
-                    }, duration * 1000);
+                    }, boost.duration * 1000);
                     updateUI();
                     openShop();
                     toast('🔥 ' + boost.name + ' активирован!', 'boost', 2000);
@@ -1382,16 +1519,23 @@
                 list.appendChild(div);
             });
 
+            // Товары
             SHOP_ITEMS.forEach(item => {
                 const owned = state.shopItems[item.id] || 0;
                 const canBuy = state.coins >= item.price && !owned;
 
                 const div = document.createElement('div');
                 div.className = 'item';
+                let descText = item.desc;
+                if (item.type === 'style') {
+                    const isActiveStyle = state.style === item.style;
+                    if (isActiveStyle) descText = '✅ Активен';
+                }
+
                 div.innerHTML = `
                     <div class="info">
                         <div class="name">${item.name}</div>
-                        <div class="desc">${item.desc}</div>
+                        <div class="desc">${descText}</div>
                         <div class="desc">💰 ${item.price} монет</div>
                     </div>
                     <button class="action-btn ${owned ? 'owned' : (!canBuy ? 'disabled' : '')}" ${owned || !canBuy ? 'disabled' : ''}>
@@ -1405,14 +1549,21 @@
                     state.coins -= item.price;
                     state.shopItems[item.id] = 1;
 
-                    if (item.id === 'crystal') {
-                        state.maxEnergy += 50;
-                        state.energy += 50;
+                    if (item.type === 'style') {
+                        state.style = item.style;
+                        toast('🎨 Стиль "' + item.name + '" активирован!', 'success', 2000);
+                    } else if (item.type === 'auto') {
+                        state.autoclickLevel += 1;
+                        startAutoclick();
+                        toast('🖥️ Автокликер улучшен!', 'success', 2000);
+                    } else if (item.type === 'permanent') {
+                        toast('🎉 ' + item.name + ' куплен!', 'success', 2000);
+                    } else if (item.type === 'temporary') {
+                        toast('🔮 ' + item.name + ' активирован на 10 минут!', 'success', 2000);
                     }
 
                     updateUI();
                     openShop();
-                    toast('🎉 ' + item.name + ' куплен!', 'success', 2000);
                 });
                 list.appendChild(div);
             });
@@ -1421,227 +1572,135 @@
             openModal('shopModal');
         }
 
-        // ============= НАВЫКИ =============
-        function openSkills() {
-            const list = $('skillsList');
-            list.innerHTML = '';
-            SKILLS.forEach(skill => {
-                const level = state.skills[skill.id] || 0;
-                const isOwned = skill.isPermanent && level >= 1;
-                const isMaxed = !skill.isPermanent && level >= skill.maxLevel;
-
-                let price;
-                if (skill.id === 'click_upgrade') {
-                    price = getClickPrice(level);
-                } else {
-                    price = Math.floor(skill.price * Math.pow(skill.priceMultiplier || 1, level));
-                }
-
-                const canBuy = state.coins >= price && !isOwned && !isMaxed;
-
-                let descText;
-                if (skill.desc) {
-                    descText = typeof skill.desc === 'function' ? skill.desc(level) : skill.desc;
-                } else {
-                    descText = '';
-                }
-
-                if (isOwned) descText += ' ✅';
-                if (isMaxed) descText += ' MAX';
-
-                const div = document.createElement('div');
-                div.className = 'item';
-                div.innerHTML = `
-                    <div class="info">
-                        <div class="name">${skill.name}</div>
-                        <div class="desc">${descText}</div>
-                        <div class="desc">💰 ${isOwned ? 'Куплен' : (isMaxed ? 'Максимум' : price + ' монет')}</div>
-                    </div>
-                    <button class="action-btn ${isOwned ? 'owned' : (isMaxed ? 'owned' : (!canBuy ? 'disabled' : ''))}" ${isOwned || isMaxed || !canBuy ? 'disabled' : ''}>
-                        ${isOwned ? '✅' : (isMaxed ? 'MAX' : 'Купить')}
-                    </button>
-                `;
-                const btn = div.querySelector('.action-btn');
-                btn.addEventListener('click', () => {
-                    if (isOwned || isMaxed) return;
-                    if (state.coins < price) { toast('⛔ Нет монет', 'error', 800); return; }
-                    state.coins -= price;
-                    state.skills[skill.id] = (state.skills[skill.id] || 0) + 1;
-                    updateUI();
-                    openSkills();
-                    toast('⚡ ' + skill.name + ' улучшен!', 'success', 1000);
-                });
-                list.appendChild(div);
-            });
-
-            $('skillsBalance').textContent = Math.floor(state.coins);
-            openModal('skillsModal');
-        }
-
-        // ============= ОБМЕННИК =============
-        function openExchange() {
-            const list = $('exchangeList');
-            list.innerHTML = '';
-
-            EXCHANGE_OFFERS.forEach(offer => {
-                const canExchange = state.level >= offer.level && state.coins >= offer.coins;
-                const lastExchange = state.lastExchange[offer.level] || 0;
-                const cooldown = offer.cooldown * 24 * 60 * 60 * 1000;
-                const now = Date.now();
-                const isOnCooldown = now - lastExchange < cooldown;
-                const available = canExchange && !isOnCooldown;
-
-                let cooldownText = '';
-                if (isOnCooldown) {
-                    const left = Math.ceil((cooldown - (now - lastExchange)) / (24 * 60 * 60 * 1000));
-                    cooldownText = '⏳ ' + left + ' дн.';
-                }
-
-                const div = document.createElement('div');
-                div.className = 'item';
-                div.innerHTML = `
-                    <div class="info">
-                        <div class="name">${offer.coins.toLocaleString()} → ${offer.stars} ⭐</div>
-                        <div class="desc">🔒 Lv.${offer.level}</div>
-                        <div class="desc">${cooldownText ? cooldownText : '✅ Доступно'}</div>
-                    </div>
-                    <button class="action-btn exchange-btn ${!available ? 'disabled' : ''}" ${!available ? 'disabled' : ''}>
-                        Обменять
-                    </button>
-                `;
-                const btn = div.querySelector('.action-btn');
-                btn.addEventListener('click', () => {
-                    if (!available) return;
-                    if (state.coins < offer.coins) { toast('⛔ Нет монет', 'error', 800); return; }
-                    if (state.level < offer.level) { toast('⛔ Нужен Lv.' + offer.level, 'error', 800); return; }
-
-                    state.coins -= offer.coins;
-                    state.lastExchange[offer.level] = Date.now();
-
-                    const user = tg.initDataUnsafe?.user;
-                    const username = user?.username || 'Аноним';
-                    const userId = user?.id || 'Неизвестно';
-
-                    tg.sendData(JSON.stringify({
-                        action: 'exchange',
-                        userId: userId,
-                        username: username,
-                        level: state.level,
-                        coins: offer.coins,
-                        stars: offer.stars
-                    }));
-
-                    updateUI();
-                    openExchange();
-                    toast('📨 Запрос отправлен!', 'exchange', 3000);
-                });
-                list.appendChild(div);
-            });
-
-            $('exchangeBalance').textContent = Math.floor(state.coins);
-            openModal('exchangeModal');
-        }
-
         // ============= НАБЕГ =============
         function openRaid() {
-            const now = Date.now();
-            if (now - state.raidCooldown < 3600000) {
-                const left = Math.ceil((3600000 - (now - state.raidCooldown)) / 60000);
-                toast('⏳ ' + left + ' мин', 'error', 800);
+            const content = $('raidContent');
+
+            // Проверяем босса
+            const boss = getCurrentBoss(state.level);
+            if (boss && state.bossesDefeated < BOSSES.indexOf(boss) + 1) {
+                const army = getArmyPower();
+                const totalPower = army * (state.boostArmy ? 1.5 : 1);
+                const winChance = Math.min(95, (totalPower / (boss.power + 1)) * 100);
+                const win = Math.random() * 100 < winChance;
+
+                let html = `
+                    <div style="text-align:center;margin:8px 0;">
+                        <div style="font-size:28px;">${boss.name}</div>
+                        <div style="color:#8395a7;font-size:12px;">⚔️ Сила босса: ${boss.power}</div>
+                        <div style="color:#ffd700;font-size:14px;">💪 Твоя сила: ${Math.floor(totalPower)}</div>
+                        <div style="color:#8395a7;font-size:12px;">🎯 Шанс победы: ${Math.floor(winChance)}%</div>
+                    </div>
+                `;
+
+                if (win) {
+                    const reward = boss.reward;
+                    state.coins += reward;
+                    state.bossesDefeated += 1;
+                    state.boostArmy = false;
+                    html += `
+                        <div class="boss-result win">
+                            <div class="big win">⚔️ БОСС ПОБЕЖДЁН!</div>
+                            <div style="color:#ffd700;">💰 +${reward} монет!</div>
+                        </div>
+                    `;
+                    toast('⚔️ БОСС ПОБЕЖДЁН! +' + reward + ' монет!', 'boss', 3000);
+                } else {
+                    if (state.boostShield) {
+                        state.boostShield = false;
+                        html += `
+                            <div class="boss-result lose">
+                                <div class="big lose">🛡️ ПОРАЖЕНИЕ ОТРАЖЕНО!</div>
+                                <div style="color:#00b894;">Щит спас тебя!</div>
+                            </div>
+                        `;
+                        toast('🛡️ Щит спас от поражения!', 'success', 2000);
+                    } else {
+                        const loss = Math.floor(50 + state.level * 2);
+                        state.coins = Math.max(0, state.coins - loss);
+                        html += `
+                            <div class="boss-result lose">
+                                <div class="big lose">💀 ПОРАЖЕНИЕ!</div>
+                                <div style="color:#ff6b6b;">-${loss} 💰</div>
+                            </div>
+                        `;
+                        toast('💀 Поражение от босса! -' + loss + ' монет', 'error', 2000);
+                    }
+                }
+
+                updateUI();
+                content.innerHTML = html +
+                    `<button class="action-btn" style="width:100%;padding:10px;margin-top:10px;border:none;border-radius:12px;background:rgba(255,255,255,0.04);color:#c8d6e5;font-weight:700;cursor:pointer;" id="raidCloseBtn">✕ Закрыть</button>`;
+                document.getElementById('raidCloseBtn').addEventListener('click', () => closeModal('raidModal'));
+                openModal('raidModal');
                 return;
             }
-            const power = Math.floor(state.level * 2 + (state.skills.income || 0) * 0.5);
-            const enemy = Math.floor(power * (0.5 + Math.random()));
-            const win = power > enemy;
-            const content = $('raidContent');
+
+            // Обычный набег
+            const army = getArmyPower();
+            const totalPower = army * (state.boostArmy ? 1.5 : 1);
+            const enemy = Math.floor(10 + state.level * 2 + Math.random() * 20);
+            const win = totalPower > enemy;
+
             let html = '';
             if (win) {
-                const reward = Math.floor(100 + power * 2);
+                const reward = Math.floor(20 + state.level * 3);
                 state.coins += reward;
-                html =
-                    `<div class="raid-result win"><div class="big win">⚔️ ПОБЕДА!</div><div style="color:#ffd700;">+${reward} 💰</div></div>`;
+                state.boostArmy = false;
+                html = `
+                    <div class="boss-result win">
+                        <div class="big win">⚔️ ПОБЕДА!</div>
+                        <div style="color:#ffd700;">💰 +${reward} монет!</div>
+                    </div>
+                `;
                 toast('⚔️ +' + reward, 'success', 1500);
             } else {
-                const loss = Math.floor(50 + power * 0.5);
-                const shield = state.shopItems.shield || 0;
-                if (shield > 0) {
-                    html =
-                        `<div class="raid-result lose"><div class="big lose">🛡️ ОТРАЖЕНО!</div><div style="color:#00b894;">Щит спас монеты!</div></div>`;
+                if (state.boostShield) {
+                    state.boostShield = false;
+                    html = `
+                        <div class="boss-result lose">
+                            <div class="big lose">🛡️ ОТРАЖЕНО!</div>
+                            <div style="color:#00b894;">Щит спас монеты!</div>
+                        </div>
+                    `;
                     toast('🛡️ Щит спас!', 'success', 2000);
                 } else {
+                    const loss = Math.floor(10 + state.level);
                     state.coins = Math.max(0, state.coins - loss);
-                    html =
-                        `<div class="raid-result lose"><div class="big lose">💀 ПОРАЖЕНИЕ!</div><div style="color:#ff6b6b;">-${loss} 💰</div></div>`;
+                    html = `
+                        <div class="boss-result lose">
+                            <div class="big lose">💀 ПОРАЖЕНИЕ!</div>
+                            <div style="color:#ff6b6b;">-${loss} 💰</div>
+                        </div>
+                    `;
                     toast('💀 -' + loss, 'error', 1500);
                 }
             }
-            state.raidCooldown = Date.now();
+
             updateUI();
             content.innerHTML = html +
-                `<div style="text-align:center;color:#8395a7;font-size:11px;margin:8px 0;">⏳ 1 час</div>
+                `<div style="text-align:center;color:#8395a7;font-size:11px;margin:8px 0;">⚔️ Сила армии: ${Math.floor(totalPower)}</div>
                 <button class="action-btn" style="width:100%;padding:10px;border:none;border-radius:12px;background:rgba(255,255,255,0.04);color:#c8d6e5;font-weight:700;cursor:pointer;" id="raidCloseBtn">✕ Закрыть</button>`;
             document.getElementById('raidCloseBtn').addEventListener('click', () => closeModal('raidModal'));
             openModal('raidModal');
         }
 
-        // ============= AIRDROP =============
-        function openAirdrop() {
-            const content = $('airdropContent');
-            if (state.level >= MAX_LEVEL) {
-                content.innerHTML = `
-                    <div style="text-align:center;padding:8px;">
-                        <div style="font-size:28px;color:#ffd700;font-weight:800;">🎉 100 УРОВЕНЬ!</div>
-                        <div style="color:#c8d6e5;margin:8px 0;">🪙 1000 TOKENS</div>
-                        <div style="color:#a29bfe;margin:4px 0;">🏆 NFT "Покоритель"</div>
-                        <button class="action-btn" style="margin-top:12px;padding:10px 20px;border:none;border-radius:12px;background:linear-gradient(135deg,#ffd700,#f0a500);color:#0a0a12;font-weight:700;font-size:14px;cursor:pointer;" id="claimAirdropBtn">💎 ЗАБРАТЬ</button>
-                    </div>
-                `;
-                document.getElementById('claimAirdropBtn').addEventListener('click', () => {
-                    toast('💎 Airdrop получен!', 'success', 3000);
-                    closeModal('airdropModal');
-                });
-            } else {
-                const p = Math.floor((state.level / MAX_LEVEL) * 100);
-                content.innerHTML = `
-                    <div style="text-align:center;padding:8px;">
-                        <div style="font-size:28px;">💎</div>
-                        <div style="color:#c8d6e5;margin:8px 0;">100 уровень → 1000 токенов + NFT</div>
-                        <div style="margin:8px 0;background:rgba(0,0,0,0.2);border-radius:10px;padding:4px;">
-                            <div style="height:4px;background:rgba(255,255,255,0.05);border-radius:20px;overflow:hidden;">
-                                <div style="height:100%;width:${p}%;background:linear-gradient(90deg,#6c5ce7,#fd79a8);border-radius:20px;"></div>
-                            </div>
-                        </div>
-                        <div style="color:#8395a7;font-size:12px;">${state.level}/${MAX_LEVEL} (${p}%)</div>
-                    </div>
-                `;
-            }
-            openModal('airdropModal');
-        }
-
         // ============= АВТОМАТИКА =============
+        // Восстановление энергии: 500 за 10 минут
         setInterval(() => {
             if (state.energy < state.maxEnergy) {
-                state.energy += 250 / 600;
+                state.energy += 500 / 600;
                 if (state.energy > state.maxEnergy) state.energy = state.maxEnergy;
                 updateUI();
             }
         }, 1000);
 
-        setInterval(() => {
-            const regen = getRegenBonus();
-            if (regen > 0 && state.energy < state.maxEnergy) {
-                state.energy += regen / 60;
-                if (state.energy > state.maxEnergy) state.energy = state.maxEnergy;
-                updateUI();
-            }
-        }, 1000);
-
+        // Пассивный доход
         setInterval(() => {
             const inc = getPassiveIncome();
             if (inc > 0) {
                 state.coins += inc;
                 updateUI();
-                toast('💰 +' + inc + ' пассивный доход', 'success', 1000);
             }
         }, 60000);
 
@@ -1655,6 +1714,7 @@
                     const data = JSON.parse(s);
                     Object.assign(state, data);
                     updateUI();
+                    startAutoclick();
                 }
             } catch (e) {}
         }
@@ -1672,32 +1732,35 @@
         $('closeShop').addEventListener('click', () => closeModal('shopModal'));
         $('shopModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('shopModal'); });
 
-        $('skillsBtn').addEventListener('click', openSkills);
-        $('closeSkills').addEventListener('click', () => closeModal('skillsModal'));
-        $('skillsModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('skillsModal'); });
+        $('skillsBtn').addEventListener('click', () => {
+            toast('⚡ Навыки в разработке!', 'level', 1500);
+        });
 
         $('raidBtn').addEventListener('click', openRaid);
         $('closeRaid').addEventListener('click', () => closeModal('raidModal'));
         $('raidModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('raidModal'); });
 
-        $('exchangeBtn').addEventListener('click', openExchange);
-        $('closeExchange').addEventListener('click', () => closeModal('exchangeModal'));
-        $('exchangeModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('exchangeModal'); });
+        $('exchangeBtn').addEventListener('click', () => {
+            toast('🔄 Обмен в разработке!', 'level', 1500);
+        });
 
-        $('airdropBtn').addEventListener('click', openAirdrop);
-        $('closeAirdrop').addEventListener('click', () => closeModal('airdropModal'));
-        $('airdropModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('airdropModal'); });
+        $('airdropBtn').addEventListener('click', () => {
+            toast('💎 Airdrop в разработке!', 'level', 1500);
+        });
 
         // ============ ЗАПУСК =============
         loadState();
         updateUI();
         setInterval(saveState, 15000);
 
-        console.log('⚔️ Эпоха Империй (полный экран)');
+        console.log('⚔️ Эпоха Империй (новая версия)');
         console.log('🏆 Уровень:', state.level, '/', MAX_LEVEL);
         console.log('🏛️ Эпоха:', getEra(state.level).name);
         console.log('💰 Баланс:', Math.floor(state.coins));
         console.log('⚡ Энергия:', Math.floor(state.energy), '/', state.maxEnergy);
+        console.log('⚔️ Сила армии:', getArmyPower());
+        console.log('🖥️ Автокликер:', getAutoClickSpeed(), 'клик/сек');
+        console.log('🎨 Стиль:', state.style);
     </script>
 </body>
 </html>
