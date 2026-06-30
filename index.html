@@ -6,6 +6,7 @@
     <title>Эпоха Империй</title>
     <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
     <style>
+        /* ============ БАЗА ============ */
         * {
             margin: 0;
             padding: 0;
@@ -33,6 +34,7 @@
             padding: 16px 14px 12px;
             border: 1px solid rgba(255, 255, 255, 0.04);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            position: relative;
         }
 
         /* ============ ШАПКА ============ */
@@ -60,9 +62,37 @@
             font-size: 16px;
         }
 
+        /* ============ ЭПОХА ============ */
+        .era-display {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 6px 12px;
+            margin: 8px 0 4px;
+            border: 1px solid rgba(255, 215, 0, 0.08);
+        }
+        .era-display .era-icon {
+            font-size: 20px;
+        }
+        .era-display .era-name {
+            font-size: 14px;
+            font-weight: 800;
+            color: #ffd700;
+        }
+        .era-display .era-level {
+            font-size: 11px;
+            color: #8395a7;
+        }
+        .era-display .era-next {
+            font-size: 10px;
+            color: #636e72;
+        }
+
         /* ============ ПРОГРЕСС ============ */
         .level-progress {
-            margin: 8px 0 4px;
+            margin: 6px 0 4px;
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             padding: 4px 10px;
@@ -101,32 +131,49 @@
             text-align: right;
         }
 
-        /* ============ БАННЕР ============ */
-        .banner {
-            margin: 6px 0;
-            padding: 6px 12px;
+        /* ============ БАННЕР БУСТА ============ */
+        .boost-banner {
+            margin: 4px 0 6px;
+            padding: 4px 10px;
             border-radius: 10px;
             text-align: center;
             font-size: 11px;
             font-weight: 700;
             color: #fff;
-            background: linear-gradient(135deg, #6c5ce7, #fd79a8);
-            cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: opacity 0.2s;
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            min-height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
-        .banner:active {
-            opacity: 0.7;
+        .boost-banner.active {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            border-color: #ff6b6b;
+            animation: boostPulse 0.5s ease-in-out infinite alternate;
         }
-        .banner.claimed {
-            background: #00b894;
+        @keyframes boostPulse {
+            from {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1.02);
+            }
         }
 
         /* ============ КЛИК ============ */
-        .click-area {
+        .click-wrapper {
+            position: relative;
+            margin: 8px auto 6px;
             width: 170px;
             height: 170px;
-            margin: 8px auto 6px;
+        }
+        .click-area {
+            width: 100%;
+            height: 100%;
             border-radius: 50%;
             background: radial-gradient(circle at 30% 30%, #2a2a5e, #0f0f1f);
             display: flex;
@@ -193,6 +240,39 @@
             color: #ffd700;
             border: 1px solid rgba(255, 215, 0, 0.06);
         }
+        .click-area .boost-multiplier {
+            position: absolute;
+            bottom: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            font-weight: 800;
+            color: #ff6b6b;
+            text-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+        }
+
+        /* ============ ЛЕТАЮЩИЕ МОНЕТЫ ============ */
+        .fly-coin {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999;
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            animation: flyCoin 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            will-change: transform, opacity;
+        }
+        @keyframes flyCoin {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(0.5);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(1.2);
+            }
+        }
 
         /* ============ СТАТИСТИКА ============ */
         .stats {
@@ -248,7 +328,7 @@
             width: 100%;
         }
 
-        /* ============ КНОПКИ (НИЖНЕЕ МЕНЮ) ============ */
+        /* ============ НИЖНЕЕ МЕНЮ ============ */
         .bottom-menu {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -299,9 +379,6 @@
                 opacity: 1;
             }
         }
-        .bottom-menu .btn.airdrop {
-            color: #a29bfe;
-        }
 
         /* ============ МОДАЛКИ ============ */
         .modal-overlay {
@@ -333,7 +410,7 @@
             padding: 16px 14px;
             max-width: 400px;
             width: 100%;
-            max-height: 75vh;
+            max-height: 80vh;
             overflow-y: auto;
             border: 1px solid rgba(255, 255, 255, 0.04);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
@@ -382,7 +459,55 @@
             font-weight: 700;
         }
 
-        /* ============ ЭЛЕМЕНТЫ СПИСКОВ ============ */
+        /* ============ БУСТЫ В МАГАЗИНЕ ============ */
+        .boost-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-bottom: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .boost-item .info .name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #c8d6e5;
+        }
+        .boost-item .info .desc {
+            font-size: 10px;
+            color: #8395a7;
+        }
+        .boost-item .info .desc .highlight {
+            color: #ffd700;
+        }
+        .boost-item .action-btn {
+            background: linear-gradient(135deg, #ffd700, #f0a500);
+            border: none;
+            border-radius: 10px;
+            padding: 5px 14px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #0a0a12;
+            cursor: pointer;
+            transition: transform 0.07s;
+        }
+        .boost-item .action-btn:active {
+            transform: scale(0.92);
+        }
+        .boost-item .action-btn.disabled {
+            background: #2d3436;
+            color: #636e72;
+            cursor: not-allowed;
+        }
+        .boost-item .action-btn.active {
+            background: #ff6b6b;
+            color: #fff;
+            cursor: default;
+        }
+
+        /* ============ ЗДАНИЯ / ВОЙСКА / ТЕХНОЛОГИИ ============ */
         .item {
             display: flex;
             justify-content: space-between;
@@ -429,12 +554,13 @@
             color: #636e72;
             cursor: not-allowed;
         }
-        .item .action-btn.active {
-            background: #ffd700;
-            color: #0a0a12;
+        .item .action-btn.locked {
+            background: #6c5ce7;
+            color: #fff;
+            cursor: not-allowed;
         }
 
-        /* ============ РЕЗУЛЬТАТ НАБЕГА ============ */
+        /* ============ НАБЕГ ============ */
         .raid-result {
             text-align: center;
             padding: 14px;
@@ -496,6 +622,11 @@
             background: rgba(255, 215, 0, 0.05);
             font-size: 14px;
         }
+        .toast.boost {
+            border-color: rgba(255, 107, 107, 0.2);
+            background: rgba(255, 107, 107, 0.05);
+            font-size: 14px;
+        }
         @keyframes toastIn {
             from {
                 opacity: 0;
@@ -516,135 +647,8 @@
             }
         }
 
-        /* ============ ЭФФЕКТЫ ============ */
-        .particle {
-            position: fixed;
-            pointer-events: none;
-            z-index: 999;
-            font-size: 22px;
-            animation: particleFly 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-            will-change: transform, opacity;
-        }
-        @keyframes particleFly {
-            0% {
-                opacity: 1;
-                transform: translate(0, 0) scale(0.5);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(var(--tx), var(--ty)) scale(1.2);
-            }
-        }
-
-        /* ============ СКИНЫ ============ */
-        .skin-gold .click-area {
-            border-color: #ffd700;
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.08);
-        }
-        .skin-fire .click-area {
-            border-color: #ff6b6b;
-            box-shadow: 0 0 40px rgba(255, 107, 107, 0.08);
-            background: radial-gradient(circle at 30% 30%, #3a1a1a, #1f0f0f);
-        }
-        .skin-cosmic .click-area {
-            border-color: #a29bfe;
-            box-shadow: 0 0 40px rgba(162, 155, 254, 0.08);
-            background: radial-gradient(circle at 30% 30%, #1a1a3a, #0f0f1f);
-        }
-        .skin-legend .click-area {
-            border-color: #fd79a8;
-            box-shadow: 0 0 60px rgba(253, 121, 168, 0.1);
-            background: radial-gradient(circle at 30% 30%, #2a1a2a, #1a0f1a);
-        }
-        .skin-legend .click-area::before {
-            background: conic-gradient(from 0deg, #fd79a8, #ffd700, #fd79a8);
-            opacity: 0.2;
-        }
-
-        /* ============ УГАДАЙ СЛОВО (МИНИ) ============ */
-        .word-box .word-display {
-            text-align: center;
-            font-size: 28px;
-            letter-spacing: 8px;
-            font-weight: 700;
-            color: #c8d6e5;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 12px;
-            border-radius: 12px;
-            margin: 8px 0;
-            font-family: 'Courier New', monospace;
-        }
-        .word-box .word-input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            background: rgba(0, 0, 0, 0.2);
-            color: #c8d6e5;
-            font-size: 16px;
-            text-align: center;
-            outline: none;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-        }
-        .word-box .word-input:focus {
-            border-color: #ffd700;
-        }
-        .word-box .word-attempts {
-            text-align: center;
-            color: #8395a7;
-            font-size: 12px;
-            margin: 6px 0;
-        }
-        .word-box .word-attempts span {
-            color: #ffd700;
-        }
-        .word-box .word-result {
-            text-align: center;
-            font-size: 14px;
-            font-weight: 700;
-            min-height: 28px;
-            color: #c8d6e5;
-        }
-        .word-box .word-result .reward {
-            color: #ffd700;
-        }
-        .word-box .word-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px;
-            margin-top: 8px;
-        }
-        .word-box .word-buttons button {
-            padding: 10px;
-            border: none;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.07s;
-        }
-        .word-box .word-buttons button:active {
-            transform: scale(0.92);
-        }
-        .word-box .word-buttons .guess {
-            background: linear-gradient(135deg, #ffd700, #f0a500);
-            color: #0a0a12;
-        }
-        .word-box .word-buttons .close {
-            background: rgba(255, 255, 255, 0.04);
-            color: #c8d6e5;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-        .word-box .word-status {
-            text-align: center;
-            color: #8395a7;
-            font-size: 11px;
-            margin-top: 6px;
-        }
-
         @media (max-width: 380px) {
-            .click-area {
+            .click-wrapper {
                 width: 140px;
                 height: 140px;
             }
@@ -664,9 +668,12 @@
             .header-item .value {
                 font-size: 13px;
             }
+            .era-display .era-name {
+                font-size: 12px;
+            }
         }
         @media (min-width: 460px) {
-            .click-area {
+            .click-wrapper {
                 width: 200px;
                 height: 200px;
             }
@@ -685,6 +692,14 @@
             <div class="header-item"><span class="icon">⚡</span><span class="value" id="energyDisplay">100</span></div>
         </div>
 
+        <!-- ============ ЭПОХА ============ -->
+        <div class="era-display">
+            <span class="era-icon" id="eraIcon">🏚️</span>
+            <span class="era-name" id="eraName">Деревня</span>
+            <span class="era-level" id="eraLevel">1-4</span>
+            <span class="era-next" id="eraNext">След: Lv.5</span>
+        </div>
+
         <!-- ============ ПРОГРЕСС ============ -->
         <div class="level-progress">
             <div class="level-text">Lv.<span id="levelDisplay">1</span></div>
@@ -692,14 +707,17 @@
             <div class="level-percent" id="levelPercent">0%</div>
         </div>
 
-        <!-- ============ БАННЕР ============ -->
-        <div class="banner" id="banner">💎 Airdrop: 100 уровень → Токены + NFT</div>
+        <!-- ============ БАННЕР БУСТА ============ -->
+        <div class="boost-banner" id="boostBanner">💪 Купи усиление в магазине!</div>
 
         <!-- ============ КЛИК ============ -->
-        <div class="click-area" id="clickArea">
-            <span class="badge" id="badge">Lv.1</span>
-            <span class="emoji" id="clickEmoji">⚔️</span>
-            <span class="text">ТАПАЙ</span>
+        <div class="click-wrapper">
+            <div class="click-area" id="clickArea">
+                <span class="badge" id="badge">Lv.1</span>
+                <span class="emoji" id="clickEmoji">⚔️</span>
+                <span class="text">ТАПАЙ</span>
+                <span class="boost-multiplier" id="boostMultiplier"></span>
+            </div>
         </div>
 
         <!-- ============ СТАТИСТИКА ============ -->
@@ -715,47 +733,24 @@
             <div class="energy-bar"><div class="energy-fill" id="energyFill" style="width:100%"></div></div>
         </div>
 
-        <!-- ============ НИЖНЕЕ МЕНЮ (6 КНОПОК) ============ -->
+        <!-- ============ НИЖНЕЕ МЕНЮ ============ -->
         <div class="bottom-menu">
             <button class="btn" id="buildBtn">🏠<span class="label">Город</span></button>
             <button class="btn" id="armyBtn">⚔️<span class="label">Войска</span></button>
             <button class="btn" id="techBtn">🔬<span class="label">Технологии</span></button>
-            <button class="btn" id="shopBtn">🛒<span class="label">Скины</span></button>
+            <button class="btn active" id="shopBtn">🛒<span class="label">Магазин</span></button>
             <button class="btn raid" id="raidBtn">⚡<span class="label">Набег</span></button>
-            <button class="btn airdrop" id="airdropBtn">💎<span class="label">Airdrop</span></button>
+            <button class="btn" id="airdropBtn">💎<span class="label">Airdrop</span></button>
         </div>
     </div>
 
     <!-- ============ МОДАЛКИ ============ -->
-    <!-- Скины -->
-    <div class="modal-overlay" id="shopModal"><div class="modal"><div class="head"><h2>🛒 Скины</h2><button class="close" id="closeShop">✕</button></div><div class="balance">💰 <span id="shopBalance">150</span></div><div id="skinList"></div></div></div>
-    <!-- Город -->
+    <div class="modal-overlay" id="shopModal"><div class="modal"><div class="head"><h2>🛒 Магазин усилений</h2><button class="close" id="closeShop">✕</button></div><div class="balance">💰 <span id="shopBalance">150</span></div><div id="shopList"></div></div></div>
     <div class="modal-overlay" id="buildModal"><div class="modal"><div class="head"><h2>🏠 Город</h2><button class="close" id="closeBuild">✕</button></div><div class="balance">💰 <span id="buildBalance">150</span></div><div id="buildList"></div></div></div>
-    <!-- Войска -->
     <div class="modal-overlay" id="armyModal"><div class="modal"><div class="head"><h2>⚔️ Войска</h2><button class="close" id="closeArmy">✕</button></div><div class="balance">💰 <span id="armyBalance">150</span></div><div id="armyList"></div></div></div>
-    <!-- Технологии -->
     <div class="modal-overlay" id="techModal"><div class="modal"><div class="head"><h2>🔬 Технологии</h2><button class="close" id="closeTech">✕</button></div><div class="balance">💰 <span id="techBalance">150</span></div><div id="techList"></div></div></div>
-    <!-- Набег -->
     <div class="modal-overlay" id="raidModal"><div class="modal"><div class="head"><h2>⚡ Набег</h2><button class="close" id="closeRaid">✕</button></div><div id="raidContent"></div></div></div>
-    <!-- Airdrop -->
     <div class="modal-overlay" id="airdropModal"><div class="modal"><div class="head"><h2>💎 Airdrop</h2><button class="close" id="closeAirdrop">✕</button></div><div id="airdropContent"></div></div></div>
-
-    <!-- ============ УГАДАЙ СЛОВО ============ -->
-    <div class="modal-overlay" id="wordOverlay">
-        <div class="modal word-box">
-            <div class="head"><h2>🔤 Угадай слово</h2><button class="close" id="closeWord">✕</button></div>
-            <div style="text-align:center;color:#8395a7;font-size:12px;" id="wordHint">Подсказка</div>
-            <div class="word-display" id="wordDisplay">_ _ _</div>
-            <input class="word-input" id="wordInput" maxlength="1" placeholder="Буква" autofocus>
-            <div class="word-attempts">Попыток: <span id="wordAttempts">3</span></div>
-            <div class="word-result" id="wordResult"></div>
-            <div class="word-buttons">
-                <button class="guess" id="wordGuess">🔍</button>
-                <button class="close" id="wordClose">✕</button>
-            </div>
-            <div class="word-status" id="wordStatus">Новое слово каждый день</div>
-        </div>
-    </div>
 
     <div class="toast-container" id="toastContainer"></div>
 
@@ -764,15 +759,44 @@
         tg.expand();
         tg.ready();
 
+        // ============= ЭПОХИ =============
+        const ERAS = [
+            { id: 0, name: 'Деревня', icon: '🏚️', minLevel: 1, maxLevel: 4 },
+            { id: 1, name: 'Каменный век', icon: '🪨', minLevel: 5, maxLevel: 9 },
+            { id: 2, name: 'Бронзовый век', icon: '⚒️', minLevel: 10, maxLevel: 14 },
+            { id: 3, name: 'Железный век', icon: '🏛️', minLevel: 15, maxLevel: 19 },
+            { id: 4, name: 'Феодализм', icon: '⚜️', minLevel: 20, maxLevel: 24 },
+            { id: 5, name: 'Ренессанс', icon: '👑', minLevel: 25, maxLevel: 29 },
+            { id: 6, name: 'Просвещение', icon: '🚀', minLevel: 30, maxLevel: 34 },
+            { id: 7, name: 'Империя', icon: '💎', minLevel: 35, maxLevel: 39 },
+            { id: 8, name: 'Золотой век', icon: '🌌', minLevel: 40, maxLevel: 999 }
+        ];
+
+        function getEra(level) {
+            for (let era of ERAS) {
+                if (level >= era.minLevel && level <= era.maxLevel) return era;
+            }
+            return ERAS[ERAS.length - 1];
+        }
+
+        function getNextEra(level) {
+            for (let era of ERAS) {
+                if (level < era.minLevel) return era;
+            }
+            return null;
+        }
+
         // ============= ДАННЫЕ =============
         const MAX_LEVEL = 100;
 
-        const SKINS = [
-            { id: 'default', name: 'Обычный', price: 0, bonus: 1, emoji: '⚔️' },
-            { id: 'gold', name: 'Золотой', price: 3000, bonus: 1.2, emoji: '👑' },
-            { id: 'fire', name: 'Огненный', price: 8000, bonus: 1.5, emoji: '🔥' },
-            { id: 'cosmic', name: 'Космический', price: 15000, bonus: 2.0, emoji: '🌌' },
-            { id: 'legend', name: 'Легендарный', price: 30000, bonus: 3.0, emoji: '💎' }
+        const BOOSTS = [
+            { id: 'x2_1min', name: '⚡ Быстрый клик', price: 500, multiplier: 2, duration: 60, desc: 'x2 монет на 1 минуту' },
+            { id: 'x3_1min', name: '🔥 Огненный тап', price: 1000, multiplier: 3, duration: 60, desc: 'x3 монет на 1 минуту' },
+            { id: 'x5_1min', name: '💎 Легендарный тап', price: 2500, multiplier: 5, duration: 60,
+            desc: 'x5 монет на 1 минуту' },
+            { id: 'x2_5min', name: '⏳ Замедление', price: 3000, multiplier: 2, duration: 300, desc: 'x2 монет на 5 минут' },
+            { id: 'x10_30sec', name: '🚀 Режим бога', price: 10000, multiplier: 10, duration: 30,
+            desc: 'x10 монет на 30 секунд' }
         ];
 
         const BUILDINGS = [
@@ -814,11 +838,6 @@
             return getExpForLevel(state.level + 1);
         }
 
-        function getSkinBonus() {
-            const s = SKINS.find(s => s.id === state.skin);
-            return s ? s.bonus : 1;
-        }
-
         function calcPower() {
             let p = 0;
             for (const [id, lvl] of Object.entries(state.buildings)) {
@@ -851,14 +870,12 @@
             exp: 0,
             clicks: 0,
             earnedToday: 0,
-            skin: 'default',
-            ownedSkins: ['default'],
             buildings: {},
             army: {},
             technologies: [],
             raidCooldown: 0,
-            wordCooldown: 0,
-            airdropClaimed: false
+            boostActive: null,
+            boostTimer: null
         };
 
         // ============= DOM =============
@@ -878,7 +895,12 @@
         const todayEl = $('today');
         const clickArea = $('clickArea');
         const container = $('app');
-        const banner = $('banner');
+        const eraIcon = $('eraIcon');
+        const eraName = $('eraName');
+        const eraLevel = $('eraLevel');
+        const eraNext = $('eraNext');
+        const boostBanner = $('boostBanner');
+        const boostMultiplier = $('boostMultiplier');
 
         // ============= ТОСТЫ =============
         let toastTimer = null;
@@ -897,17 +919,17 @@
             }, duration);
         }
 
-        // ============= ЭФФЕКТЫ =============
-        function spawnParticles(x, y, emoji = '✨') {
+        // ============= ЛЕТАЮЩИЕ МОНЕТЫ =============
+        function flyCoin(x, y, text) {
             const el = document.createElement('div');
-            el.className = 'particle';
-            el.textContent = emoji;
-            el.style.left = (x - 12) + 'px';
-            el.style.top = (y - 12) + 'px';
-            el.style.setProperty('--tx', (Math.random() - 0.5) * 80 + 'px');
-            el.style.setProperty('--ty', -Math.random() * 80 - 20 + 'px');
+            el.className = 'fly-coin';
+            el.textContent = text;
+            el.style.left = (x - 15) + 'px';
+            el.style.top = (y - 15) + 'px';
+            el.style.setProperty('--tx', (Math.random() - 0.5) * 120 + 'px');
+            el.style.setProperty('--ty', -Math.random() * 120 - 40 + 'px');
             document.body.appendChild(el);
-            setTimeout(() => el.remove(), 600);
+            setTimeout(() => el.remove(), 900);
         }
 
         // ============= ОБНОВЛЕНИЕ UI =============
@@ -934,23 +956,30 @@
             powerEl.textContent = calcPower();
             todayEl.textContent = state.earnedToday;
 
-            // Скин
-            const s = SKINS.find(s => s.id === state.skin);
-            container.className = 'game-container skin-' + state.skin;
-            clickEmoji.textContent = s ? s.emoji : '⚔️';
-
-            // Баннер
-            if (state.level >= MAX_LEVEL && !state.airdropClaimed) {
-                banner.textContent = '🎉 100 УРОВЕНЬ! Забери Airdrop!';
-                banner.style.background = 'linear-gradient(135deg, #ffd700, #ff6b6b)';
-                banner.className = 'banner';
-            } else if (state.airdropClaimed) {
-                banner.textContent = '✅ Airdrop получен!';
-                banner.className = 'banner claimed';
+            // Эпоха
+            const era = getEra(state.level);
+            const nextEra = getNextEra(state.level);
+            eraIcon.textContent = era.icon;
+            eraName.textContent = era.name;
+            eraLevel.textContent = era.minLevel + '-' + (era.maxLevel > 999 ? '∞' : era.maxLevel);
+            if (nextEra) {
+                eraNext.textContent = 'След: Lv.' + nextEra.minLevel;
             } else {
-                banner.textContent = '💎 Airdrop: 100 уровень → Токены + NFT';
-                banner.style.background = 'linear-gradient(135deg, #6c5ce7, #fd79a8)';
-                banner.className = 'banner';
+                eraNext.textContent = 'Максимум!';
+            }
+
+            // Буст баннер
+            if (state.boostActive) {
+                const boost = BOOSTS.find(b => b.id === state.boostActive);
+                if (boost) {
+                    boostBanner.textContent = '🔥 ' + boost.name + ' активен! x' + boost.multiplier;
+                    boostBanner.className = 'boost-banner active';
+                    boostMultiplier.textContent = 'x' + boost.multiplier;
+                }
+            } else {
+                boostBanner.textContent = '💪 Купи усиление в магазине!';
+                boostBanner.className = 'boost-banner';
+                boostMultiplier.textContent = '';
             }
         }
 
@@ -961,9 +990,10 @@
             if (state.exp >= needed) {
                 state.exp -= needed;
                 state.level += 1;
-                toast('🎉 Lv.' + state.level + '!', 'level', 2000);
+                const era = getEra(state.level);
+                toast('🎉 Lv.' + state.level + '! ' + era.icon + ' ' + era.name, 'level', 2000);
                 if (state.level === MAX_LEVEL) {
-                    toast('👑 100 УРОВЕНЬ! Забери Airdrop!', 'level', 3000);
+                    toast('👑 МАКСИМАЛЬНЫЙ УРОВЕНЬ!', 'level', 3000);
                 }
                 updateUI();
                 return true;
@@ -977,8 +1007,15 @@
                 toast('⛔ Нет энергии', 'error', 800);
                 return;
             }
+
+            let multiplier = 1;
+            if (state.boostActive) {
+                const boost = BOOSTS.find(b => b.id === state.boostActive);
+                if (boost) multiplier = boost.multiplier;
+            }
+
             let earned = Math.floor(Math.random() * 4) + 2;
-            earned = Math.floor(earned * getSkinBonus());
+            earned = Math.floor(earned * multiplier);
 
             state.coins += earned;
             state.energy -= 1;
@@ -992,7 +1029,9 @@
             const rect = clickArea.getBoundingClientRect();
             const cx = rect.left + rect.width / 2;
             const cy = rect.top + rect.height / 2;
-            spawnParticles(cx, cy, '✨');
+
+            const text = multiplier > 1 ? '+' + earned + '🔥' : '+' + earned;
+            flyCoin(cx + (Math.random() - 0.5) * 60, cy + (Math.random() - 0.5) * 60, text);
 
             updateUI();
             if (state.clicks % 3 === 0) {
@@ -1005,46 +1044,43 @@
 
         function closeModal(id) { $(id).classList.remove('active'); }
 
-        // ============= МАГАЗИН =============
+        // ============= МАГАЗИН БУСТОВ =============
         function openShop() {
-            const list = $('skinList');
+            const list = $('shopList');
             list.innerHTML = '';
-            SKINS.forEach(skin => {
-                const owned = state.ownedSkins.includes(skin.id);
-                const active = state.skin === skin.id;
-                const can = state.coins >= skin.price && !owned && skin.price > 0;
+            BOOSTS.forEach(boost => {
+                const isActive = state.boostActive === boost.id;
+                const canBuy = state.coins >= boost.price && !isActive;
+
                 const div = document.createElement('div');
-                div.className = 'item';
-                let status = '';
-                if (skin.price === 0) status = '🆓';
-                else if (owned && active) status = '✅';
-                else if (owned) status = '✔️';
-                else status = skin.price + '💰';
+                div.className = 'boost-item';
                 div.innerHTML = `
                     <div class="info">
-                        <div class="name">${skin.emoji} ${skin.name}</div>
-                        <div class="desc">${skin.bonus > 1 ? '+' + Math.round((skin.bonus-1)*100) + '%' : 'Обычный'}</div>
+                        <div class="name">${boost.name}</div>
+                        <div class="desc">${boost.desc}</div>
+                        <div class="desc">💰 ${boost.price} монет</div>
                     </div>
-                    <button class="action-btn ${owned ? (active ? 'active' : 'owned') : (!can && skin.price > 0 ? 'disabled' : '')}" ${!can && !owned && skin.price > 0 ? 'disabled' : ''}>
-                        ${owned ? (active ? '✅' : 'Выбрать') : (skin.price === 0 ? '✅' : 'Купить')}
+                    <button class="action-btn ${isActive ? 'active' : (!canBuy ? 'disabled' : '')}" ${isActive || !canBuy ? 'disabled' : ''}>
+                        ${isActive ? '✅ Активен' : 'Купить'}
                     </button>
                 `;
                 const btn = div.querySelector('.action-btn');
                 btn.addEventListener('click', () => {
-                    if (owned) { state.skin = skin.id;
+                    if (isActive) return;
+                    if (state.coins < boost.price) { toast('⛔ Нет монет', 'error', 800); return; }
+                    // Активируем буст
+                    state.coins -= boost.price;
+                    state.boostActive = boost.id;
+                    if (state.boostTimer) clearTimeout(state.boostTimer);
+                    state.boostTimer = setTimeout(() => {
+                        state.boostActive = null;
+                        state.boostTimer = null;
                         updateUI();
-                        openShop();
-                        toast('✅ ' + skin.name, 'success', 800); return; }
-                    if (skin.price === 0) { state.skin = 'default';
-                        updateUI();
-                        openShop(); return; }
-                    if (state.coins < skin.price) { toast('⛔ Нет монет', 'error', 800); return; }
-                    state.coins -= skin.price;
-                    state.ownedSkins.push(skin.id);
-                    state.skin = skin.id;
+                        toast('⏳ Усиление закончилось!', 'error', 2000);
+                    }, boost.duration * 1000);
                     updateUI();
                     openShop();
-                    toast('🎉 ' + skin.name, 'success', 1000);
+                    toast('🔥 ' + boost.name + ' активирован! x' + boost.multiplier, 'boost', 2000);
                 });
                 list.appendChild(div);
             });
@@ -1058,13 +1094,16 @@
             list.innerHTML = '';
             BUILDINGS.forEach(b => {
                 const lvl = state.buildings[b.id] || 0;
+                const era = getEra(state.level);
                 const can = state.coins >= b.price && state.level >= b.minLevel;
+
                 const div = document.createElement('div');
                 div.className = 'item';
                 div.innerHTML = `
                     <div class="info">
                         <div class="name">${b.name} <span style="color:#8395a7;font-size:10px;">Ур.${lvl}</span></div>
                         <div class="desc">⚔️ +${b.power} ${b.passive > 0 ? '💰 +' + b.passive + '/ч' : ''}</div>
+                        <div class="desc">🔒 ${era.icon} ${era.name}</div>
                     </div>
                     <button class="action-btn ${!can ? 'disabled' : ''}" ${!can ? 'disabled' : ''}>
                         ${lvl > 0 ? '⬆️' : '🏗️'} ${b.price}💰
@@ -1073,7 +1112,7 @@
                 const btn = div.querySelector('.action-btn');
                 btn.addEventListener('click', () => {
                     if (state.coins < b.price) { toast('⛔ Нет монет', 'error', 800); return; }
-                    if (state.level < b.minLevel) { toast('⛔ Lv.' + b.minLevel, 'error', 800); return; }
+                    if (state.level < b.minLevel) { toast('⛔ Требуется Lv.' + b.minLevel, 'error', 800); return; }
                     state.coins -= b.price;
                     state.buildings[b.id] = (state.buildings[b.id] || 0) + 1;
                     updateUI();
@@ -1093,6 +1132,7 @@
             ARMY.forEach(a => {
                 const cnt = state.army[a.id] || 0;
                 const can = state.coins >= a.price && state.level >= a.minLevel;
+
                 const div = document.createElement('div');
                 div.className = 'item';
                 div.innerHTML = `
@@ -1107,7 +1147,7 @@
                 const btn = div.querySelector('.action-btn');
                 btn.addEventListener('click', () => {
                     if (state.coins < a.price) { toast('⛔ Нет монет', 'error', 800); return; }
-                    if (state.level < a.minLevel) { toast('⛔ Lv.' + a.minLevel, 'error', 800); return; }
+                    if (state.level < a.minLevel) { toast('⛔ Требуется Lv.' + a.minLevel, 'error', 800); return; }
                     state.coins -= a.price;
                     state.army[a.id] = (state.army[a.id] || 0) + 1;
                     updateUI();
@@ -1127,6 +1167,7 @@
             TECHNOLOGIES.forEach(t => {
                 const learned = state.technologies.includes(t.id);
                 const can = !learned && state.coins >= t.price && state.level >= t.minLevel;
+
                 const div = document.createElement('div');
                 div.className = 'item';
                 div.innerHTML = `
@@ -1142,7 +1183,7 @@
                 btn.addEventListener('click', () => {
                     if (learned) return;
                     if (state.coins < t.price) { toast('⛔ Нет монет', 'error', 800); return; }
-                    if (state.level < t.minLevel) { toast('⛔ Lv.' + t.minLevel, 'error', 800); return; }
+                    if (state.level < t.minLevel) { toast('⛔ Требуется Lv.' + t.minLevel, 'error', 800); return; }
                     state.coins -= t.price;
                     state.technologies.push(t.id);
                     updateUI();
@@ -1173,7 +1214,7 @@
                 state.coins += reward;
                 html =
                     `<div class="raid-result win"><div class="big win">⚔️ ПОБЕДА!</div><div style="color:#ffd700;">+${reward} 💰</div></div>`;
-                toast('⚔️ +' + reward, 'raid', 1500);
+                toast('⚔️ +' + reward, 'success', 1500);
             } else {
                 const loss = Math.floor(50 + p * 0.5);
                 state.coins = Math.max(0, state.coins - loss);
@@ -1193,7 +1234,7 @@
         // ============= AIRDROP =============
         function openAirdrop() {
             const content = $('airdropContent');
-            if (state.level >= MAX_LEVEL && !state.airdropClaimed) {
+            if (state.level >= MAX_LEVEL) {
                 content.innerHTML = `
                     <div style="text-align:center;padding:8px;">
                         <div style="font-size:28px;color:#ffd700;font-weight:800;">🎉 100 УРОВЕНЬ!</div>
@@ -1203,14 +1244,9 @@
                     </div>
                 `;
                 document.getElementById('claimAirdropBtn').addEventListener('click', () => {
-                    state.airdropClaimed = true;
-                    updateUI();
-                    closeModal('airdropModal');
                     toast('💎 Airdrop получен!', 'success', 3000);
+                    closeModal('airdropModal');
                 });
-            } else if (state.airdropClaimed) {
-                content.innerHTML =
-                    `<div style="text-align:center;padding:16px;"><div style="font-size:28px;">✅</div><div style="color:#c8d6e5;">Airdrop получен!</div></div>`;
             } else {
                 const p = Math.floor((state.level / MAX_LEVEL) * 100);
                 content.innerHTML = `
@@ -1227,105 +1263,6 @@
                 `;
             }
             openModal('airdropModal');
-        }
-
-        // ============= УГАДАЙ СЛОВО =============
-        function getDailyWord() {
-            const words = [
-                { word: 'ЗАМОК', hint: '🏰' }, { word: 'РЫЦАРЬ', hint: '⚔️' },
-                { word: 'КОРОНА', hint: '👑' }, { word: 'МЕЧ', hint: '⚔️' },
-                { word: 'ЩИТ', hint: '🛡️' }, { word: 'ТРОН', hint: '👑' },
-                { word: 'ГИЛЬДИЯ', hint: '🏛️' }, { word: 'КРЕСТ', hint: '✝️' },
-                { word: 'ПЛАЩ', hint: '🧥' }, { word: 'КОЛЧАН', hint: '🏹' }
-            ];
-            const d = new Date();
-            const s = new Date(d.getFullYear(), 0, 0);
-            return words[Math.floor((d - s) / 86400000) % words.length];
-        }
-
-        let wData = null,
-            wGuessed = [],
-            wAttempts = 3,
-            wOver = false;
-
-        function openWord() {
-            const now = Date.now();
-            if (now - state.wordCooldown < 86400000) { toast('⏳ Завтра', 'error', 800); return; }
-            const today = new Date().toDateString();
-            if (localStorage.getItem('word_guessed_' + today) === 'true') { toast('✅ Уже сегодня', 'error', 800); return; }
-            wData = getDailyWord();
-            wGuessed = [];
-            wAttempts = 3;
-            wOver = false;
-            $('wordHint').textContent = '💡 ' + wData.hint;
-            $('wordAttempts').textContent = wAttempts;
-            $('wordResult').textContent = '';
-            $('wordInput').value = '';
-            $('wordInput').disabled = false;
-            $('wordGuess').disabled = false;
-            $('wordStatus').textContent = '3 попытки';
-            updateWordDisplay();
-            openModal('wordOverlay');
-            setTimeout(() => $('wordInput').focus(), 300);
-        }
-
-        function updateWordDisplay() {
-            let d = '';
-            for (let c of wData.word) d += (wGuessed.includes(c) ? c : '_') + ' ';
-            $('wordDisplay').textContent = d.trim();
-        }
-
-        function guessWord() {
-            if (wOver || !wData) return;
-            const input = $('wordInput').value.toUpperCase().trim();
-            if (!input) { toast('Введи букву', 'error', 800); return; }
-            if (input.length > 1) {
-                if (input === wData.word) { winWord(); return; }
-                wAttempts--;
-                $('wordAttempts').textContent = wAttempts;
-                toast('❌ ' + wAttempts, 'error', 800);
-                if (wAttempts <= 0) loseWord();
-                return;
-            }
-            const l = input[0];
-            if (wGuessed.includes(l)) { toast('Уже есть', 'error', 800); return; }
-            if (wData.word.includes(l)) {
-                wGuessed.push(l);
-                updateWordDisplay();
-                toast('✅ ' + l, 'success', 800);
-                let all = true;
-                for (let c of wData.word) { if (!wGuessed.includes(c)) { all = false; break; } }
-                if (all) winWord();
-            } else {
-                wAttempts--;
-                $('wordAttempts').textContent = wAttempts;
-                toast('❌ ' + l, 'error', 800);
-                if (wAttempts <= 0) loseWord();
-            }
-            $('wordInput').value = '';
-            setTimeout(() => $('wordInput').focus(), 100);
-        }
-
-        function winWord() {
-            wOver = true;
-            $('wordInput').disabled = true;
-            $('wordGuess').disabled = true;
-            const reward = 1000;
-            state.coins += reward;
-            state.wordCooldown = Date.now();
-            localStorage.setItem('word_guessed_' + new Date().toDateString(), 'true');
-            $('wordResult').innerHTML = '🎉 <span class="reward">+' + reward + '💰</span>';
-            $('wordStatus').textContent = '🏆 Завтра новое!';
-            updateUI();
-            toast('💰 +' + reward, 'success', 2000);
-        }
-
-        function loseWord() {
-            wOver = true;
-            $('wordInput').disabled = true;
-            $('wordGuess').disabled = true;
-            $('wordResult').innerHTML = '😢 Слово: ' + wData.word;
-            $('wordStatus').textContent = '🔄 Завтра!';
         }
 
         // ============= АВТОМАТИКА =============
@@ -1349,8 +1286,11 @@
         function loadState() {
             try {
                 const s = localStorage.getItem('guild_state');
-                if (s) { Object.assign(state, JSON.parse(s));
-                    updateUI(); }
+                if (s) {
+                    const data = JSON.parse(s);
+                    Object.assign(state, data);
+                    updateUI();
+                }
             } catch (e) {}
         }
 
@@ -1360,7 +1300,7 @@
             localStorage.setItem('guild_reset', today);
         }
 
-        // ============= СОБЫТИЯ =============
+        // ============ СОБЫТИЯ =============
         clickArea.addEventListener('click', handleClick);
         $('shopBtn').addEventListener('click', openShop);
         $('closeShop').addEventListener('click', () => closeModal('shopModal'));
@@ -1378,26 +1318,19 @@
         $('closeRaid').addEventListener('click', () => closeModal('raidModal'));
         $('raidModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('raidModal'); });
         $('airdropBtn').addEventListener('click', openAirdrop);
-        banner.addEventListener('click', openAirdrop);
         $('closeAirdrop').addEventListener('click', () => closeModal('airdropModal'));
         $('airdropModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('airdropModal'); });
 
-        // Слово
-        $('wordBtn').addEventListener('click', openWord);
-        $('wordGuess').addEventListener('click', guessWord);
-        $('wordInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') guessWord(); });
-        $('closeWord').addEventListener('click', () => closeModal('wordOverlay'));
-        $('wordClose').addEventListener('click', () => closeModal('wordOverlay'));
-        $('wordOverlay').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('wordOverlay'); });
-
-        // ============= ЗАПУСК =============
+        // ============ ЗАПУСК =============
         loadState();
         updateUI();
         setInterval(saveState, 15000);
 
-        console.log('⚔️ Эпоха Империй (минимализм)');
-        console.log('🏆 Уровень:', state.level, '/', MAX_LEVEL);
+        console.log('⚔️ Эпоха Империй (эпохи по уровням + бусты)');
+        console.log('🏆 Уровень:', state.level);
+        console.log('🏛️ Эпоха:', getEra(state.level).name);
         console.log('💰 Баланс:', state.coins);
+        console.log('🔥 Буст:', state.boostActive || 'нет');
     </script>
 </body>
 </html>
