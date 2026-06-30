@@ -3,17 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Гильдия Эпох</title>
+    <title>Gold Epoch</title>
     <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
     <style>
-        /* ============ БАЗОВЫЙ СБРОС ============ */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             background: #0a0a12;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -26,8 +19,6 @@
             user-select: none;
             overflow: hidden;
         }
-
-        /* ============ ОСНОВНОЙ КОНТЕЙНЕР ============ */
         .game-container {
             max-width: 420px;
             width: 100%;
@@ -39,8 +30,6 @@
             border: 1px solid rgba(255,255,255,0.06);
             box-shadow: 0 30px 80px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);
         }
-
-        /* ============ ВЕРХНЯЯ ПАНЕЛЬ ============ */
         .header {
             display: flex;
             justify-content: space-between;
@@ -51,7 +40,6 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.05);
         }
-
         .header-item {
             display: flex;
             align-items: center;
@@ -60,16 +48,8 @@
             font-weight: 600;
             color: #c8d6e5;
         }
-
-        .header-item .icon {
-            font-size: 20px;
-        }
-        .header-item .value {
-            color: #ffd700;
-            font-size: 18px;
-        }
-
-        /* ============ КНОПКА КЛИКА ============ */
+        .header-item .icon { font-size: 20px; }
+        .header-item .value { color: #ffd700; font-size: 18px; }
         .click-area {
             width: 200px;
             height: 200px;
@@ -82,14 +62,11 @@
             align-items: center;
             cursor: pointer;
             border: 3px solid rgba(255,215,0,0.3);
-            box-shadow: 
-                0 0 60px rgba(255,215,0,0.1),
-                inset 0 -10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 0 60px rgba(255,215,0,0.1), inset 0 -10px 30px rgba(0,0,0,0.5);
             transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             user-select: none;
         }
-
         .click-area::before {
             content: '';
             position: absolute;
@@ -100,28 +77,14 @@
             z-index: -1;
             animation: rotateBorder 6s linear infinite;
         }
-
-        @keyframes rotateBorder {
-            to { transform: rotate(360deg); }
-        }
-
+        @keyframes rotateBorder { to { transform: rotate(360deg); } }
         .click-area:active {
             transform: scale(0.92);
             border-color: #ffd700;
             box-shadow: 0 0 100px rgba(255,215,0,0.3), inset 0 -5px 20px rgba(0,0,0,0.3);
         }
-
-        .click-area .emoji {
-            font-size: 70px;
-            line-height: 1;
-            filter: drop-shadow(0 4px 20px rgba(255,215,0,0.3));
-            transition: transform 0.1s;
-        }
-
-        .click-area:active .emoji {
-            transform: scale(1.1);
-        }
-
+        .click-area .emoji { font-size: 70px; line-height: 1; filter: drop-shadow(0 4px 20px rgba(255,215,0,0.3)); transition: transform 0.1s; }
+        .click-area:active .emoji { transform: scale(1.1); }
         .click-area .text {
             font-size: 14px;
             font-weight: 700;
@@ -131,7 +94,6 @@
             letter-spacing: 2px;
             text-transform: uppercase;
         }
-
         .click-area .level-badge {
             position: absolute;
             top: 10px;
@@ -145,15 +107,12 @@
             color: #ffd700;
             border: 1px solid rgba(255,215,0,0.2);
         }
-
-        /* ============ СТАТИСТИКА ============ */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 8px;
             margin: 16px 0;
         }
-
         .stat-card {
             background: rgba(0,0,0,0.4);
             border-radius: 16px;
@@ -162,28 +121,9 @@
             border: 1px solid rgba(255,255,255,0.04);
             backdrop-filter: blur(5px);
         }
-
-        .stat-card .stat-value {
-            font-size: 22px;
-            font-weight: 800;
-            color: #ffd700;
-            display: block;
-        }
-
-        .stat-card .stat-label {
-            font-size: 11px;
-            color: #8395a7;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 2px;
-            display: block;
-        }
-
-        /* ============ ЭНЕРГИЯ ============ */
-        .energy-section {
-            margin: 12px 0 16px;
-        }
-
+        .stat-card .stat-value { font-size: 22px; font-weight: 800; color: #ffd700; display: block; }
+        .stat-card .stat-label { font-size: 11px; color: #8395a7; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; display: block; }
+        .energy-section { margin: 12px 0 16px; }
         .energy-header {
             display: flex;
             justify-content: space-between;
@@ -192,12 +132,7 @@
             margin-bottom: 6px;
             padding: 0 4px;
         }
-
-        .energy-header .current {
-            color: #ffd700;
-            font-weight: 600;
-        }
-
+        .energy-header .current { color: #ffd700; font-weight: 600; }
         .energy-bar {
             width: 100%;
             height: 8px;
@@ -206,7 +141,6 @@
             overflow: hidden;
             position: relative;
         }
-
         .energy-fill {
             height: 100%;
             border-radius: 20px;
@@ -216,12 +150,7 @@
             transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             width: 100%;
         }
-
-        @keyframes shimmer {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
+        @keyframes shimmer { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
         .energy-bar .energy-text {
             position: absolute;
             right: 6px;
@@ -231,15 +160,12 @@
             font-weight: 700;
             color: rgba(255,255,255,0.5);
         }
-
-        /* ============ КНОПКИ ДЕЙСТВИЙ ============ */
         .action-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
             margin: 4px 0 8px;
         }
-
         .btn {
             padding: 14px;
             border: none;
@@ -255,57 +181,125 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-
-        .btn:active {
-            transform: scale(0.95);
-        }
-
+        .btn:active { transform: scale(0.95); }
         .btn-primary {
             background: linear-gradient(135deg, #ffd700, #f0a500);
             color: #0a0a12;
             box-shadow: 0 4px 20px rgba(255,215,0,0.25);
         }
-
-        .btn-primary:active {
-            box-shadow: 0 2px 10px rgba(255,215,0,0.15);
-        }
-
         .btn-secondary {
             background: rgba(255,255,255,0.06);
             color: #c8d6e5;
             border: 1px solid rgba(255,255,255,0.08);
         }
-
-        .btn-secondary:active {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            color: white;
-            box-shadow: 0 4px 20px rgba(255,107,107,0.2);
-        }
-
         .btn-success {
             background: linear-gradient(135deg, #00b894, #00a381);
             color: white;
             box-shadow: 0 4px 20px rgba(0,184,148,0.2);
         }
-
-        .btn-block {
-            grid-column: 1 / -1;
+        .btn-block { grid-column: 1 / -1; }
+        
+        /* ============ МОДАЛЬНОЕ ОКНО МАГАЗИНА ============ */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
         }
+        .modal-overlay.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal {
+            background: #1a1a2e;
+            border-radius: 30px;
+            padding: 24px 20px;
+            max-width: 400px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+            animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal h2 {
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .modal .close-btn {
+            float: right;
+            background: none;
+            border: none;
+            color: #8395a7;
+            font-size: 28px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .modal .close-btn:hover { color: #ff6b6b; transform: rotate(90deg); }
+        .skin-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.04);
+            border-radius: 16px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255,255,255,0.04);
+            transition: 0.3s;
+        }
+        .skin-item:hover { background: rgba(255,255,255,0.08); }
+        .skin-item .info { display: flex; flex-direction: column; gap: 2px; }
+        .skin-item .name { font-size: 16px; font-weight: 600; color: #c8d6e5; }
+        .skin-item .price { font-size: 13px; color: #ffd700; }
+        .skin-item .owned { color: #00b894; font-size: 13px; font-weight: 600; }
+        .skin-item .buy-btn {
+            background: linear-gradient(135deg, #ffd700, #f0a500);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            color: #0a0a12;
+            transition: 0.3s;
+        }
+        .skin-item .buy-btn:active { transform: scale(0.95); }
+        .skin-item .buy-btn.owned-btn {
+            background: #00b894;
+            color: white;
+            cursor: default;
+        }
+        .skin-item .buy-btn.disabled {
+            background: #2d3436;
+            color: #636e72;
+            cursor: not-allowed;
+        }
+        .modal .balance-info {
+            text-align: center;
+            color: #8395a7;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+        .modal .balance-info span { color: #ffd700; font-weight: 700; }
 
-        /* ============ ТОСТ ============ */
+        /* ============ ТОСТЫ ============ */
         .toast-container {
             position: fixed;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 1000;
+            z-index: 3000;
             pointer-events: none;
         }
-
         .toast {
             background: rgba(0,0,0,0.85);
             backdrop-filter: blur(20px);
@@ -322,33 +316,17 @@
             min-width: 200px;
             max-width: 90%;
         }
-
-        .toast.success {
-            border-color: rgba(0,184,148,0.4);
-        }
-        .toast.error {
-            border-color: rgba(255,107,107,0.4);
-        }
-        .toast.level-up {
-            border-color: rgba(255,215,0,0.6);
-            background: rgba(255,215,0,0.15);
-            font-size: 20px;
-        }
-
+        .toast.success { border-color: rgba(0,184,148,0.4); }
+        .toast.error { border-color: rgba(255,107,107,0.4); }
+        .toast.level-up { border-color: rgba(255,215,0,0.6); background: rgba(255,215,0,0.15); font-size: 20px; }
         @keyframes slideDown {
             from { opacity: 0; transform: translateX(-50%) translateY(-20px) scale(0.9); }
             to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
         }
+        .toast.fade-out { animation: fadeOut 0.3s ease forwards; }
+        @keyframes fadeOut { to { opacity: 0; transform: translateX(-50%) translateY(-10px) scale(0.95); } }
 
-        .toast.fade-out {
-            animation: fadeOut 0.3s ease forwards;
-        }
-
-        @keyframes fadeOut {
-            to { opacity: 0; transform: translateX(-50%) translateY(-10px) scale(0.95); }
-        }
-
-        /* ============ FLOATING МОНЕТКИ ============ */
+        /* ============ ПАРТИКЛЫ ============ */
         .coin-particle {
             position: fixed;
             font-size: 30px;
@@ -356,111 +334,52 @@
             z-index: 999;
             animation: coinFly 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
-
         @keyframes coinFly {
             0% { opacity: 1; transform: translate(0, 0) scale(1); }
             100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(1.5); }
         }
 
-        /* ============ АДАПТИВ ============ */
+        /* ============ СКИНЫ ============ */
+        .skin-gold .click-area { border-color: #ffd700; box-shadow: 0 0 80px rgba(255,215,0,0.2), inset 0 -10px 30px rgba(0,0,0,0.5); }
+        .skin-fire .click-area { border-color: #ff6b6b; box-shadow: 0 0 80px rgba(255,107,107,0.2); background: radial-gradient(circle at 30% 30%, #3a1a1a, #1f0f0f); }
+        .skin-cosmic .click-area { border-color: #a29bfe; box-shadow: 0 0 80px rgba(162,155,254,0.2); background: radial-gradient(circle at 30% 30%, #1a1a3a, #0f0f1f); }
+        .skin-legend .click-area { border-color: #fd79a8; box-shadow: 0 0 100px rgba(253,121,168,0.3); background: radial-gradient(circle at 30% 30%, #2a1a2a, #1a0f1a); }
+        .skin-legend .click-area::before { background: conic-gradient(from 0deg, #fd79a8, #ffd700, #fd79a8); opacity: 0.5; }
+
         @media (max-width: 400px) {
-            .click-area {
-                width: 160px;
-                height: 160px;
-            }
+            .click-area { width: 160px; height: 160px; }
             .click-area .emoji { font-size: 50px; }
             .stat-card .stat-value { font-size: 18px; }
             .btn { font-size: 12px; padding: 12px; }
         }
-
         @media (min-width: 500px) {
-            .click-area {
-                width: 240px;
-                height: 240px;
-            }
+            .click-area { width: 240px; height: 240px; }
             .click-area .emoji { font-size: 80px; }
-        }
-
-        /* ============ SKIN-ПЕРСОНАЛИЗАЦИЯ ============ */
-        .skin-gold .click-area {
-            border-color: #ffd700;
-            box-shadow: 0 0 80px rgba(255,215,0,0.2), inset 0 -10px 30px rgba(0,0,0,0.5);
-        }
-        .skin-fire .click-area {
-            border-color: #ff6b6b;
-            box-shadow: 0 0 80px rgba(255,107,107,0.2);
-            background: radial-gradient(circle at 30% 30%, #3a1a1a, #1f0f0f);
-        }
-        .skin-cosmic .click-area {
-            border-color: #a29bfe;
-            box-shadow: 0 0 80px rgba(162,155,254,0.2);
-            background: radial-gradient(circle at 30% 30%, #1a1a3a, #0f0f1f);
-        }
-        .skin-legend .click-area {
-            border-color: #fd79a8;
-            box-shadow: 0 0 100px rgba(253,121,168,0.3);
-            background: radial-gradient(circle at 30% 30%, #2a1a2a, #1a0f1a);
-        }
-        .skin-legend .click-area::before {
-            background: conic-gradient(from 0deg, #fd79a8, #ffd700, #fd79a8);
-            opacity: 0.5;
         }
     </style>
 </head>
 <body>
+    <!-- ОСНОВНОЙ ЭКРАН -->
     <div class="game-container" id="app">
-        <!-- Верхняя панель -->
         <div class="header">
-            <div class="header-item">
-                <span class="icon">🏆</span>
-                <span>Lv.<span class="value" id="level">1</span></span>
-            </div>
-            <div class="header-item">
-                <span class="icon">💰</span>
-                <span class="value" id="coins">150</span>
-            </div>
-            <div class="header-item">
-                <span class="icon">⚡</span>
-                <span class="value" id="energyDisplay">100</span>
-            </div>
+            <div class="header-item"><span class="icon">🏆</span><span>Lv.<span class="value" id="level">1</span></span></div>
+            <div class="header-item"><span class="icon">💰</span><span class="value" id="coins">150</span></div>
+            <div class="header-item"><span class="icon">⚡</span><span class="value" id="energyDisplay">100</span></div>
         </div>
-
-        <!-- Клик-зона -->
         <div class="click-area" id="clickArea">
             <span class="level-badge" id="levelBadge">Lv.1</span>
             <span class="emoji" id="clickEmoji">⚔️</span>
             <span class="text">ТАПАЙ!</span>
         </div>
-
-        <!-- Статистика -->
         <div class="stats-grid">
-            <div class="stat-card">
-                <span class="stat-value" id="clickCount">0</span>
-                <span class="stat-label">Всего кликов</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-value" id="earnedToday">0</span>
-                <span class="stat-label">За сегодня</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-value" id="expDisplay">0/100</span>
-                <span class="stat-label">Опыт</span>
-            </div>
+            <div class="stat-card"><span class="stat-value" id="clickCount">0</span><span class="stat-label">Всего кликов</span></div>
+            <div class="stat-card"><span class="stat-value" id="earnedToday">0</span><span class="stat-label">За сегодня</span></div>
+            <div class="stat-card"><span class="stat-value" id="expDisplay">0/100</span><span class="stat-label">Опыт</span></div>
         </div>
-
-        <!-- Энергия -->
         <div class="energy-section">
-            <div class="energy-header">
-                <span>⚡ Энергия</span>
-                <span class="current"><span id="energyCurrent">100</span> / 100</span>
-            </div>
-            <div class="energy-bar">
-                <div class="energy-fill" id="energyFill" style="width: 100%"></div>
-                <span class="energy-text" id="energyPercent">100%</span>
-            </div>
+            <div class="energy-header"><span>⚡ Энергия</span><span class="current"><span id="energyCurrent">100</span> / 100</span></div>
+            <div class="energy-bar"><div class="energy-fill" id="energyFill" style="width: 100%"></div><span class="energy-text" id="energyPercent">100%</span></div>
         </div>
-
-        <!-- Кнопки действий -->
         <div class="action-buttons">
             <button class="btn btn-primary" id="boostBtn">⚡ +50%</button>
             <button class="btn btn-secondary" id="shopBtn">🛒 Магазин</button>
@@ -468,19 +387,34 @@
         </div>
     </div>
 
-    <!-- Тосты -->
+    <!-- МОДАЛЬНОЕ ОКНО МАГАЗИНА -->
+    <div class="modal-overlay" id="shopModal">
+        <div class="modal">
+            <button class="close-btn" id="closeShop">✕</button>
+            <h2>🛒 Магазин скинов</h2>
+            <div class="balance-info">💰 Твой баланс: <span id="shopBalance">150</span> монет</div>
+            <div id="skinList"></div>
+        </div>
+    </div>
+
+    <!-- ТОСТЫ -->
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
-        // ============================================================
-        //                       ГЛАВНЫЙ КОД
-        // ============================================================
-
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.ready();
 
-        // ==================== СОСТОЯНИЕ ====================
+        // ============= ДАННЫЕ СКИНОВ =============
+        const SKINS = [
+            { id: 'default', name: '⚔️ Обычный', price: 0, emoji: '⚔️' },
+            { id: 'gold', name: '👑 Золотой', price: 3000, emoji: '👑' },
+            { id: 'fire', name: '🔥 Огненный', price: 8000, emoji: '🔥' },
+            { id: 'cosmic', name: '🌌 Космический', price: 15000, emoji: '🌌' },
+            { id: 'legend', name: '💎 Легендарный', price: 30000, emoji: '💎' }
+        ];
+
+        // ============= СОСТОЯНИЕ =============
         const state = {
             coins: 150,
             energy: 100,
@@ -491,11 +425,12 @@
             clicks: 0,
             earnedToday: 0,
             skin: 'default',
+            ownedSkins: ['default'],
             lastClickTime: 0,
             comboCount: 0
         };
 
-        // ==================== DOM ====================
+        // ============= DOM =============
         const $ = id => document.getElementById(id);
         const coinsEl = $('coins');
         const energyDisplay = $('energyDisplay');
@@ -510,22 +445,25 @@
         const clickArea = $('clickArea');
         const clickEmoji = $('clickEmoji');
         const container = $('app');
+        const shopModal = $('shopModal');
+        const shopBalance = $('shopBalance');
+        const skinList = $('skinList');
+        const closeShop = $('closeShop');
 
-        // ==================== ТОСТЫ ====================
+        // ============= ТОСТЫ =============
         function showToast(text, type = 'success', duration = 2000) {
             const container = $('toastContainer');
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
             toast.textContent = text;
             container.appendChild(toast);
-            
             setTimeout(() => {
                 toast.classList.add('fade-out');
                 setTimeout(() => toast.remove(), 300);
             }, duration);
         }
 
-        // ==================== МОНЕТКИ (ПАРТИКЛЫ) ====================
+        // ============= ПАРТИКЛЫ =============
         function spawnCoins(x, y, count = 3) {
             const emojis = ['🪙', '⭐', '💎'];
             for (let i = 0; i < count; i++) {
@@ -541,7 +479,12 @@
             }
         }
 
-        // ==================== ОБНОВЛЕНИЕ UI ====================
+        // ============= ЗАГРУЗКА ДАННЫХ ИЗ БОТА =============
+        function loadDataFromBot() {
+            tg.sendData(JSON.stringify({ action: 'get_data' }));
+        }
+
+        // ============= ОБНОВЛЕНИЕ UI =============
         function updateUI() {
             coinsEl.textContent = state.coins;
             energyDisplay.textContent = Math.floor(state.energy);
@@ -554,29 +497,117 @@
             clickCount.textContent = state.clicks;
             earnedToday.textContent = state.earnedToday;
             expDisplay.textContent = `${state.exp}/${state.expToNext}`;
-
-            // Скин
+            
+            // Применяем скин
             container.className = `game-container skin-${state.skin}`;
-            if (state.skin === 'gold') clickEmoji.textContent = '👑';
-            else if (state.skin === 'fire') clickEmoji.textContent = '🔥';
-            else if (state.skin === 'cosmic') clickEmoji.textContent = '🌌';
-            else if (state.skin === 'legend') clickEmoji.textContent = '💎';
-            else clickEmoji.textContent = '⚔️';
+            const skin = SKINS.find(s => s.id === state.skin);
+            clickEmoji.textContent = skin ? skin.emoji : '⚔️';
+            
+            // Обновляем баланс в магазине
+            shopBalance.textContent = state.coins;
         }
 
-        // ==================== КЛИК ====================
+        // ============= МАГАЗИН =============
+        function openShop() {
+            renderSkins();
+            shopBalance.textContent = state.coins;
+            shopModal.classList.add('active');
+        }
+
+        function closeShopModal() {
+            shopModal.classList.remove('active');
+        }
+
+        function renderSkins() {
+            skinList.innerHTML = '';
+            SKINS.forEach(skin => {
+                const owned = state.ownedSkins.includes(skin.id);
+                const isActive = state.skin === skin.id;
+                const canBuy = state.coins >= skin.price && !owned && skin.price > 0;
+                const isDefault = skin.id === 'default';
+
+                const div = document.createElement('div');
+                div.className = 'skin-item';
+                
+                let statusText = '';
+                if (isDefault) statusText = '🆓 Бесплатно';
+                else if (owned && isActive) statusText = '✅ Активен';
+                else if (owned) statusText = '✔️ Владелец';
+                else statusText = `💰 ${skin.price} монет`;
+
+                div.innerHTML = `
+                    <div class="info">
+                        <span class="name">${skin.name}</span>
+                        <span class="${owned ? 'owned' : 'price'}">${statusText}</span>
+                    </div>
+                    <button class="buy-btn ${owned ? 'owned-btn' : (canBuy ? '' : 'disabled')}"
+                            data-skin-id="${skin.id}"
+                            ${!canBuy && !owned && !isDefault ? 'disabled' : ''}>
+                        ${owned ? (isActive ? '✅' : 'Выбрать') : (isDefault ? '✅' : 'Купить')}
+                    </button>
+                `;
+
+                const btn = div.querySelector('.buy-btn');
+                btn.addEventListener('click', () => handleSkinAction(skin.id));
+
+                skinList.appendChild(div);
+            });
+        }
+
+        function handleSkinAction(skinId) {
+            const skin = SKINS.find(s => s.id === skinId);
+            if (!skin) return;
+
+            // Если скин уже есть - просто применяем
+            if (state.ownedSkins.includes(skinId)) {
+                state.skin = skinId;
+                updateUI();
+                renderSkins();
+                showToast(`✅ Скин "${skin.name}" применён!`, 'success');
+                return;
+            }
+
+            // Если это дефолтный скин (он всегда бесплатный)
+            if (skinId === 'default') {
+                state.skin = 'default';
+                updateUI();
+                renderSkins();
+                showToast(`✅ Скин "${skin.name}" применён!`, 'success');
+                return;
+            }
+
+            // Покупка скина
+            if (state.coins < skin.price) {
+                showToast(`⛔ Не хватает монет! Нужно ${skin.price}`, 'error');
+                return;
+            }
+
+            // Списываем монеты
+            state.coins -= skin.price;
+            state.ownedSkins.push(skinId);
+            state.skin = skinId;
+            updateUI();
+            renderSkins();
+            showToast(`🎉 Куплен скин "${skin.name}"!`, 'success', 2000);
+            spawnCoins(window.innerWidth/2, window.innerHeight/2, 8);
+
+            // Отправляем боту
+            tg.sendData(JSON.stringify({
+                action: 'buy_skin',
+                skin_id: skinId,
+                price: skin.price
+            }));
+        }
+
+        // ============= КЛИК =============
         function handleClick(e) {
             if (state.energy <= 0) {
                 showToast('⛔ Нет энергии! Жди восстановления', 'error');
                 return;
             }
-
             const now = Date.now();
-            if (now - state.lastClickTime < 100) {
-                state.comboCount += 1;
-            } else {
-                state.comboCount = 1;
-            }
+            if (now - state.lastClickTime < 100) state.comboCount += 1;
+            else state.comboCount = 1;
             state.lastClickTime = now;
 
             const earned = Math.floor(Math.random() * 5) + 1 + Math.floor(state.comboCount / 10);
@@ -584,9 +615,8 @@
             state.energy -= 1;
             state.clicks += 1;
             state.earnedToday += earned;
-
-            // Опыт
             state.exp += 1;
+
             if (state.exp >= state.expToNext) {
                 state.level += 1;
                 state.exp = 0;
@@ -595,26 +625,16 @@
                 spawnCoins(window.innerWidth/2, window.innerHeight/2, 10);
             }
 
-            // Партиклы
             const rect = clickArea.getBoundingClientRect();
             spawnCoins(rect.left + rect.width/2, rect.top + rect.height/2, 2);
 
-            // Отправка боту
-            tg.sendData(JSON.stringify({
-                action: 'click',
-                earned: earned
-            }));
+            tg.sendData(JSON.stringify({ action: 'click', earned: earned }));
 
             updateUI();
             showToast(`+${earned} 🪙`, 'success', 800);
         }
 
-        // ==================== ЗАГРУЗКА ДАННЫХ ====================
-        function loadData() {
-            tg.sendData(JSON.stringify({ action: 'get_data' }));
-        }
-
-        // ==================== ВОССТАНОВЛЕНИЕ ЭНЕРГИИ ====================
+        // ============= ВОССТАНОВЛЕНИЕ ЭНЕРГИИ =============
         function boostEnergy() {
             if (state.coins < 10) {
                 showToast('⛔ Нужно 10 монет!', 'error');
@@ -624,19 +644,14 @@
                 showToast('⚡ Энергия уже полная!', 'error');
                 return;
             }
-
             state.coins -= 10;
             state.energy = state.maxEnergy;
             updateUI();
             showToast('⚡ Энергия восстановлена!', 'success');
-
-            tg.sendData(JSON.stringify({
-                action: 'boost_energy',
-                amount: 10
-            }));
+            tg.sendData(JSON.stringify({ action: 'boost_energy' }));
         }
 
-        // ==================== АВТО-ВОССТАНОВЛЕНИЕ ====================
+        // ============= АВТО-ВОССТАНОВЛЕНИЕ =============
         setInterval(() => {
             if (state.energy < state.maxEnergy) {
                 state.energy += 1;
@@ -645,14 +660,7 @@
             }
         }, 30000);
 
-        // ==================== ЕЖЕДНЕВНЫЙ СБРОС ====================
-        const today = new Date().toDateString();
-        if (localStorage.getItem('guild_reset') !== today) {
-            state.earnedToday = 0;
-            localStorage.setItem('guild_reset', today);
-        }
-
-        // ==================== СОХРАНЕНИЕ В LOCALSTORAGE ====================
+        // ============= СОХРАНЕНИЕ =============
         function saveState() {
             localStorage.setItem('guild_state', JSON.stringify(state));
         }
@@ -662,38 +670,37 @@
             if (saved) {
                 const data = JSON.parse(saved);
                 Object.assign(state, data);
-                // Проверка на сброс дня
-                if (localStorage.getItem('guild_reset') !== today) {
-                    state.earnedToday = 0;
-                    localStorage.setItem('guild_reset', today);
-                }
                 updateUI();
             }
         }
 
-        // ==================== ОБРАБОТКА СООБЩЕНИЙ ОТ БОТА ====================
-        // (данные приходят через ответное сообщение, но в WebApp нет прямого получения)
-        // Используем локальное хранилище как fallback
+        // ============= ЕЖЕДНЕВНЫЙ СБРОС =============
+        const today = new Date().toDateString();
+        if (localStorage.getItem('guild_reset') !== today) {
+            state.earnedToday = 0;
+            localStorage.setItem('guild_reset', today);
+        }
 
-        // ==================== СОБЫТИЯ ====================
+        // ============= СОБЫТИЯ =============
         clickArea.addEventListener('click', handleClick);
         $('boostBtn').addEventListener('click', boostEnergy);
-        $('shopBtn').addEventListener('click', () => {
-            showToast('🛒 Магазин откроется в боте!', 'success', 1500);
+        $('shopBtn').addEventListener('click', openShop);
+        closeShop.addEventListener('click', closeShopModal);
+        shopModal.addEventListener('click', (e) => {
+            if (e.target === shopModal) closeShopModal();
         });
         $('statsBtn').addEventListener('click', () => {
             showToast(`📊 Кликов: ${state.clicks} | Комбо: ${state.comboCount}`, 'success', 2000);
         });
 
-        // ==================== ЗАПУСК ====================
+        // ============= ЗАПУСК =============
         loadState();
-        updateUI();
-        loadData();
-
-        // Регулярное сохранение
+        loadDataFromBot();
         setInterval(saveState, 10000);
 
-        console.log('⚔️ Гильдия Эпох запущена!');
+        console.log('⚔️ Gold Epoch запущена!');
+        console.log('💰 Баланс:', state.coins);
+        console.log('🎨 Скинов:', state.ownedSkins.length);
     </script>
 </body>
 </html>
