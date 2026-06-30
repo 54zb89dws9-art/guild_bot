@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Гильдия Эпох</title>
+    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+    <style>
+        /* ============ БАЗОВЫЙ СБРОС ============ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #0a0a12;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            background-image: radial-gradient(ellipse at top, #1a1a2e 0%, #0a0a12 70%);
+            user-select: none;
+            overflow: hidden;
+        }
+
+        /* ============ ОСНОВНОЙ КОНТЕЙНЕР ============ */
+        .game-container {
+            max-width: 420px;
+            width: 100%;
+            position: relative;
+            background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            padding: 20px 16px 30px;
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);
+        }
+
+        /* ============ ВЕРХНЯЯ ПАНЕЛЬ ============ */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.4);
+            border-radius: 20px;
+            padding: 12px 18px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .header-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #c8d6e5;
+        }
+
+        .header-item .icon {
+            font-size: 20px;
+        }
+        .header-item .value {
+            color: #ffd700;
+            font-size: 18px;
+        }
+
+        /* ============ КНОПКА КЛИКА ============ */
+        .click-area {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #2a2a5e, #0f0f1f);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border: 3px solid rgba(255,215,0,0.3);
+            box-shadow: 
+                0 0 60px rgba(255,215,0,0.1),
+                inset 0 -10px 30px rgba(0,0,0,0.5);
+            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            user-select: none;
+        }
+
+        .click-area::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #ffd700, #ff6b6b, #ffd700);
+            opacity: 0.3;
+            z-index: -1;
+            animation: rotateBorder 6s linear infinite;
+        }
+
+        @keyframes rotateBorder {
+            to { transform: rotate(360deg); }
+        }
+
+        .click-area:active {
+            transform: scale(0.92);
+            border-color: #ffd700;
+            box-shadow: 0 0 100px rgba(255,215,0,0.3), inset 0 -5px 20px rgba(0,0,0,0.3);
+        }
+
+        .click-area .emoji {
+            font-size: 70px;
+            line-height: 1;
+            filter: drop-shadow(0 4px 20px rgba(255,215,0,0.3));
+            transition: transform 0.1s;
+        }
+
+        .click-area:active .emoji {
+            transform: scale(1.1);
+        }
+
+        .click-area .text {
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 8px;
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255,215,0,0.2);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .click-area .level-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,215,0,0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffd700;
+            border: 1px solid rgba(255,215,0,0.2);
+        }
+
+        /* ============ СТАТИСТИКА ============ */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .stat-card {
+            background: rgba(0,0,0,0.4);
+            border-radius: 16px;
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.04);
+            backdrop-filter: blur(5px);
+        }
+
+        .stat-card .stat-value {
+            font-size: 22px;
+            font-weight: 800;
+            color: #ffd700;
+            display: block;
+        }
+
+        .stat-card .stat-label {
+            font-size: 11px;
+            color: #8395a7;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+            display: block;
+        }
+
+        /* ============ ЭНЕРГИЯ ============ */
+        .energy-section {
+            margin: 12px 0 16px;
+        }
+
+        .energy-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #8395a7;
+            margin-bottom: 6px;
+            padding: 0 4px;
+        }
+
+        .energy-header .current {
+            color: #ffd700;
+            font-weight: 600;
+        }
+
+        .energy-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .energy-fill {
+            height: 100%;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5, #00d2ff);
+            background-size: 200% 100%;
+            animation: shimmer 3s ease-in-out infinite;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 100%;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .energy-bar .energy-text {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 9px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* ============ КНОПКИ ДЕЙСТВИЙ ============ */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin: 4px 0 8px;
+        }
+
+        .btn {
+            padding: 14px;
+            border: none;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ffd700, #f0a500);
+            color: #0a0a12;
+            box-shadow: 0 4px 20px rgba(255,215,0,0.25);
+        }
+
+        .btn-primary:active {
+            box-shadow: 0 2px 10px rgba(255,215,0,0.15);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.06);
+            color: #c8d6e5;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .btn-secondary:active {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            box-shadow: 0 4px 20px rgba(255,107,107,0.2);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #00b894, #00a381);
+            color: white;
+            box-shadow: 0 4px 20px rgba(0,184,148,0.2);
+        }
+
+        .btn-block {
+            grid-column: 1 / -1;
+        }
+
+        /* ============ ТОСТ ============ */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            margin-top: 8px;
+            animation: slideDown 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+            min-width: 200px;
+            max-width: 90%;
+        }
+
+        .toast.success {
+            border-color: rgba(0,184,148,0.4);
+        }
+        .toast.error {
+            border-color: rgba(255,107,107,0.4);
+        }
+        .toast.level-up {
+            border-color: rgba(255,215,0,0.6);
+            background: rgba(255,215,0,0.15);
+            font-size: 20px;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateX(-50%) translateY(-20px) scale(0.9); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+        }
+
+        .toast.fade-out {
+            animation: fadeOut 0.3s ease forwards;
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateX(-50%) translateY(-10px) scale(0.95); }
+        }
+
+        /* ============ FLOATING МОНЕТКИ ============ */
+        .coin-particle {
+            position: fixed;
+            font-size: 30px;
+            pointer-events: none;
+            z-index: 999;
+            animation: coinFly 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        @keyframes coinFly {
+            0% { opacity: 1; transform: translate(0, 0) scale(1); }
+            100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(1.5); }
+        }
+
+        /* ============ АДАПТИВ ============ */
+        @media (max-width: 400px) {
+            .click-area {
+                width: 160px;
+                height: 160px;
+            }
+            .click-area .emoji { font-size: 50px; }
+            .stat-card .stat-value { font-size: 18px; }
+            .btn { font-size: 12px; padding: 12px; }
+        }
+
+        @media (min-width: 500px) {
+            .click-area {
+                width: 240px;
+                height: 240px;
+            }
+            .click-area .emoji { font-size: 80px; }
+        }
+
+        /* ============ SKIN-ПЕРСОНАЛИЗАЦИЯ ============ */
+        .skin-gold .click-area {
+            border-color: #ffd700;
+            box-shadow: 0 0 80px rgba(255,215,0,0.2), inset 0 -10px 30px rgba(0,0,0,0.5);
+        }
+        .skin-fire .click-area {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 80px rgba(255,107,107,0.2);
+            background: radial-gradient(circle at 30% 30%, #3a1a1a, #1f0f0f);
+        }
+        .skin-cosmic .click-area {
+            border-color: #a29bfe;
+            box-shadow: 0 0 80px rgba(162,155,254,0.2);
+            background: radial-gradient(circle at 30% 30%, #1a1a3a, #0f0f1f);
+        }
+        .skin-legend .click-area {
+            border-color: #fd79a8;
+            box-shadow: 0 0 100px rgba(253,121,168,0.3);
+            background: radial-gradient(circle at 30% 30%, #2a1a2a, #1a0f1a);
+        }
+        .skin-legend .click-area::before {
+            background: conic-gradient(from 0deg, #fd79a8, #ffd700, #fd79a8);
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container" id="app">
+        <!-- Верхняя панель -->
+        <div class="header">
+            <div class="header-item">
+                <span class="icon">🏆</span>
+                <span>Lv.<span class="value" id="level">1</span></span>
+            </div>
+            <div class="header-item">
+                <span class="icon">💰</span>
+                <span class="value" id="coins">150</span>
+            </div>
+            <div class="header-item">
+                <span class="icon">⚡</span>
+                <span class="value" id="energyDisplay">100</span>
+            </div>
+        </div>
+
+        <!-- Клик-зона -->
+        <div class="click-area" id="clickArea">
+            <span class="level-badge" id="levelBadge">Lv.1</span>
+            <span class="emoji" id="clickEmoji">⚔️</span>
+            <span class="text">ТАПАЙ!</span>
+        </div>
+
+        <!-- Статистика -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-value" id="clickCount">0</span>
+                <span class="stat-label">Всего кликов</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="earnedToday">0</span>
+                <span class="stat-label">За сегодня</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value" id="expDisplay">0/100</span>
+                <span class="stat-label">Опыт</span>
+            </div>
+        </div>
+
+        <!-- Энергия -->
+        <div class="energy-section">
+            <div class="energy-header">
+                <span>⚡ Энергия</span>
+                <span class="current"><span id="energyCurrent">100</span> / 100</span>
+            </div>
+            <div class="energy-bar">
+                <div class="energy-fill" id="energyFill" style="width: 100%"></div>
+                <span class="energy-text" id="energyPercent">100%</span>
+            </div>
+        </div>
+
+        <!-- Кнопки действий -->
+        <div class="action-buttons">
+            <button class="btn btn-primary" id="boostBtn">⚡ +50%</button>
+            <button class="btn btn-secondary" id="shopBtn">🛒 Магазин</button>
+            <button class="btn btn-secondary btn-block" id="statsBtn">📊 Статистика</button>
+        </div>
+    </div>
+
+    <!-- Тосты -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // ============================================================
+        //                       ГЛАВНЫЙ КОД
+        // ============================================================
+
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        // ==================== СОСТОЯНИЕ ====================
+        const state = {
+            coins: 150,
+            energy: 100,
+            maxEnergy: 100,
+            level: 1,
+            exp: 0,
+            expToNext: 100,
+            clicks: 0,
+            earnedToday: 0,
+            skin: 'default',
+            lastClickTime: 0,
+            comboCount: 0
+        };
+
+        // ==================== DOM ====================
+        const $ = id => document.getElementById(id);
+        const coinsEl = $('coins');
+        const energyDisplay = $('energyDisplay');
+        const energyFill = $('energyFill');
+        const energyCurrent = $('energyCurrent');
+        const energyPercent = $('energyPercent');
+        const levelEl = $('level');
+        const levelBadge = $('levelBadge');
+        const clickCount = $('clickCount');
+        const earnedToday = $('earnedToday');
+        const expDisplay = $('expDisplay');
+        const clickArea = $('clickArea');
+        const clickEmoji = $('clickEmoji');
+        const container = $('app');
+
+        // ==================== ТОСТЫ ====================
+        function showToast(text, type = 'success', duration = 2000) {
+            const container = $('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = text;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('fade-out');
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+
+        // ==================== МОНЕТКИ (ПАРТИКЛЫ) ====================
+        function spawnCoins(x, y, count = 3) {
+            const emojis = ['🪙', '⭐', '💎'];
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('div');
+                el.className = 'coin-particle';
+                el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                el.style.left = (x + (Math.random() - 0.5) * 60) + 'px';
+                el.style.top = (y + (Math.random() - 0.5) * 60) + 'px';
+                el.style.setProperty('--tx', (Math.random() - 0.5) * 150 + 'px');
+                el.style.setProperty('--ty', -Math.random() * 200 - 50 + 'px');
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 1200);
+            }
+        }
+
+        // ==================== ОБНОВЛЕНИЕ UI ====================
+        function updateUI() {
+            coinsEl.textContent = state.coins;
+            energyDisplay.textContent = Math.floor(state.energy);
+            energyCurrent.textContent = Math.floor(state.energy);
+            const percent = (state.energy / state.maxEnergy) * 100;
+            energyFill.style.width = Math.min(100, percent) + '%';
+            energyPercent.textContent = Math.floor(percent) + '%';
+            levelEl.textContent = state.level;
+            levelBadge.textContent = `Lv.${state.level}`;
+            clickCount.textContent = state.clicks;
+            earnedToday.textContent = state.earnedToday;
+            expDisplay.textContent = `${state.exp}/${state.expToNext}`;
+
+            // Скин
+            container.className = `game-container skin-${state.skin}`;
+            if (state.skin === 'gold') clickEmoji.textContent = '👑';
+            else if (state.skin === 'fire') clickEmoji.textContent = '🔥';
+            else if (state.skin === 'cosmic') clickEmoji.textContent = '🌌';
+            else if (state.skin === 'legend') clickEmoji.textContent = '💎';
+            else clickEmoji.textContent = '⚔️';
+        }
+
+        // ==================== КЛИК ====================
+        function handleClick(e) {
+            if (state.energy <= 0) {
+                showToast('⛔ Нет энергии! Жди восстановления', 'error');
+                return;
+            }
+
+            const now = Date.now();
+            if (now - state.lastClickTime < 100) {
+                state.comboCount += 1;
+            } else {
+                state.comboCount = 1;
+            }
+            state.lastClickTime = now;
+
+            const earned = Math.floor(Math.random() * 5) + 1 + Math.floor(state.comboCount / 10);
+            state.coins += earned;
+            state.energy -= 1;
+            state.clicks += 1;
+            state.earnedToday += earned;
+
+            // Опыт
+            state.exp += 1;
+            if (state.exp >= state.expToNext) {
+                state.level += 1;
+                state.exp = 0;
+                state.expToNext = state.level * 100;
+                showToast(`🎉 НОВЫЙ УРОВЕНЬ ${state.level}!`, 'level-up', 2500);
+                spawnCoins(window.innerWidth/2, window.innerHeight/2, 10);
+            }
+
+            // Партиклы
+            const rect = clickArea.getBoundingClientRect();
+            spawnCoins(rect.left + rect.width/2, rect.top + rect.height/2, 2);
+
+            // Отправка боту
+            tg.sendData(JSON.stringify({
+                action: 'click',
+                earned: earned
+            }));
+
+            updateUI();
+            showToast(`+${earned} 🪙`, 'success', 800);
+        }
+
+        // ==================== ЗАГРУЗКА ДАННЫХ ====================
+        function loadData() {
+            tg.sendData(JSON.stringify({ action: 'get_data' }));
+        }
+
+        // ==================== ВОССТАНОВЛЕНИЕ ЭНЕРГИИ ====================
+        function boostEnergy() {
+            if (state.coins < 10) {
+                showToast('⛔ Нужно 10 монет!', 'error');
+                return;
+            }
+            if (state.energy >= state.maxEnergy) {
+                showToast('⚡ Энергия уже полная!', 'error');
+                return;
+            }
+
+            state.coins -= 10;
+            state.energy = state.maxEnergy;
+            updateUI();
+            showToast('⚡ Энергия восстановлена!', 'success');
+
+            tg.sendData(JSON.stringify({
+                action: 'boost_energy',
+                amount: 10
+            }));
+        }
+
+        // ==================== АВТО-ВОССТАНОВЛЕНИЕ ====================
+        setInterval(() => {
+            if (state.energy < state.maxEnergy) {
+                state.energy += 1;
+                if (state.energy > state.maxEnergy) state.energy = state.maxEnergy;
+                updateUI();
+            }
+        }, 30000);
+
+        // ==================== ЕЖЕДНЕВНЫЙ СБРОС ====================
+        const today = new Date().toDateString();
+        if (localStorage.getItem('guild_reset') !== today) {
+            state.earnedToday = 0;
+            localStorage.setItem('guild_reset', today);
+        }
+
+        // ==================== СОХРАНЕНИЕ В LOCALSTORAGE ====================
+        function saveState() {
+            localStorage.setItem('guild_state', JSON.stringify(state));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('guild_state');
+            if (saved) {
+                const data = JSON.parse(saved);
+                Object.assign(state, data);
+                // Проверка на сброс дня
+                if (localStorage.getItem('guild_reset') !== today) {
+                    state.earnedToday = 0;
+                    localStorage.setItem('guild_reset', today);
+                }
+                updateUI();
+            }
+        }
+
+        // ==================== ОБРАБОТКА СООБЩЕНИЙ ОТ БОТА ====================
+        // (данные приходят через ответное сообщение, но в WebApp нет прямого получения)
+        // Используем локальное хранилище как fallback
+
+        // ==================== СОБЫТИЯ ====================
+        clickArea.addEventListener('click', handleClick);
+        $('boostBtn').addEventListener('click', boostEnergy);
+        $('shopBtn').addEventListener('click', () => {
+            showToast('🛒 Магазин откроется в боте!', 'success', 1500);
+        });
+        $('statsBtn').addEventListener('click', () => {
+            showToast(`📊 Кликов: ${state.clicks} | Комбо: ${state.comboCount}`, 'success', 2000);
+        });
+
+        // ==================== ЗАПУСК ====================
+        loadState();
+        updateUI();
+        loadData();
+
+        // Регулярное сохранение
+        setInterval(saveState, 10000);
+
+        console.log('⚔️ Гильдия Эпох запущена!');
+    </script>
+</body>
+</html>
