@@ -714,7 +714,7 @@
         <!-- ============ СТАТИСТИКА ============ -->
         <div class="stats">
             <div class="item"><span class="num" id="clicks">0</span><span class="label">Кликов</span></div>
-            <div class="item"><span class="num" id="perClick">0.1</span><span class="label">За клик</span></div>
+            <div class="item"><span class="num" id="perClick">1</span><span class="label">За клик</span></div>
             <div class="item"><span class="num" id="today">0</span><span class="label">За день</span></div>
         </div>
 
@@ -789,12 +789,70 @@
         ];
 
         // ============= НАВЫКИ =============
+        // Функция для получения бонуса клика по уровню
+        function getClickBonus(level) {
+            if (level <= 0) return 0;
+            // Уровень 1: +1, 2: +2, 3: +4, 4: +6, 5: +8, 6: +10, 7: +12...
+            const values = [0, 1, 2, 4, 6, 8, 10];
+            if (level <= 6) return values[level];
+            return 10 + (level - 6) * 2;
+        }
+
+        // Функция для получения цены улучшения клика
+        function getClickPrice(level) {
+            if (level <= 0) return 50;
+            // 1: 50, 2: 100, 3: 200, 4: 400, 5: 800, 6: 1600, 7: 3200...
+            if (level === 1) return 100;
+            return 50 * Math.pow(2, level - 1);
+        }
+
         const SKILLS = [
-            { id: 'income', name: '💰 Пассивный доход', price: 50, priceMultiplier: 1.5, maxLevel: Infinity, desc: '+1 монета в час', isPermanent: false },
-            { id: 'click_bonus', name: '⚡ Усиление клика', price: 100, priceMultiplier: 1.5, maxLevel: Infinity, desc: '+0.001 монеты за клик', isPermanent: false },
-            { id: 'boost_power', name: '🔥 Усиление буста', price: 5000, priceMultiplier: 0, maxLevel: 1, desc: 'Сила буста +10%', isPermanent: true },
-            { id: 'energy_saver', name: '🛡️ Экономия энергии', price: 10000, priceMultiplier: 0, maxLevel: 1, desc: 'Энергия тратится на 20% медленнее', isPermanent: true },
-            { id: 'coin_magnet', name: '🧲 Магнит монет', price: 20000, priceMultiplier: 0, maxLevel: 1, desc: '+5% к монетам за клик', isPermanent: true }
+            { 
+                id: 'click_upgrade', 
+                name: '⚡ Улучшение клика', 
+                price: 50, 
+                priceMultiplier: 0, 
+                maxLevel: Infinity, 
+                desc: (level) => `+${getClickBonus(level)} монеты за клик (ур.${level})`,
+                isPermanent: false,
+                getPrice: (level) => getClickPrice(level)
+            },
+            { 
+                id: 'income', 
+                name: '💰 Пассивный доход', 
+                price: 50, 
+                priceMultiplier: 1.5, 
+                maxLevel: Infinity, 
+                desc: (level) => `+1 монета в час (ур.${level})`,
+                isPermanent: false 
+            },
+            { 
+                id: 'boost_power', 
+                name: '🔥 Усиление буста', 
+                price: 5000, 
+                priceMultiplier: 0, 
+                maxLevel: 1, 
+                desc: () => 'Сила буста +10%', 
+                isPermanent: true 
+            },
+            { 
+                id: 'energy_saver', 
+                name: '🛡️ Экономия энергии', 
+                price: 10000, 
+                priceMultiplier: 0, 
+                maxLevel: 1, 
+                desc: () => 'Энергия тратится на 20% медленнее', 
+                isPermanent: true 
+            },
+            { 
+                id: 'coin_magnet', 
+                name: '🧲 Магнит монет', 
+                price: 20000, 
+                priceMultiplier: 0, 
+                maxLevel: 1, 
+                desc: () => '+5% к монетам за клик', 
+                isPermanent: true 
+            }
         ];
 
         const BUILDINGS = [
@@ -819,20 +877,18 @@
 
         function getPassiveIncome() {
             let inc = 0;
-            // От зданий
             for (const [id, lvl] of Object.entries(state.buildings)) {
                 const b = BUILDINGS.find(b => b.id === id);
                 if (b) inc += b.passive * lvl;
             }
-            // От навыка пассивного дохода
             const incomeLevel = state.skills.income || 0;
             inc += incomeLevel;
             return inc;
         }
 
-        function getClickBonus() {
-            const level = state.skills.click_bonus || 0;
-            return level * 0.001;
+        function getClickBonusFromSkill() {
+            const level = state.skills.click_upgrade || 0;
+            return getClickBonus(level);
         }
 
         function getBoostPowerBonus() {
@@ -945,10 +1001,10 @@
             }
 
             clicksEl.textContent = state.clicks;
-            const clickBonus = getClickBonus();
+            const clickBonus = getClickBonusFromSkill();
             const magnetBonus = getCoinMagnetBonus();
-            const basePerClick = 0.1 + clickBonus + (0.1 * magnetBonus * 0.05);
-            perClickEl.textContent = (basePerClick).toFixed(3);
+            const basePerClick = 1 + clickBonus + (magnetBonus * 0.05);
+            perClickEl.textContent = basePerClick.toFixed(2);
             todayEl.textContent = state.earnedToday;
 
             // Эпоха
@@ -1007,7 +1063,6 @@
         // ============= КЛИК =============
         function handleClick(e) {
             if (state.energy <= 0) {
-                // Показываем предупреждение
                 energyWarning.classList.add('show');
                 setTimeout(() => {
                     if (state.energy > 0) energyWarning.classList.remove('show');
@@ -1021,13 +1076,11 @@
                 if (boost) multiplier = getBoostMultiplier(boost.multiplier);
             }
 
-            const clickBonus = getClickBonus();
+            const clickBonus = getClickBonusFromSkill();
             const magnetBonus = getCoinMagnetBonus();
-            const baseEarn = 0.1 + clickBonus + (0.1 * magnetBonus * 0.05);
-            let earned = baseEarn * multiplier;
-
-            // Случайный бонус
-            earned += Math.random() * 0.05;
+            // Базовый клик = 1 + бонус от навыка + бонус от магнита
+            let earned = 1 + clickBonus + (magnetBonus * 0.05);
+            earned = earned * multiplier;
 
             state.coins += earned;
             state.energy -= 1;
@@ -1035,7 +1088,7 @@
             // Экономия энергии
             const saver = getEnergySaverBonus();
             if (saver > 0 && Math.random() < 0.2) {
-                state.energy += 1; // 20% шанс не потратить энергию
+                state.energy += 1;
             }
 
             state.clicks += 1;
@@ -1049,11 +1102,10 @@
             const cx = rect.left + rect.width / 2;
             const cy = rect.top + rect.height / 2;
 
-            const text = earned.toFixed(2);
-            const isBig = multiplier > 1;
-            flyNumber(cx + (Math.random() - 0.5) * 80, cy + (Math.random() - 0.5) * 80, '+' + text, isBig);
+            const text = earned >= 1 ? '+' + Math.floor(earned) : '+' + earned.toFixed(2);
+            const isBig = multiplier > 1 || earned > 5;
+            flyNumber(cx + (Math.random() - 0.5) * 80, cy + (Math.random() - 0.5) * 80, text, isBig);
 
-            // Небольшой эффект при клике
             if (multiplier > 1) {
                 clickArea.style.borderColor = '#ff6b6b';
                 setTimeout(() => { clickArea.style.borderColor = ''; }, 200);
@@ -1145,18 +1197,28 @@
                 const level = state.skills[skill.id] || 0;
                 const isOwned = skill.isPermanent && level >= 1;
                 const isMaxed = !skill.isPermanent && level >= skill.maxLevel;
-                const price = Math.floor(skill.price * Math.pow(skill.priceMultiplier || 1, level));
+
+                let price;
+                if (skill.id === 'click_upgrade') {
+                    price = getClickPrice(level);
+                } else {
+                    price = Math.floor(skill.price * Math.pow(skill.priceMultiplier || 1, level));
+                }
+
                 const canBuy = state.coins >= price && !isOwned && !isMaxed;
 
-                const div = document.createElement('div');
-                div.className = 'item';
-                let descText = skill.desc;
-                if (!skill.isPermanent) {
-                    descText += ` (${level})`;
+                let descText;
+                if (skill.desc) {
+                    descText = typeof skill.desc === 'function' ? skill.desc(level) : skill.desc;
+                } else {
+                    descText = '';
                 }
+
                 if (isOwned) descText += ' ✅';
                 if (isMaxed) descText += ' MAX';
 
+                const div = document.createElement('div');
+                div.className = 'item';
                 div.innerHTML = `
                     <div class="info">
                         <div class="name">${skill.name}</div>
@@ -1289,10 +1351,10 @@
         }
 
         // ============= АВТОМАТИКА =============
-        // Восстановление энергии: 250 за 10 минут = 0.4167 в секунду
+        // Восстановление энергии: 250 за 10 минут
         setInterval(() => {
             if (state.energy < state.maxEnergy) {
-                state.energy += 250 / 600; // 600 секунд = 10 минут
+                state.energy += 250 / 600;
                 if (state.energy > state.maxEnergy) state.energy = state.maxEnergy;
                 updateUI();
             }
@@ -1351,12 +1413,13 @@
         updateUI();
         setInterval(saveState, 15000);
 
-        console.log('⚔️ Эпоха Империй (новая версия)');
+        console.log('⚔️ Эпоха Империй (новая система клика)');
         console.log('🏆 Уровень:', state.level);
         console.log('🏛️ Эпоха:', getEra(state.level).name);
         console.log('💰 Баланс:', Math.floor(state.coins));
         console.log('⚡ Энергия:', Math.floor(state.energy), '/', state.maxEnergy);
         console.log('⚡ Навыки:', Object.keys(state.skills).length);
+        console.log('💪 Бонус клика:', getClickBonusFromSkill());
     </script>
 </body>
 </html>
