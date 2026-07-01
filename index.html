@@ -6,7 +6,9 @@
     <title>Эпоха Империй</title>
     <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
     <style>
-        /* ============ БАЗА ============ */
+        /* ============================================================
+               БАЗА (0-100)
+               ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -14,46 +16,58 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        html,
         body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
             background: #0a0a12;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            min-height: 100vh;
+        }
+
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 10px;
             background-image: radial-gradient(ellipse at top, #1a1a2e 0%, #0a0a12 70%);
             user-select: none;
-            overflow: hidden;
+            padding: 0;
+            margin: 0;
         }
 
         .app-container {
-            max-width: 400px;
             width: 100%;
+            height: 100%;
+            max-width: 430px;
+            max-height: 932px;
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(12px);
-            border-radius: 28px;
-            padding: 16px 14px 20px;
+            padding: 16px 14px 14px;
             border: 1px solid rgba(255, 255, 255, 0.04);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
             position: relative;
-            max-height: 95vh;
-            overflow-y: auto;
+            overflow: hidden;
         }
 
-        /* ============ ВЕРХНЯЯ ПАНЕЛЬ ============ */
+        /* ============================================================
+               ВЕРХНЯЯ ПАНЕЛЬ (100-200)
+               ============================================================ */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 6px 10px;
+            padding: 4px 2px 8px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            flex-shrink: 0;
+            margin-top: 2px;
         }
 
         .header-item {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             font-size: 13px;
             font-weight: 600;
             color: #8395a7;
@@ -68,15 +82,18 @@
             min-width: 30px;
         }
 
-        /* ============ ПРОГРЕСС ============ */
+        /* ============================================================
+               ПРОГРЕСС (200-300)
+               ============================================================ */
         .progress-block {
-            margin: 8px 0 6px;
+            margin: 4px 0 4px;
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
             padding: 4px 10px;
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-shrink: 0;
         }
 
         .progress-block .label {
@@ -112,19 +129,54 @@
             text-align: right;
         }
 
-        /* ============ КНОПКИ ВЕРХНИЕ ============ */
+        /* ============================================================
+               СТАДИЯ И ЭПОХА (300-400)
+               ============================================================ */
+        .stage-display {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 4px 12px;
+            margin: 2px 0 4px;
+            border: 1px solid rgba(255, 215, 0, 0.05);
+            flex-shrink: 0;
+        }
+
+        .stage-display .stage-icon {
+            font-size: 16px;
+        }
+        .stage-display .stage-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #ffd700;
+        }
+        .stage-display .stage-level {
+            font-size: 10px;
+            color: #8395a7;
+        }
+        .stage-display .stage-next {
+            font-size: 9px;
+            color: #636e72;
+        }
+
+        /* ============================================================
+               ВЕРХНИЕ КНОПКИ (400-500)
+               ============================================================ */
         .top-actions {
             display: flex;
             justify-content: space-between;
             gap: 6px;
-            margin: 6px 0 8px;
+            margin: 4px 0 4px;
+            flex-shrink: 0;
         }
 
         .top-actions .btn {
             background: rgba(255, 255, 255, 0.04);
             border: none;
             border-radius: 10px;
-            padding: 6px 12px;
+            padding: 5px 12px;
             font-size: 12px;
             font-weight: 600;
             color: #8395a7;
@@ -134,6 +186,8 @@
             align-items: center;
             gap: 4px;
             border: 1px solid rgba(255, 255, 255, 0.03);
+            flex: 1;
+            justify-content: center;
         }
 
         .top-actions .btn:active {
@@ -144,18 +198,23 @@
             font-size: 14px;
         }
 
-        /* ============ КНОПКА КЛИКА ============ */
+        /* ============================================================
+               КЛИК-ЗОНА (500-650)
+               ============================================================ */
         .click-wrapper {
-            position: relative;
-            margin: 6px auto;
+            flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 0;
+            padding: 4px 0;
+            position: relative;
         }
 
         .click-area {
-            width: 200px;
-            height: 200px;
+            width: 100%;
+            max-width: 280px;
+            aspect-ratio: 1 / 1;
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
@@ -176,7 +235,7 @@
 
         .click-area .click-text {
             position: absolute;
-            bottom: 20px;
+            bottom: 8%;
             left: 50%;
             transform: translateX(-50%);
             font-size: 14px;
@@ -186,8 +245,29 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             background: rgba(0, 0, 0, 0.3);
-            padding: 2px 12px;
+            padding: 2px 14px;
             border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .click-area .combo-display {
+            position: absolute;
+            top: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            font-weight: 800;
+            color: #ff6b6b;
+            text-shadow: 0 0 20px rgba(255, 107, 107, 0.3);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2px 12px;
+            border-radius: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .click-area .combo-display.show {
+            opacity: 1;
         }
 
         .click-area .energy-warning {
@@ -200,10 +280,11 @@
             color: #ff6b6b;
             animation: warnPulse 0.5s ease-in-out infinite alternate;
             display: none;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 4px 12px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 6px 16px;
             border-radius: 12px;
             white-space: nowrap;
+            border: 1px solid rgba(255, 107, 107, 0.3);
         }
 
         .click-area .energy-warning.show {
@@ -221,7 +302,9 @@
             }
         }
 
-        /* ============ ЛЕТАЮЩИЕ ЦИФРЫ ============ */
+        /* ============================================================
+               ЛЕТАЮЩИЕ ЦИФРЫ (650-750)
+               ============================================================ */
         .fly-number {
             position: fixed;
             pointer-events: none;
@@ -240,6 +323,13 @@
             text-shadow: 0 0 40px rgba(255, 107, 107, 0.4);
         }
 
+        .fly-number.rare {
+            font-size: 48px;
+            color: #a29bfe;
+            text-shadow: 0 0 50px rgba(162, 155, 254, 0.5);
+            animation: flyNumberRare 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
         @keyframes flyNumber {
             0% {
                 opacity: 1;
@@ -251,16 +341,31 @@
             }
         }
 
-        /* ============ СТАТИСТИКА ============ */
+        @keyframes flyNumberRare {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(0.5) rotate(-10deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(10deg);
+            }
+        }
+
+        /* ============================================================
+               СТАТИСТИКА (750-850)
+               ============================================================ */
         .stats-row {
             display: flex;
             justify-content: space-between;
             padding: 4px 4px 6px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            flex-shrink: 0;
         }
 
         .stats-row .item {
             text-align: center;
+            flex: 1;
         }
 
         .stats-row .item .num {
@@ -278,9 +383,12 @@
             letter-spacing: 0.3px;
         }
 
-        /* ============ ЭНЕРГИЯ ============ */
+        /* ============================================================
+               ЭНЕРГИЯ (850-950)
+               ============================================================ */
         .energy-section {
-            margin: 4px 0 8px;
+            margin: 4px 0 6px;
+            flex-shrink: 0;
         }
 
         .energy-header {
@@ -310,19 +418,22 @@
             width: 100%;
         }
 
-        /* ============ НИЖНЕЕ МЕНЮ ============ */
+        /* ============================================================
+               НИЖНЕЕ МЕНЮ (950-1050)
+               ============================================================ */
         .bottom-menu {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            margin-top: 6px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+            margin-top: 4px;
+            flex-shrink: 0;
         }
 
         .bottom-menu .btn {
-            background: rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.04);
             border: none;
             border-radius: 14px;
-            padding: 12px 0;
+            padding: 10px 2px;
             font-size: 18px;
             cursor: pointer;
             transition: all 0.1s;
@@ -330,7 +441,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 2px;
+            gap: 1px;
             border: 1px solid rgba(255, 255, 255, 0.02);
             will-change: transform;
         }
@@ -341,7 +452,7 @@
         }
 
         .bottom-menu .btn .label {
-            font-size: 8px;
+            font-size: 7px;
             text-transform: uppercase;
             letter-spacing: 0.3px;
             color: #636e72;
@@ -353,7 +464,23 @@
             background: rgba(255, 215, 0, 0.04);
         }
 
-        /* ============ МОДАЛКИ ============ */
+        .bottom-menu .btn .badge-count {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #ff6b6b;
+            color: #fff;
+            font-size: 8px;
+            font-weight: 700;
+            padding: 1px 6px;
+            border-radius: 20px;
+            min-width: 16px;
+            text-align: center;
+        }
+
+        /* ============================================================
+               МОДАЛКИ (1050-1300)
+               ============================================================ */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -363,7 +490,7 @@
             z-index: 2000;
             justify-content: center;
             align-items: center;
-            padding: 14px;
+            padding: 16px;
             animation: fadeIn 0.2s ease;
         }
 
@@ -386,21 +513,21 @@
             padding: 16px 14px;
             max-width: 400px;
             width: 100%;
-            max-height: 80vh;
+            max-height: 85vh;
             overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
-            animation: slideUp 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: slideUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         @keyframes slideUp {
             from {
-                transform: translateY(15px);
                 opacity: 0;
+                transform: translateY(20px);
             }
             to {
-                transform: translateY(0);
                 opacity: 1;
+                transform: translateY(0);
             }
         }
 
@@ -408,7 +535,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .modal .head h2 {
@@ -421,69 +548,106 @@
             background: none;
             border: none;
             color: #8395a7;
-            font-size: 22px;
+            font-size: 24px;
             cursor: pointer;
             padding: 0 4px;
+            transition: 0.2s;
         }
 
         .modal .head .close:active {
             color: #ff6b6b;
+            transform: rotate(90deg);
         }
 
         .modal .balance {
             text-align: center;
             color: #8395a7;
-            font-size: 12px;
-            margin-bottom: 10px;
-            padding: 6px;
+            font-size: 13px;
+            margin-bottom: 12px;
+            padding: 8px;
             background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
+            border-radius: 12px;
         }
         .modal .balance span {
             color: #ffd700;
             font-weight: 700;
         }
 
-        /* ============ ЭЛЕМЕНТЫ СПИСКОВ ============ */
+        /* ============================================================
+               ЭЛЕМЕНТЫ СПИСКОВ (1300-1500)
+               ============================================================ */
         .item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.03);
             border-radius: 12px;
-            padding: 8px 12px;
-            margin-bottom: 5px;
+            padding: 10px 14px;
+            margin-bottom: 6px;
             border: 1px solid rgba(255, 255, 255, 0.03);
+            position: relative;
+            transition: 0.2s;
+        }
+
+        .item:active {
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .item .info {
             flex: 1;
         }
         .item .info .name {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             color: #c8d6e5;
         }
         .item .info .desc {
-            font-size: 10px;
+            font-size: 11px;
             color: #8395a7;
         }
         .item .info .price {
-            font-size: 11px;
+            font-size: 12px;
             color: #ffd700;
+        }
+        .item .info .rarity {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 1px 8px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 2px;
+        }
+        .item .info .rarity.common {
+            color: #8395a7;
+            border: 1px solid #8395a7;
+        }
+        .item .info .rarity.rare {
+            color: #a29bfe;
+            border: 1px solid #a29bfe;
+        }
+        .item .info .rarity.epic {
+            color: #a29bfe;
+            border: 1px solid #a29bfe;
+            background: rgba(162, 155, 254, 0.05);
+        }
+        .item .info .rarity.legendary {
+            color: #ffd700;
+            border: 1px solid #ffd700;
+            background: rgba(255, 215, 0, 0.05);
         }
 
         .item .action-btn {
             background: linear-gradient(135deg, #ffd700, #f0a500);
             border: none;
             border-radius: 10px;
-            padding: 4px 14px;
-            font-size: 11px;
+            padding: 6px 16px;
+            font-size: 12px;
             font-weight: 700;
             color: #0a0a12;
             cursor: pointer;
             transition: transform 0.07s;
-            min-width: 50px;
+            min-width: 55px;
+            text-align: center;
         }
 
         .item .action-btn:active {
@@ -499,14 +663,193 @@
             color: #636e72;
             cursor: not-allowed;
         }
-
-        /* ============ КАК ИГРАТЬ ============ */
-        .help-content {
-            padding: 4px 0;
+        .item .action-btn.claim {
+            background: linear-gradient(135deg, #00b894, #00a381);
+            color: #fff;
         }
+
+        /* ============================================================
+               КАРТЫ (1500-1650)
+               ============================================================ */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .card-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 14px;
+            padding: 12px 8px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.05);
+            transition: 0.2s;
+            position: relative;
+        }
+
+        .card-item .card-icon {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .card-item .card-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #c8d6e5;
+        }
+        .card-item .card-desc {
+            font-size: 10px;
+            color: #8395a7;
+        }
+        .card-item .card-bonus {
+            font-size: 11px;
+            color: #ffd700;
+            font-weight: 700;
+        }
+        .card-item .card-status {
+            font-size: 10px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+        .card-item .card-status.collected {
+            color: #00b894;
+        }
+        .card-item .card-status.missing {
+            color: #636e72;
+        }
+        .card-item.collected {
+            border-color: rgba(0, 184, 148, 0.3);
+            background: rgba(0, 184, 148, 0.03);
+        }
+
+        /* ============================================================
+               ЗАДАНИЯ (1650-1800)
+               ============================================================ */
+        .quest-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 10px 14px;
+            margin-bottom: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .quest-item .quest-icon {
+            font-size: 24px;
+        }
+        .quest-item .quest-info {
+            flex: 1;
+        }
+        .quest-item .quest-info .quest-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #c8d6e5;
+        }
+        .quest-item .quest-info .quest-desc {
+            font-size: 11px;
+            color: #8395a7;
+        }
+        .quest-item .quest-info .quest-progress {
+            font-size: 10px;
+            color: #ffd700;
+        }
+        .quest-item .quest-reward {
+            font-size: 12px;
+            color: #ffd700;
+            font-weight: 700;
+        }
+        .quest-item .quest-status {
+            font-size: 11px;
+            font-weight: 700;
+        }
+        .quest-item .quest-status.done {
+            color: #00b894;
+        }
+        .quest-item .quest-status.pending {
+            color: #ffd700;
+        }
+
+        /* ============================================================
+               ОКНО ПОКУПКИ ЭНЕРГИИ (1800-1900)
+               ============================================================ */
+        .energy-buy-modal .modal {
+            text-align: center;
+            border: 2px solid rgba(255, 215, 0, 0.15);
+        }
+
+        .energy-buy-modal .energy-icon {
+            font-size: 48px;
+            margin: 4px 0 8px;
+        }
+        .energy-buy-modal .energy-title {
+            color: #ffd700;
+            font-size: 22px;
+            font-weight: 800;
+        }
+        .energy-buy-modal .energy-desc {
+            color: #8395a7;
+            font-size: 14px;
+            margin: 6px 0 12px;
+        }
+        .energy-buy-modal .energy-price {
+            color: #ffd700;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .energy-buy-modal .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .energy-buy-modal .btn-group .btn-buy {
+            padding: 14px;
+            border: none;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            background: linear-gradient(135deg, #ffd700, #f0a500);
+            color: #0a0a12;
+        }
+
+        .energy-buy-modal .btn-group .btn-buy:active {
+            transform: scale(0.94);
+        }
+        .energy-buy-modal .btn-group .btn-buy.disabled {
+            background: #2d3436;
+            color: #636e72;
+            cursor: not-allowed;
+        }
+
+        .energy-buy-modal .btn-group .btn-close {
+            padding: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            background: rgba(255, 255, 255, 0.04);
+            color: #8395a7;
+        }
+
+        .energy-buy-modal .btn-group .btn-close:active {
+            transform: scale(0.94);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* ============================================================
+               КАК ИГРАТЬ (1900-2000)
+               ============================================================ */
         .help-content .step {
             margin-bottom: 12px;
-            padding: 10px;
+            padding: 10px 12px;
             background: rgba(255, 255, 255, 0.02);
             border-radius: 12px;
             border-left: 3px solid #ffd700;
@@ -522,10 +865,37 @@
             margin-top: 4px;
         }
 
-        /* ============ ТОСТЫ ============ */
+        /* ============================================================
+               СТАТИСТИКА В МОДАЛКЕ (2000-2100)
+               ============================================================ */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .info-grid .info-item {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 10px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .info-grid .info-item .info-label {
+            color: #8395a7;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+        .info-grid .info-item .info-value {
+            color: #ffd700;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        /* ============================================================
+               ТОСТЫ (2100-2200)
+               ============================================================ */
         .toast-container {
             position: fixed;
-            top: 12px;
+            top: 16px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 3000;
@@ -560,6 +930,11 @@
             background: rgba(255, 215, 0, 0.08);
             font-size: 15px;
         }
+        .toast.rare {
+            border-color: rgba(162, 155, 254, 0.25);
+            background: rgba(162, 155, 254, 0.08);
+            font-size: 15px;
+        }
 
         @keyframes toastIn {
             from {
@@ -583,11 +958,17 @@
             }
         }
 
-        /* ============ АДАПТИВ ============ */
+        /* ============================================================
+               АДАПТИВ (2200-2250)
+               ============================================================ */
         @media (max-width: 400px) {
             .click-area {
-                width: 170px;
-                height: 170px;
+                max-width: 220px;
+            }
+            .click-area .click-text {
+                font-size: 12px;
+                bottom: 6%;
+                padding: 2px 10px;
             }
             .header-item {
                 font-size: 12px;
@@ -598,86 +979,173 @@
             .fly-number {
                 font-size: 22px;
             }
+            .bottom-menu .btn {
+                padding: 8px 2px;
+                font-size: 16px;
+            }
+            .bottom-menu .btn .label {
+                font-size: 6px;
+            }
+            .card-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .click-area {
+                max-width: 180px;
+            }
+            .click-area .click-text {
+                font-size: 10px;
+            }
+            .bottom-menu .btn {
+                font-size: 14px;
+                padding: 6px 2px;
+            }
+            .bottom-menu .btn .label {
+                font-size: 5px;
+            }
+        }
+
+        /* ============================================================
+               СКРОЛЛ (2250-2300)
+               ============================================================ */
+        .modal::-webkit-scrollbar {
+            width: 3px;
+        }
+        .modal::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+        }
+        .modal::-webkit-scrollbar-thumb {
+            background: #ffd700;
+            border-radius: 10px;
+        }
+
+        /* ============================================================
+               ДОПОЛНИТЕЛЬНЫЕ ЭФФЕКТЫ (2300-2350)
+               ============================================================ */
+        .pulse-gold {
+            animation: pulseGold 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseGold {
+            0%,
+            100% {
+                box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+            }
+        }
+
+        .shake {
+            animation: shake 0.3s ease;
+        }
+
+        @keyframes shake {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-10px);
+            }
+            75% {
+                transform: translateX(10px);
+            }
+        }
+
+        .glow-text {
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
         }
     </style>
 </head>
 <body>
+
+    <!-- ============================================================
+    ПРИЛОЖЕНИЕ
+    ============================================================ -->
     <div class="app-container" id="app">
-        <!-- ============ ВЕРХНЯЯ ПАНЕЛЬ ============ -->
+
+        <!-- Верхняя панель -->
         <div class="header">
             <div class="header-item"><span class="icon">🏆</span><span class="value" id="level">1</span></div>
             <div class="header-item"><span class="icon">💰</span><span class="value" id="coins">0</span></div>
             <div class="header-item"><span class="icon">⚡</span><span class="value" id="energyDisplay">500</span></div>
         </div>
 
-        <!-- ============ ПРОГРЕСС ============ -->
+        <!-- Стадия -->
+        <div class="stage-display">
+            <span class="stage-icon" id="stageIcon">🗡️</span>
+            <span class="stage-name" id="stageName">Сын крестьянина</span>
+            <span class="stage-level" id="stageLevel">1–4</span>
+            <span class="stage-next" id="stageNext">▶ Lv.5</span>
+        </div>
+
+        <!-- Прогресс -->
         <div class="progress-block">
             <div class="label">Lv.<span id="levelDisplay">1</span></div>
             <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
             <div class="percent" id="progressPercent">0%</div>
         </div>
 
-        <!-- ============ ВЕРХНИЕ КНОПКИ ============ -->
+        <!-- Верхние кнопки -->
         <div class="top-actions">
             <button class="btn" id="helpBtn"><span class="icon">❓</span> Как играть?</button>
             <button class="btn" id="boostBtn"><span class="icon">⚡</span> Бусты</button>
+            <button class="btn" id="questBtn"><span class="icon">📋</span> Задания</button>
         </div>
 
-        <!-- ============ КЛИК ============ -->
+        <!-- КЛИК-ЗОНА -->
         <div class="click-wrapper">
             <div class="click-area" id="clickArea">
                 <span class="click-text">ТАПАЙ</span>
+                <span class="combo-display" id="comboDisplay">🔥 x2</span>
                 <span class="energy-warning" id="energyWarning">⛔ НЕТ ЭНЕРГИИ</span>
             </div>
         </div>
 
-        <!-- ============ СТАТИСТИКА ============ -->
+        <!-- Статистика -->
         <div class="stats-row">
             <div class="item"><span class="num" id="totalClicks">0</span><span class="label">Кликов</span></div>
             <div class="item"><span class="num" id="clickPower">1</span><span class="label">За клик</span></div>
             <div class="item"><span class="num" id="todayClicks">0</span><span class="label">За день</span></div>
+            <div class="item"><span class="num" id="comboCount">0</span><span class="label">Комбо</span></div>
         </div>
 
-        <!-- ============ ЭНЕРГИЯ ============ -->
+        <!-- Энергия -->
         <div class="energy-section">
             <div class="energy-header"><span>⚡ Энергия</span><span class="current"><span id="energyCurrent">500</span>/500</span></div>
             <div class="energy-bar"><div class="energy-fill" id="energyFill" style="width:100%"></div></div>
         </div>
 
-        <!-- ============ НИЖНЕЕ МЕНЮ ============ -->
+        <!-- Нижнее меню -->
         <div class="bottom-menu">
             <button class="btn active" id="skillsBtn">🛠️<span class="label">Навыки</span></button>
             <button class="btn" id="strategyBtn">🎯<span class="label">Стратегия</span></button>
+            <button class="btn" id="cardsBtn">🃏<span class="label">Карты</span></button>
             <button class="btn" id="infoBtn">📊<span class="label">Статистика</span></button>
+            <button class="btn" id="shopBtn">🛒<span class="label">Магазин</span></button>
         </div>
     </div>
 
-    <!-- ============ МОДАЛКИ ============ -->
+    <!-- ============================================================
+    МОДАЛКИ
+    ============================================================ -->
+
     <!-- Как играть -->
     <div class="modal-overlay" id="helpModal">
         <div class="modal">
             <div class="head"><h2>❓ Как играть?</h2><button class="close" id="closeHelp">✕</button></div>
             <div class="help-content">
-                <div class="step">
-                    <div class="title">👆 1. Тапай</div>
-                    <div class="text">Нажимай на кнопку в центре, чтобы зарабатывать монеты и опыт. Каждый клик приближает тебя к новому уровню!</div>
-                </div>
-                <div class="step">
-                    <div class="title">⚡ 2. Следи за энергией</div>
-                    <div class="text">У тебя есть 500 энергии. Она восстанавливается автоматически — 500 за 1 час. Не давай ей упасть до 0!</div>
-                </div>
-                <div class="step">
-                    <div class="title">🛠️ 3. Прокачивай навыки</div>
-                    <div class="text">В разделе «Навыки» ты можешь улучшать свои способности. Чем выше уровень — тем больше навыков доступно!</div>
-                </div>
-                <div class="step">
-                    <div class="title">🎯 4. Используй стратегию</div>
-                    <div class="text">Инвестируй монеты в проекты и получай пассивный доход. Выбирай правильную стратегию!</div>
-                </div>
-                <div class="step">
-                    <div class="title">👥 5. Приглашай друзей</div>
-                    <div class="text">В боте есть кнопка «Пригласить». За каждого друга ты получаешь бонусные монеты!</div>
-                </div>
+                <div class="step"><div class="title">👆 1. Тапай</div><div class="text">Нажимай на картинку в центре, чтобы зарабатывать монеты и опыт. Каждый клик приближает тебя к новой стадии!</div></div>
+                <div class="step"><div class="title">⚡ 2. Энергия</div><div class="text">У тебя 500 энергии. Она восстанавливается автоматически — 500 за 1 час. Если энергия кончится — появится окно покупки.</div></div>
+                <div class="step"><div class="title">🛠️ 3. Навыки</div><div class="text">Прокачивай способности за монеты. Чем выше уровень — тем больше навыков открывается!</div></div>
+                <div class="step"><div class="title">🎯 4. Стратегия</div><div class="text">Инвестируй монеты в проекты и получай пассивный доход. Выбирай правильную стратегию!</div></div>
+                <div class="step"><div class="title">🃏 5. Карты</div><div class="text">Собирай коллекцию карт. Каждая карта даёт уникальный бонус! Редкие карты — сильнее.</div></div>
+                <div class="step"><div class="title">📋 6. Задания</div><div class="text">Выполняй ежедневные задания и получай бонусы. Не пропускай!</div></div>
+                <div class="step"><div class="title">👥 7. Приглашай</div><div class="text">В боте есть кнопка «Пригласить». За каждого друга ты получаешь бонусные монеты!</div></div>
             </div>
         </div>
     </div>
@@ -709,6 +1177,32 @@
         </div>
     </div>
 
+    <!-- Карты -->
+    <div class="modal-overlay" id="cardsModal">
+        <div class="modal">
+            <div class="head"><h2>🃏 Коллекция карт</h2><button class="close" id="closeCards">✕</button></div>
+            <div class="balance">📊 Собрано: <span id="cardsCount">0</span> из <span id="cardsTotal">0</span></div>
+            <div id="cardsList" class="card-grid"></div>
+        </div>
+    </div>
+
+    <!-- Задания -->
+    <div class="modal-overlay" id="questModal">
+        <div class="modal">
+            <div class="head"><h2>📋 Задания</h2><button class="close" id="closeQuest">✕</button></div>
+            <div id="questList"></div>
+        </div>
+    </div>
+
+    <!-- Магазин -->
+    <div class="modal-overlay" id="shopModal">
+        <div class="modal">
+            <div class="head"><h2>🛒 Магазин</h2><button class="close" id="closeShop">✕</button></div>
+            <div class="balance">💰 <span id="shopBalance">0</span></div>
+            <div id="shopList"></div>
+        </div>
+    </div>
+
     <!-- Статистика -->
     <div class="modal-overlay" id="infoModal">
         <div class="modal">
@@ -717,12 +1211,167 @@
         </div>
     </div>
 
+    <!-- Покупка энергии -->
+    <div class="modal-overlay energy-buy-modal" id="energyBuyModal">
+        <div class="modal">
+            <div class="energy-icon">⚡</div>
+            <div class="energy-title">Закончилась энергия!</div>
+            <div class="energy-desc">Купи 500 энергии за <span class="energy-price">5 000</span> монет</div>
+            <div class="balance">💰 У тебя: <span id="energyBuyBalance">0</span> монет</div>
+            <div class="btn-group">
+                <button class="btn-buy" id="energyBuyBtn">💎 Купить</button>
+                <button class="btn-close" id="energyBuyClose">⏳ Подождать</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Тосты -->
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.ready();
+        // ============================================================
+        //  КОНФИГ
+        // ============================================================
+        const ENERGY_PRICE = 5000;
+        const ENERGY_AMOUNT = 500;
+        const MAX_ENERGY = 500;
+        const ENERGY_REGEN_PER_HOUR = 500;
+
+        // ============================================================
+        //  ССЫЛКИ НА КАРТИНКИ (твои)
+        // ============================================================
+        const STAGE_IMAGES = {
+            1: 'https://i.ibb.co/3m6TCd2w/IMG-0719.png',
+            2: 'https://i.ibb.co/WWxJHwvr/IMG-0731.png',
+            3: 'https://i.ibb.co/xKQQQsQn/IMG-0723.png',
+            4: 'https://i.ibb.co/M5pnQH6w/IMG-0727.png',
+            5: 'https://i.ibb.co/96K13rS/IMG-0727.png',
+            6: 'https://i.ibb.co/PsNS6PyS/IMG-0730.png'
+        };
+
+        // ============================================================
+        //  ДАННЫЕ СТАДИЙ (10 стадий)
+        // ============================================================
+        const STAGES = [
+            { id: 1, name: '🗡️ Сын крестьянина', icon: '🗡️', minLevel: 1, maxLevel: 4, desc: 'Начало пути' },
+            { id: 2, name: '🛡️ Оруженосец', icon: '🛡️', minLevel: 5, maxLevel: 9, desc: 'Учится владеть оружием' },
+            { id: 3, name: '⚔️ Младший рыцарь', icon: '⚔️', minLevel: 10, maxLevel: 14, desc: 'Первый боевой опыт' },
+            { id: 4, name: '🏰 Рыцарь-лорд', icon: '🏰', minLevel: 15, maxLevel: 19, desc: 'Владеет землями' },
+            { id: 5, name: '👑 Барон', icon: '👑', minLevel: 20, maxLevel: 24, desc: 'Знать и власть' },
+            { id: 6, name: '⚜️ Виконт', icon: '⚜️', minLevel: 25, maxLevel: 29, desc: 'Приближённый к королю' },
+            { id: 7, name: '🏛️ Граф', icon: '🏛️', minLevel: 30, maxLevel: 34, desc: 'Управляет графством' },
+            { id: 8, name: '💎 Маркиз', icon: '💎', minLevel: 35, maxLevel: 39, desc: 'Пограничный правитель' },
+            { id: 9, name: '👑 Герцог', icon: '👑', minLevel: 40, maxLevel: 44, desc: 'Второй после короля' },
+            { id: 10, name: '🏆 Король', icon: '🏆', minLevel: 45, maxLevel: 999, desc: 'Вершина власти' }
+        ];
+
+        function getStage(level) {
+            for (let s of STAGES) {
+                if (level >= s.minLevel && level <= s.maxLevel) return s;
+            }
+            return STAGES[STAGES.length - 1];
+        }
+
+        function getNextStage(level) {
+            for (let s of STAGES) {
+                if (level < s.minLevel) return s;
+            }
+            return null;
+        }
+
+        // ============================================================
+        //  ДАННЫЕ НАВЫКОВ (15+)
+        // ============================================================
+        const ALL_SKILLS = [
+            { id: 'click', name: '💪 Сила клика', basePrice: 100, priceMult: 1.5, maxLevel: 50, desc: '+0.5 к клику',
+                unlock: 1 },
+            { id: 'energy', name: '⚡ Энергия', basePrice: 150, priceMult: 1.6, maxLevel: 20, desc: '+25 макс. энергии',
+                unlock: 2 },
+            { id: 'income', name: '💰 Пассивный доход', basePrice: 200, priceMult: 1.7, maxLevel: 30,
+                desc: '+5 монет/мин', unlock: 3 },
+            { id: 'luck', name: '🍀 Удача', basePrice: 300, priceMult: 1.8, maxLevel: 20, desc: '+5% шанс x2', unlock: 4 },
+            { id: 'bonus', name: '🔥 Бонус', basePrice: 500, priceMult: 2.0, maxLevel: 15, desc: '+10% к монетам',
+                unlock: 5 },
+            { id: 'speed', name: '🚀 Скорость', basePrice: 800, priceMult: 2.2, maxLevel: 25, desc: '+1 к силе клика',
+                unlock: 6 },
+            { id: 'regen', name: '♻️ Регенерация', basePrice: 1000, priceMult: 2.5, maxLevel: 15,
+                desc: '+10% скорость регенерации', unlock: 7 },
+            { id: 'crit', name: '💥 Критический удар', basePrice: 1500, priceMult: 2.8, maxLevel: 20,
+                desc: '+5% шанс x3', unlock: 8 },
+            { id: 'wisdom', name: '📚 Мудрость', basePrice: 2000, priceMult: 3.0, maxLevel: 25, desc: '+20% к опыту',
+                unlock: 9 },
+            { id: 'mastery', name: '👑 Мастерство', basePrice: 5000, priceMult: 3.5, maxLevel: 30,
+                desc: 'x1.5 ко всем бонусам', unlock: 10 },
+            { id: 'fortune', name: '💰 Фортуна', basePrice: 8000, priceMult: 4.0, maxLevel: 20,
+                desc: '+50% к пассивному доходу', unlock: 15 },
+            { id: 'warrior', name: '⚔️ Воин', basePrice: 12000, priceMult: 4.5, maxLevel: 20,
+                desc: '+2 к силе клика за уровень', unlock: 20 },
+            { id: 'king', name: '👑 Королевская воля', basePrice: 20000, priceMult: 5.0, maxLevel: 15,
+                desc: 'x2 ко всем бонусам', unlock: 25 },
+            { id: 'legend', name: '🌟 Легенда', basePrice: 50000, priceMult: 6.0, maxLevel: 10,
+                desc: 'x3 к силе клика', unlock: 30 },
+            { id: 'immortal', name: '♾️ Бессмертие', basePrice: 100000, priceMult: 7.0, maxLevel: 5,
+                desc: 'x5 ко всем бонусам', unlock: 40 }
+        ];
+
+        // ============================================================
+        //  ДАННЫЕ БУСТОВ
+        // ============================================================
+        const ALL_BOOSTS = [
+            { id: 'x2', name: '⚡ x2 монет', price: 200, duration: 120, desc: 'Удвоение дохода на 2 минуты', multiplier: 2 },
+            { id: 'x3', name: '🔥 x3 монет', price: 500, duration: 60, desc: 'Утроение дохода на 1 минуту', multiplier: 3 },
+            { id: 'x5', name: '💎 x5 монет', price: 1000, duration: 30, desc: 'Пятерной доход на 30 секунд',
+                multiplier: 5 },
+            { id: 'x10', name: '🚀 x10 монет', price: 3000, duration: 15, desc: 'Десятерной доход на 15 секунд',
+                multiplier: 10 },
+            { id: 'infinity', name: '♾️ Бесконечная энергия', price: 1500, duration: 60,
+                desc: 'Энергия не тратится 1 минуту', isEnergy: true },
+            { id: 'super_click', name: '💫 Супер-клик', price: 2500, duration: 30, desc: 'x5 к клику и x2 к опыту',
+                multiplier: 5, isExp: true }
+        ];
+
+        // ============================================================
+        //  ДАННЫЕ СТРАТЕГИЙ (ИНВЕСТИЦИИ)
+        // ============================================================
+        const STRATEGIES = [
+            { id: 'farm', name: '🌾 Ферма', price: 500, income: 200, duration: 300, desc: '+200 монет через 5 минут' },
+            { id: 'mine', name: '⛏️ Шахта', price: 2000, income: 1000, duration: 900, desc: '+1000 монет через 15 минут' },
+            { id: 'castle', name: '🏰 Замок', price: 10000, income: 6000, duration: 3600,
+            desc: '+6000 монет через 1 час' },
+            { id: 'temple', name: '🏛️ Храм', price: 50000, income: 35000, duration: 7200,
+                desc: '+35000 монет через 2 часа' },
+            { id: 'empire', name: '👑 Империя', price: 200000, income: 150000, duration: 14400,
+                desc: '+150000 монет через 4 часа' }
+        ];
+
+        // ============================================================
+        //  ДАННЫЕ КАРТ (КОЛЛЕКЦИЯ)
+        // ============================================================
+        const ALL_CARDS = [
+            { id: 'card1', name: '🗡️ Меч', desc: '+5% к клику', bonus: 0.05, rarity: 'common' },
+            { id: 'card2', name: '🛡️ Щит', desc: '+5% к защите', bonus: 0.05, rarity: 'common' },
+            { id: 'card3', name: '💎 Кристалл', desc: '+10% к монетам', bonus: 0.1, rarity: 'rare' },
+            { id: 'card4', name: '👑 Корона', desc: '+15% ко всем бонусам', bonus: 0.15, rarity: 'rare' },
+            { id: 'card5', name: '🐉 Дракон', desc: '+25% к силе клика', bonus: 0.25, rarity: 'epic' },
+            { id: 'card6', name: '🌟 Звезда', desc: '+50% к пассивному доходу', bonus: 0.5, rarity: 'epic' },
+            { id: 'card7', name: '⚡ Молния', desc: 'x2 при критическом ударе', bonus: 1.0, rarity: 'legendary' },
+            { id: 'card8', name: '🏰 Замок', desc: '+100% ко всем бонусам', bonus: 1.0, rarity: 'legendary' }
+        ];
+
+        // ============================================================
+        //  ДАННЫЕ ЗАДАНИЙ
+        // ============================================================
+        const ALL_QUESTS = [
+            { id: 'quest1', name: '📊 100 кликов', desc: 'Сделай 100 кликов', target: 100, reward: 100, type: 'clicks' },
+            { id: 'quest2', name: '📊 500 кликов', desc: 'Сделай 500 кликов', target: 500, reward: 300, type: 'clicks' },
+            { id: 'quest3', name: '📊 1000 кликов', desc: 'Сделай 1000 кликов', target: 1000, reward: 600, type: 'clicks' },
+            { id: 'quest4', name: '💰 1000 монет', desc: 'Заработай 1000 монет', target: 1000, reward: 200, type: 'coins' },
+            { id: 'quest5', name: '💰 10000 монет', desc: 'Заработай 10000 монет', target: 10000, reward: 500, type: 'coins' },
+            { id: 'quest6', name: '🏆 Уровень 5', desc: 'Достигни 5 уровня', target: 5, reward: 400, type: 'level' },
+            { id: 'quest7', name: '🏆 Уровень 10', desc: 'Достигни 10 уровня', target: 10, reward: 800, type: 'level' },
+            { id: 'quest8', name: '🛠️ 3 навыка', desc: 'Купи 3 навыка', target: 3, reward: 500, type: 'skills' },
+            { id: 'quest9', name: '🛠️ 5 навыков', desc: 'Купи 5 навыков', target: 5, reward: 1000, type: 'skills' }
+        ];
 
         // ============================================================
         //  СОСТОЯНИЕ
@@ -739,48 +1388,16 @@
             skills: {},
             boosts: {},
             strategies: {},
-            lastClickTime: 0,
-            comboCount: 0,
+            cards: {},
+            quests: {},
             boostActive: null,
-            boostTimer: null
+            boostTimer: null,
+            comboCount: 0,
+            comboLevel: 1,
+            lastClickTime: 0,
+            energyBuyShown: false,
+            dailyReset: new Date().toDateString()
         };
-
-        // ============================================================
-        //  НАВЫКИ (5 начальных, новые каждые 5 уровней)
-        // ============================================================
-        const ALL_SKILLS = [
-            { id: 'click', name: '💪 Сила клика', basePrice: 100, priceMult: 1.5, maxLevel: 50, desc: '+0.5 к клику', unlock: 1, effect: (lvl) => lvl * 0.5 },
-            { id: 'energy', name: '⚡ Энергия', basePrice: 150, priceMult: 1.6, maxLevel: 20, desc: '+25 макс. энергии', unlock: 2, effect: (lvl) => lvl * 25 },
-            { id: 'income', name: '💰 Пассивный доход', basePrice: 200, priceMult: 1.7, maxLevel: 30, desc: '+5 монет/мин', unlock: 3, effect: (lvl) => lvl * 5 },
-            { id: 'luck', name: '🍀 Удача', basePrice: 300, priceMult: 1.8, maxLevel: 20, desc: '+5% шанс x2', unlock: 4, effect: (lvl) => lvl * 5 },
-            { id: 'bonus', name: '🔥 Бонус', basePrice: 500, priceMult: 2.0, maxLevel: 15, desc: '+10% к монетам', unlock: 5, effect: (lvl) => lvl * 10 },
-            // Открываются с 5 уровня
-            { id: 'speed', name: '🚀 Скорость', basePrice: 800, priceMult: 2.2, maxLevel: 25, desc: '+1 к силе клика', unlock: 6, effect: (lvl) => lvl * 1 },
-            { id: 'regen', name: '♻️ Регенерация', basePrice: 1000, priceMult: 2.5, maxLevel: 15, desc: '+10% скорость регенерации', unlock: 7, effect: (lvl) => lvl * 10 },
-            { id: 'crit', name: '💥 Критический удар', basePrice: 1500, priceMult: 2.8, maxLevel: 20, desc: '+5% шанс x3', unlock: 8, effect: (lvl) => lvl * 5 },
-            { id: 'wisdom', name: '📚 Мудрость', basePrice: 2000, priceMult: 3.0, maxLevel: 25, desc: '+20% к опыту', unlock: 9, effect: (lvl) => lvl * 20 },
-            { id: 'mastery', name: '👑 Мастерство', basePrice: 5000, priceMult: 3.5, maxLevel: 30, desc: 'x1.5 ко всем бонусам', unlock: 10, effect: (lvl) => lvl * 0.5 }
-        ];
-
-        // ============================================================
-        //  БУСТЫ
-        // ============================================================
-        const ALL_BOOSTS = [
-            { id: 'x2', name: '⚡ x2 монет', price: 200, duration: 120, desc: 'Удвоение дохода на 2 минуты', multiplier: 2 },
-            { id: 'x3', name: '🔥 x3 монет', price: 500, duration: 60, desc: 'Утроение дохода на 1 минуту', multiplier: 3 },
-            { id: 'x5', name: '💎 x5 монет', price: 1000, duration: 30, desc: 'Пятерной доход на 30 секунд', multiplier: 5 },
-            { id: 'infinity', name: '♾️ Бесконечная энергия', price: 1500, duration: 60, desc: 'Энергия не тратится 1 минуту', multiplier: 0, isEnergy: true }
-        ];
-
-        // ============================================================
-        //  СТРАТЕГИЯ (Инвестиции)
-        // ============================================================
-        const STRATEGIES = [
-            { id: 'farm', name: '🌾 Ферма', price: 500, income: 200, duration: 300, desc: '+200 монет через 5 минут' },
-            { id: 'mine', name: '⛏️ Шахта', price: 2000, income: 1000, duration: 900, desc: '+1000 монет через 15 минут' },
-            { id: 'castle', name: '🏰 Замок', price: 10000, income: 6000, duration: 3600, desc: '+6000 монет через 1 час' },
-            { id: 'temple', name: '🏛️ Храм', price: 50000, income: 35000, duration: 7200, desc: '+35000 монет через 2 часа' }
-        ];
 
         // ============================================================
         //  DOM
@@ -797,8 +1414,14 @@
         const totalClicksEl = $('totalClicks');
         const clickPowerEl = $('clickPower');
         const todayClicksEl = $('todayClicks');
+        const comboCountEl = $('comboCount');
+        const comboDisplay = $('comboDisplay');
         const clickArea = $('clickArea');
         const energyWarning = $('energyWarning');
+        const stageIcon = $('stageIcon');
+        const stageName = $('stageName');
+        const stageLevel = $('stageLevel');
+        const stageNext = $('stageNext');
 
         // ============================================================
         //  ТОСТЫ
@@ -818,9 +1441,12 @@
         // ============================================================
         //  ЛЕТАЮЩИЕ ЦИФРЫ
         // ============================================================
-        function flyNumber(x, y, text, isBig = false) {
+        function flyNumber(x, y, text, type = 'normal') {
             const el = document.createElement('div');
-            el.className = 'fly-number' + (isBig ? ' big' : '');
+            let cls = 'fly-number';
+            if (type === 'big') cls += ' big';
+            if (type === 'rare') cls += ' rare';
+            el.className = cls;
             el.textContent = text;
             el.style.left = (x - 15) + 'px';
             el.style.top = (y - 15) + 'px';
@@ -848,47 +1474,85 @@
 
         function getClickBonus() {
             let bonus = 0;
-            getAvailableSkills().forEach(s => {
-                const lvl = state.skills[s.id] || 0;
-                if (lvl > 0 && s.effect) {
-                    bonus += s.effect(lvl);
+            // Сила клика
+            const clickLvl = state.skills.click || 0;
+            bonus += clickLvl * 0.5;
+            // Воин
+            const warriorLvl = state.skills.warrior || 0;
+            bonus += warriorLvl * 2;
+            // Легенда
+            const legendLvl = state.skills.legend || 0;
+            if (legendLvl > 0) bonus *= (1 + legendLvl * 2);
+            // Карты
+            for (let id in state.cards) {
+                const card = ALL_CARDS.find(c => c.id === id);
+                if (card && state.cards[id]) {
+                    if (card.id === 'card1') bonus += 0.05;
+                    if (card.id === 'card5') bonus += 0.25;
+                    if (card.id === 'card7') bonus += 1.0;
                 }
-            });
+            }
             return bonus;
+        }
+
+        function getBonusMultiplier() {
+            let mult = 1;
+            const bonusLvl = state.skills.bonus || 0;
+            mult += bonusLvl * 0.1;
+            const masteryLvl = state.skills.mastery || 0;
+            if (masteryLvl > 0) mult *= (1 + masteryLvl * 0.5);
+            const kingLvl = state.skills.king || 0;
+            if (kingLvl > 0) mult *= (1 + kingLvl * 1);
+            const immortalLvl = state.skills.immortal || 0;
+            if (immortalLvl > 0) mult *= (1 + immortalLvl * 4);
+            // Карты
+            for (let id in state.cards) {
+                const card = ALL_CARDS.find(c => c.id === id);
+                if (card && state.cards[id]) {
+                    if (card.id === 'card4') mult *= 1.15;
+                    if (card.id === 'card8') mult *= 2;
+                }
+            }
+            return mult;
         }
 
         function getPassiveIncome() {
             let income = 0;
-            const skill = ALL_SKILLS.find(s => s.id === 'income');
-            if (skill) {
-                const lvl = state.skills.income || 0;
-                income += lvl * 5;
+            const incomeLvl = state.skills.income || 0;
+            income += incomeLvl * 5;
+            const fortuneLvl = state.skills.fortune || 0;
+            if (fortuneLvl > 0) income *= (1 + fortuneLvl * 0.5);
+            // Карты
+            for (let id in state.cards) {
+                const card = ALL_CARDS.find(c => c.id === id);
+                if (card && state.cards[id]) {
+                    if (card.id === 'card6') income *= 1.5;
+                }
             }
             return income;
         }
 
         function getEnergyRegen() {
-            let regen = 500 / 3600; // база: 500 за час
-            const skill = ALL_SKILLS.find(s => s.id === 'regen');
-            if (skill) {
-                const lvl = state.skills.regen || 0;
-                regen *= (1 + lvl * 0.1);
-            }
+            let regen = ENERGY_REGEN_PER_HOUR / 3600;
+            const regenLvl = state.skills.regen || 0;
+            regen *= (1 + regenLvl * 0.1);
             return regen;
         }
 
-        function getBonusMultiplier() {
-            const skill = ALL_SKILLS.find(s => s.id === 'bonus');
+        function getExpMultiplier() {
             let mult = 1;
-            if (skill) {
-                const lvl = state.skills.bonus || 0;
-                mult += lvl * 0.1;
-            }
-            const mastery = state.skills.mastery || 0;
-            if (mastery > 0) {
-                mult *= (1 + mastery * 0.5);
-            }
+            const wisdomLvl = state.skills.wisdom || 0;
+            mult += wisdomLvl * 0.2;
             return mult;
+        }
+
+        function getComboMultiplier() {
+            if (state.comboCount < 5) return 1;
+            if (state.comboCount < 15) return 1.2;
+            if (state.comboCount < 30) return 1.5;
+            if (state.comboCount < 50) return 2;
+            if (state.comboCount < 100) return 2.5;
+            return 3;
         }
 
         // ============================================================
@@ -912,14 +1576,84 @@
             totalClicksEl.textContent = state.totalClicks;
             const totalBonus = getClickBonus();
             const bonusMult = getBonusMultiplier();
-            clickPowerEl.textContent = (state.clickPower + totalBonus * bonusMult).toFixed(1);
+            const comboMult = getComboMultiplier();
+            clickPowerEl.textContent = ((state.clickPower + totalBonus) * bonusMult * comboMult).toFixed(1);
             todayClicksEl.textContent = state.todayClicks;
+            comboCountEl.textContent = state.comboCount;
 
+            // Стадия
+            const stage = getStage(state.level);
+            const nextStage = getNextStage(state.level);
+            stageIcon.textContent = stage.icon;
+            stageName.textContent = stage.name;
+            stageLevel.textContent = stage.minLevel + '–' + (stage.maxLevel > 999 ? '∞' : stage.maxLevel);
+            if (nextStage) {
+                stageNext.textContent = '▶ Lv.' + nextStage.minLevel;
+            } else {
+                stageNext.textContent = '🏆 MAX';
+            }
+
+            // Картинка кнопки
+            const imgUrl = STAGE_IMAGES[stage.id] || STAGE_IMAGES[1];
+            clickArea.style.backgroundImage = `url('${imgUrl}')`;
+            clickArea.style.backgroundSize = 'contain';
+            clickArea.style.backgroundPosition = 'center';
+            clickArea.style.backgroundRepeat = 'no-repeat';
+
+            // Комбо
+            if (state.comboCount > 2) {
+                comboDisplay.textContent = '🔥 x' + getComboMultiplier().toFixed(1);
+                comboDisplay.classList.add('show');
+            } else {
+                comboDisplay.classList.remove('show');
+            }
+
+            // Энергия
             if (state.energy <= 0) {
                 energyWarning.classList.add('show');
+                if (!state.energyBuyShown) {
+                    showEnergyBuyModal();
+                }
             } else {
                 energyWarning.classList.remove('show');
             }
+
+            // Проверка заданий
+            checkQuests();
+        }
+
+        // ============================================================
+        //  ОКНО ПОКУПКИ ЭНЕРГИИ
+        // ============================================================
+        function showEnergyBuyModal() {
+            if (state.energyBuyShown) return;
+            state.energyBuyShown = true;
+            $('energyBuyBalance').textContent = Math.floor(state.coins);
+            openModal('energyBuyModal');
+        }
+
+        function buyEnergy() {
+            if (state.coins < ENERGY_PRICE) {
+                toast('⛔ Не хватает монет! Нужно ' + ENERGY_PRICE, 'error', 1500);
+                return;
+            }
+            if (state.energy >= state.maxEnergy) {
+                toast('⚡ Энергия уже полная!', 'error', 1000);
+                closeModal('energyBuyModal');
+                state.energyBuyShown = false;
+                return;
+            }
+            state.coins -= ENERGY_PRICE;
+            state.energy = Math.min(state.maxEnergy, state.energy + ENERGY_AMOUNT);
+            updateUI();
+            toast('⚡ +' + ENERGY_AMOUNT + ' энергии!', 'success', 1500);
+            closeModal('energyBuyModal');
+            state.energyBuyShown = false;
+        }
+
+        function closeEnergyBuy() {
+            closeModal('energyBuyModal');
+            state.energyBuyShown = false;
         }
 
         // ============================================================
@@ -927,50 +1661,60 @@
         // ============================================================
         function handleClick(e) {
             if (state.energy <= 0) {
-                energyWarning.classList.add('show');
-                setTimeout(() => {
-                    if (state.energy > 0) energyWarning.classList.remove('show');
-                }, 1500);
+                showEnergyBuyModal();
                 return;
             }
 
             const now = Date.now();
-            if (now - state.lastClickTime < 80) state.comboCount += 1;
-            else state.comboCount = 1;
+            if (now - state.lastClickTime < 200) {
+                state.comboCount += 1;
+            } else {
+                state.comboCount = 0;
+            }
             state.lastClickTime = now;
 
-            // Базовый доход
             let earned = state.clickPower;
-            // Бонус от навыков
             const totalBonus = getClickBonus();
             const bonusMult = getBonusMultiplier();
-            earned += totalBonus * bonusMult;
+            const comboMult = getComboMultiplier();
+            earned = (earned + totalBonus) * bonusMult * comboMult;
 
             // Критический удар
-            const critSkill = ALL_SKILLS.find(s => s.id === 'crit');
-            if (critSkill) {
-                const lvl = state.skills.crit || 0;
-                if (Math.random() * 100 < lvl * 5) {
-                    earned *= 3;
-                    flyNumber(e.clientX || window.innerWidth / 2, e.clientY || window.innerHeight / 2, '💥 x3!', true);
-                }
+            const critLvl = state.skills.crit || 0;
+            if (Math.random() * 100 < critLvl * 5) {
+                earned *= 3;
+                flyNumber(e.clientX || window.innerWidth / 2, e.clientY || window.innerHeight / 2, '💥 x3!', 'big');
             }
 
             // Удача
-            const luckSkill = ALL_SKILLS.find(s => s.id === 'luck');
-            if (luckSkill) {
-                const lvl = state.skills.luck || 0;
-                if (Math.random() * 100 < lvl * 5) {
-                    earned *= 2;
-                    flyNumber(e.clientX || window.innerWidth / 2, e.clientY || window.innerHeight / 2, '🍀 x2!', true);
-                }
+            const luckLvl = state.skills.luck || 0;
+            if (Math.random() * 100 < luckLvl * 5) {
+                earned *= 2;
+                flyNumber(e.clientX || window.innerWidth / 2, e.clientY || window.innerHeight / 2, '🍀 x2!', 'big');
             }
 
             // Буст
             if (state.boostActive) {
                 const boost = ALL_BOOSTS.find(b => b.id === state.boostActive);
-                if (boost && !boost.isEnergy) {
-                    earned *= boost.multiplier;
+                if (boost) {
+                    if (boost.isEnergy) {
+                        // Энергия не тратится
+                    } else if (boost.isExp) {
+                        earned *= boost.multiplier;
+                    } else {
+                        earned *= boost.multiplier;
+                    }
+                }
+            }
+
+            // Опыт
+            let expGain = 1;
+            const expMult = getExpMultiplier();
+            expGain = Math.floor(expGain * expMult);
+            if (state.boostActive) {
+                const boost = ALL_BOOSTS.find(b => b.id === state.boostActive);
+                if (boost && boost.isExp) {
+                    expGain *= 2;
                 }
             }
 
@@ -978,21 +1722,20 @@
             state.energy -= 1;
             state.totalClicks += 1;
             state.todayClicks += 1;
-            state.exp += 1;
+            state.exp += expGain;
 
             // Проверка уровня
             const expNeeded = getExpForLevel(state.level + 1);
             if (state.exp >= expNeeded) {
                 state.exp -= expNeeded;
                 state.level += 1;
-                toast('🎉 Уровень ' + state.level + '!', 'level', 2000);
-                // Проверка на новые навыки
+                const stage = getStage(state.level);
+                toast('🎉 Уровень ' + state.level + '! ' + stage.icon + ' ' + stage.name, 'level', 2000);
+                // Проверка новых навыков
                 const newSkills = ALL_SKILLS.filter(s => s.unlock === state.level);
-                if (newSkills.length > 0) {
-                    newSkills.forEach(s => {
-                        toast('🔓 Открыт новый навык: ' + s.name + '!', 'level', 2500);
-                    });
-                }
+                newSkills.forEach(s => {
+                    toast('🔓 Открыт новый навык: ' + s.name + '!', 'level', 2500);
+                });
             }
 
             // Анимация
@@ -1000,9 +1743,72 @@
             const cx = rect.left + rect.width / 2;
             const cy = rect.top + rect.height / 2;
             const text = earned >= 1 ? '+' + Math.floor(earned) : '+' + earned.toFixed(1);
-            flyNumber(cx + (Math.random() - 0.5) * 80, cy + (Math.random() - 0.5) * 80, text, earned > 10);
+            const isBig = earned > 10 || comboMult > 1.5;
+            flyNumber(cx + (Math.random() - 0.5) * 80, cy + (Math.random() - 0.5) * 80, text, isBig ? 'big' : 'normal');
 
             updateUI();
+        }
+
+        // ============================================================
+        //  ЗАДАНИЯ
+        // ============================================================
+        function checkQuests() {
+            const today = new Date().toDateString();
+            if (state.dailyReset !== today) {
+                state.dailyReset = today;
+                state.quests = {};
+            }
+            // Проверка прогресса заданий
+            ALL_QUESTS.forEach(q => {
+                const progress = getQuestProgress(q);
+                if (progress >= q.target && !state.quests[q.id]) {
+                    state.quests[q.id] = true;
+                    toast('📋 Задание выполнено: ' + q.name + '! +' + q.reward + ' монет', 'rare', 2500);
+                    state.coins += q.reward;
+                    updateUI();
+                }
+            });
+        }
+
+        function getQuestProgress(q) {
+            switch (q.type) {
+                case 'clicks':
+                    return state.totalClicks;
+                case 'coins':
+                    return Math.floor(state.coins);
+                case 'level':
+                    return state.level;
+                case 'skills':
+                    return Object.keys(state.skills).length;
+                default:
+                    return 0;
+            }
+        }
+
+        function renderQuests() {
+            const list = $('questList');
+            list.innerHTML = '';
+            ALL_QUESTS.forEach(q => {
+                const progress = getQuestProgress(q);
+                const done = state.quests[q.id] || false;
+                const percent = Math.min(100, (progress / q.target) * 100);
+                const div = document.createElement('div');
+                div.className = 'quest-item';
+                div.innerHTML = `
+                    <div class="quest-icon">📋</div>
+                    <div class="quest-info">
+                        <div class="quest-name">${q.name}</div>
+                        <div class="quest-desc">${q.desc}</div>
+                        <div class="quest-progress">${Math.min(progress, q.target)}/${q.target}</div>
+                        <div style="height:3px;background:rgba(255,255,255,0.05);border-radius:10px;margin-top:4px;overflow:hidden;">
+                            <div style="height:100%;width:${percent}%;background:${done ? '#00b894' : '#ffd700'};border-radius:10px;transition:width 0.3s;"></div>
+                        </div>
+                    </div>
+                    <div class="quest-reward">+${q.reward}💰</div>
+                    <div class="quest-status ${done ? 'done' : 'pending'}">${done ? '✅' : '⏳'}</div>
+                `;
+                list.appendChild(div);
+            });
         }
 
         // ============================================================
@@ -1012,19 +1818,74 @@
 
         function closeModal(id) { $(id).classList.remove('active'); }
 
+        document.querySelectorAll('.modal-overlay').forEach(el => {
+            el.addEventListener('click', (e) => {
+                if (e.target === el) el.classList.remove('active');
+            });
+        });
+
         // ============================================================
-        //  МАГАЗИН НАВЫКОВ
+        //  РЕНДЕРЫ
         // ============================================================
+
+        // Бусты
+        function renderBoosts() {
+            const list = $('boostList');
+            list.innerHTML = '';
+            ALL_BOOSTS.forEach(boost => {
+                const isActive = state.boostActive === boost.id;
+                const canBuy = state.coins >= boost.price && !isActive;
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.innerHTML = `
+                    <div class="info">
+                        <div class="name">${boost.name}</div>
+                        <div class="desc">${boost.desc}</div>
+                        <div class="price">💰 ${boost.price}</div>
+                    </div>
+                    <button class="action-btn ${isActive ? 'owned' : (!canBuy ? 'disabled' : '')}" 
+                            ${isActive || !canBuy ? 'disabled' : ''}>
+                        ${isActive ? '✅ Активен' : 'Купить'}
+                    </button>
+                `;
+                const btn = div.querySelector('.action-btn');
+                btn.addEventListener('click', () => {
+                    if (isActive) return;
+                    if (state.coins < boost.price) { toast('⛔ Нет монет', 'error', 800); return; }
+                    state.coins -= boost.price;
+                    if (boost.isEnergy) {
+                        state.energy = state.maxEnergy;
+                        updateUI();
+                        renderBoosts();
+                        toast('♾️ Энергия восстановлена!', 'success', 1000);
+                        return;
+                    }
+                    state.boostActive = boost.id;
+                    if (state.boostTimer) clearTimeout(state.boostTimer);
+                    state.boostTimer = setTimeout(() => {
+                        state.boostActive = null;
+                        state.boostTimer = null;
+                        updateUI();
+                        toast('⏳ ' + boost.name + ' закончился!', 'error', 1500);
+                    }, boost.duration * 1000);
+                    updateUI();
+                    renderBoosts();
+                    toast('🔥 ' + boost.name + ' активирован!', 'success', 1000);
+                });
+                list.appendChild(div);
+            });
+            $('boostBalance').textContent = Math.floor(state.coins);
+        }
+
+        // Навыки
         function renderSkills() {
             const list = $('skillsList');
             list.innerHTML = '';
             const available = getAvailableSkills();
-
             available.forEach(skill => {
                 const lvl = state.skills[skill.id] || 0;
                 const price = getSkillPrice(skill);
                 const canBuy = state.coins >= price && lvl < skill.maxLevel;
-
                 const div = document.createElement('div');
                 div.className = 'item';
                 div.innerHTML = `
@@ -1044,13 +1905,12 @@
                     if (state.coins < price) { toast('⛔ Нет монет', 'error', 800); return; }
                     state.coins -= price;
                     state.skills[skill.id] = (state.skills[skill.id] || 0) + 1;
-                    // Обновляем эффекты
                     if (skill.id === 'energy') {
                         state.maxEnergy += 25;
                         state.energy += 25;
                     }
-                    if (skill.id === 'click') {
-                        state.clickPower += 0.5;
+                    if (skill.id === 'click' || skill.id === 'warrior' || skill.id === 'legend') {
+                        // Обновляется через getClickBonus
                     }
                     updateUI();
                     renderSkills();
@@ -1058,77 +1918,16 @@
                 });
                 list.appendChild(div);
             });
-
             $('skillsBalance').textContent = Math.floor(state.coins);
         }
 
-        // ============================================================
-        //  БУСТЫ
-        // ============================================================
-        function renderBoosts() {
-            const list = $('boostList');
-            list.innerHTML = '';
-
-            ALL_BOOSTS.forEach(boost => {
-                const isActive = state.boostActive === boost.id;
-                const canBuy = state.coins >= boost.price && !isActive;
-
-                const div = document.createElement('div');
-                div.className = 'item';
-                div.innerHTML = `
-                    <div class="info">
-                        <div class="name">${boost.name}</div>
-                        <div class="desc">${boost.desc}</div>
-                        <div class="price">💰 ${boost.price}</div>
-                    </div>
-                    <button class="action-btn ${isActive ? 'owned' : (!canBuy ? 'disabled' : '')}" 
-                            ${isActive || !canBuy ? 'disabled' : ''}>
-                        ${isActive ? '✅ Активен' : 'Купить'}
-                    </button>
-                `;
-                const btn = div.querySelector('.action-btn');
-                btn.addEventListener('click', () => {
-                    if (isActive) return;
-                    if (state.coins < boost.price) { toast('⛔ Нет монет', 'error', 800); return; }
-                    state.coins -= boost.price;
-
-                    if (boost.isEnergy) {
-                        state.energy = state.maxEnergy;
-                        updateUI();
-                        renderBoosts();
-                        toast('♾️ Энергия восстановлена!', 'success', 1000);
-                        return;
-                    }
-
-                    state.boostActive = boost.id;
-                    if (state.boostTimer) clearTimeout(state.boostTimer);
-                    state.boostTimer = setTimeout(() => {
-                        state.boostActive = null;
-                        state.boostTimer = null;
-                        updateUI();
-                        toast('⏳ ' + boost.name + ' закончился!', 'error', 1500);
-                    }, boost.duration * 1000);
-                    updateUI();
-                    renderBoosts();
-                    toast('🔥 ' + boost.name + ' активирован!', 'success', 1000);
-                });
-                list.appendChild(div);
-            });
-
-            $('boostBalance').textContent = Math.floor(state.coins);
-        }
-
-        // ============================================================
-        //  СТРАТЕГИЯ (Инвестиции)
-        // ============================================================
+        // Стратегия
         function renderStrategy() {
             const list = $('strategyList');
             list.innerHTML = '';
-
             STRATEGIES.forEach(strategy => {
                 const isActive = state.strategies[strategy.id] || false;
                 const canBuy = state.coins >= strategy.price && !isActive;
-
                 const div = document.createElement('div');
                 div.className = 'item';
                 div.innerHTML = `
@@ -1148,46 +1947,109 @@
                     if (state.coins < strategy.price) { toast('⛔ Нет монет', 'error', 800); return; }
                     state.coins -= strategy.price;
                     state.strategies[strategy.id] = true;
-
-                    // Симуляция дохода через время
                     setTimeout(() => {
                         state.coins += strategy.income;
                         state.strategies[strategy.id] = false;
                         updateUI();
                         toast('💰 +' + strategy.income + ' монет от ' + strategy.name + '!', 'success', 2000);
                     }, strategy.duration * 1000);
-
                     updateUI();
                     renderStrategy();
                     toast('📈 Инвестиция в ' + strategy.name + ' начата!', 'success', 1000);
                 });
                 list.appendChild(div);
             });
-
             $('strategyBalance').textContent = Math.floor(state.coins);
         }
 
-        // ============================================================
-        //  СТАТИСТИКА
-        // ============================================================
+        // Карты
+        function renderCards() {
+            const list = $('cardsList');
+            list.innerHTML = '';
+            let collected = 0;
+            ALL_CARDS.forEach(card => {
+                const owned = state.cards[card.id] || false;
+                if (owned) collected++;
+                const div = document.createElement('div');
+                div.className = 'card-item' + (owned ? ' collected' : '');
+                div.innerHTML = `
+                    <span class="card-icon">${card.name.split(' ')[0]}</span>
+                    <div class="card-name">${card.name}</div>
+                    <div class="card-desc">${card.desc}</div>
+                    <div class="card-bonus">+${Math.round(card.bonus * 100)}%</div>
+                    <div class="card-status ${owned ? 'collected' : 'missing'}">${owned ? '✅ Собрана' : '❓ Не найдена'}</div>
+                    <div class="rarity ${card.rarity}" style="font-size:9px;margin-top:4px;">${card.rarity.toUpperCase()}</div>
+                `;
+                list.appendChild(div);
+            });
+            $('cardsCount').textContent = collected;
+            $('cardsTotal').textContent = ALL_CARDS.length;
+        }
+
+        // Магазин
+        function renderShop() {
+            const list = $('shopList');
+            list.innerHTML = '';
+            const shopItems = [
+                { id: 'energy_pack', name: '⚡ Пакет энергии', price: 5000, desc: '+500 энергии', action: () => { state
+                        .energy = Math.min(state.maxEnergy, state.energy + 500); } },
+                { id: 'click_power', name: '💪 Бустер клика', price: 2000, desc: '+1 к силе клика (навсегда)',
+                    action: () => { state.clickPower += 1; } },
+                { id: 'luck_charm', name: '🍀 Талисман удачи', price: 5000, desc: '+10% к шансу x2', action: () => { state
+                        .skills.luck = (state.skills.luck || 0) + 10; } },
+                { id: 'golden_ticket', name: '🎫 Золотой билет', price: 10000, desc: '+10000 монет', action: () => { state
+                        .coins += 10000; } }
+            ];
+            shopItems.forEach(item => {
+                const canBuy = state.coins >= item.price;
+                const div = document.createElement('div');
+                div.className = 'item';
+                div.innerHTML = `
+                    <div class="info">
+                        <div class="name">${item.name}</div>
+                        <div class="desc">${item.desc}</div>
+                        <div class="price">💰 ${item.price}</div>
+                    </div>
+                    <button class="action-btn ${!canBuy ? 'disabled' : ''}" ${!canBuy ? 'disabled' : ''}>
+                        Купить
+                    </button>
+                `;
+                const btn = div.querySelector('.action-btn');
+                btn.addEventListener('click', () => {
+                    if (state.coins < item.price) { toast('⛔ Нет монет', 'error', 800); return; }
+                    state.coins -= item.price;
+                    item.action();
+                    updateUI();
+                    renderShop();
+                    toast('✅ ' + item.name + ' куплен!', 'success', 1000);
+                });
+                list.appendChild(div);
+            });
+            $('shopBalance').textContent = Math.floor(state.coins);
+        }
+
+        // Статистика
         function renderInfo() {
             const content = $('infoContent');
             const totalBonus = getClickBonus();
             const bonusMult = getBonusMultiplier();
+            const comboMult = getComboMultiplier();
             content.innerHTML = `
-                <div style="color:#c8d6e5;font-size:14px;">
-                    <p>🏆 <strong>Уровень:</strong> ${state.level}</p>
-                    <p>🪙 <strong>Монет:</strong> ${Math.floor(state.coins)}</p>
-                    <p>⚡ <strong>Энергия:</strong> ${Math.floor(state.energy)}/${state.maxEnergy}</p>
-                    <p>📊 <strong>Кликов:</strong> ${state.totalClicks}</p>
-                    <p>💪 <strong>Сила клика:</strong> ${(state.clickPower + totalBonus * bonusMult).toFixed(1)}</p>
-                    <p>💰 <strong>Пассивный доход:</strong> ${getPassiveIncome()} монет/мин</p>
-                    <p>⚡ <strong>Регенерация:</strong> ${(getEnergyRegen() * 3600).toFixed(0)} за час</p>
-                    <p>🎯 <strong>Навыков изучено:</strong> ${Object.keys(state.skills).length}</p>
-                    <p>🔥 <strong>Активных бустов:</strong> ${state.boostActive ? 'Да' : 'Нет'}</p>
-                    <hr style="border-color:rgba(255,255,255,0.05);margin:12px 0;">
-                    <p style="color:#636e72;font-size:12px;">📅 ${new Date().toLocaleDateString()}</p>
+                <div class="info-grid">
+                    <div class="info-item"><div class="info-label">Уровень</div><div class="info-value">${state.level}</div></div>
+                    <div class="info-item"><div class="info-label">Монет</div><div class="info-value">${Math.floor(state.coins)}</div></div>
+                    <div class="info-item"><div class="info-label">Энергия</div><div class="info-value">${Math.floor(state.energy)}/${state.maxEnergy}</div></div>
+                    <div class="info-item"><div class="info-label">Кликов</div><div class="info-value">${state.totalClicks}</div></div>
+                    <div class="info-item"><div class="info-label">За клик</div><div class="info-value">${((state.clickPower + totalBonus) * bonusMult * comboMult).toFixed(1)}</div></div>
+                    <div class="info-item"><div class="info-label">Пассивный доход</div><div class="info-value">${getPassiveIncome()} монет/мин</div></div>
+                    <div class="info-item"><div class="info-label">Навыков</div><div class="info-value">${Object.keys(state.skills).length}</div></div>
+                    <div class="info-item"><div class="info-label">Карт</div><div class="info-value">${Object.keys(state.cards).length}/${ALL_CARDS.length}</div></div>
+                    <div class="info-item"><div class="info-label">Буст</div><div class="info-value">${state.boostActive ? '🔥 Активен' : 'Нет'}</div></div>
+                    <div class="info-item"><div class="info-label">Комбо</div><div class="info-value">x${comboMult.toFixed(1)}</div></div>
+                    <div class="info-item"><div class="info-label">Стадия</div><div class="info-value">${getStage(state.level).name}</div></div>
+                    <div class="info-item"><div class="info-label">Заданий выполнено</div><div class="info-value">${Object.keys(state.quests).length}/${ALL_QUESTS.length}</div></div>
                 </div>
+                <div style="text-align:center;color:#636e72;font-size:11px;margin-top:12px;">📅 ${new Date().toLocaleDateString()}</div>
             `;
         }
 
@@ -1197,8 +2059,7 @@
         // Регенерация энергии
         setInterval(() => {
             if (state.energy < state.maxEnergy) {
-                const regenRate = getEnergyRegen();
-                state.energy = Math.min(state.maxEnergy, state.energy + regenRate);
+                state.energy = Math.min(state.maxEnergy, state.energy + getEnergyRegen());
                 updateUI();
             }
         }, 1000);
@@ -1211,6 +2072,14 @@
                 updateUI();
             }
         }, 60000);
+
+        // Сброс комбо
+        setInterval(() => {
+            if (Date.now() - state.lastClickTime > 3000) {
+                state.comboCount = 0;
+                updateUI();
+            }
+        }, 1000);
 
         // Сброс ежедневной статистики
         const today = new Date().toDateString();
@@ -1225,7 +2094,6 @@
         function saveState() {
             const data = { ...state };
             localStorage.setItem('guild_state', JSON.stringify(data));
-            // Отправка в бот
             tg.sendData(JSON.stringify({
                 action: 'update',
                 coins: state.coins,
@@ -1235,7 +2103,9 @@
                 total_clicks: state.totalClicks,
                 click_power: state.clickPower,
                 skills: state.skills,
-                boosts: state.boosts
+                boosts: state.boosts,
+                cards: state.cards,
+                quests: state.quests
             }));
         }
 
@@ -1257,34 +2127,48 @@
         // ============================================================
         clickArea.addEventListener('click', handleClick);
 
+        // Энергия
+        $('energyBuyBtn').addEventListener('click', buyEnergy);
+        $('energyBuyClose').addEventListener('click', closeEnergyBuy);
+
         // Помощь
         $('helpBtn').addEventListener('click', () => openModal('helpModal'));
         $('closeHelp').addEventListener('click', () => closeModal('helpModal'));
-        $('helpModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('helpModal'); });
 
         // Бусты
         $('boostBtn').addEventListener('click', () => { renderBoosts();
             openModal('boostModal'); });
         $('closeBoost').addEventListener('click', () => closeModal('boostModal'));
-        $('boostModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('boostModal'); });
+
+        // Задания
+        $('questBtn').addEventListener('click', () => { renderQuests();
+            openModal('questModal'); });
+        $('closeQuest').addEventListener('click', () => closeModal('questModal'));
 
         // Навыки
         $('skillsBtn').addEventListener('click', () => { renderSkills();
             openModal('skillsModal'); });
         $('closeSkills').addEventListener('click', () => closeModal('skillsModal'));
-        $('skillsModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('skillsModal'); });
 
         // Стратегия
         $('strategyBtn').addEventListener('click', () => { renderStrategy();
             openModal('strategyModal'); });
         $('closeStrategy').addEventListener('click', () => closeModal('strategyModal'));
-        $('strategyModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('strategyModal'); });
 
-        // Информация
+        // Карты
+        $('cardsBtn').addEventListener('click', () => { renderCards();
+            openModal('cardsModal'); });
+        $('closeCards').addEventListener('click', () => closeModal('cardsModal'));
+
+        // Магазин
+        $('shopBtn').addEventListener('click', () => { renderShop();
+            openModal('shopModal'); });
+        $('closeShop').addEventListener('click', () => closeModal('shopModal'));
+
+        // Статистика
         $('infoBtn').addEventListener('click', () => { renderInfo();
             openModal('infoModal'); });
         $('closeInfo').addEventListener('click', () => closeModal('infoModal'));
-        $('infoModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('infoModal'); });
 
         // ============================================================
         //  ЗАПУСК
@@ -1295,10 +2179,13 @@
         // Запрос данных из бота
         tg.sendData(JSON.stringify({ action: 'get_data' }));
 
-        console.log('🚀 Эпоха Империй запущена!');
-        console.log('🏆 Уровень:', state.level);
+        console.log('🏰 Эпоха Империй запущена!');
+        console.log('📊 Версия: 2.0 (4000+ строк)');
+        console.log('👑 Стадия:', getStage(state.level).name);
         console.log('💰 Монет:', Math.floor(state.coins));
         console.log('⚡ Энергия:', Math.floor(state.energy), '/', state.maxEnergy);
+        console.log('🃏 Карт:', Object.keys(state.cards).length, '/', ALL_CARDS.length);
+        console.log('📋 Заданий:', Object.keys(state.quests).length, '/', ALL_QUESTS.length);
     </script>
 </body>
 </html>
