@@ -4,1183 +4,599 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Эпоха Империй</title>
-    <script src="https://telegram.org/js/telegram-web-app.js?56"></script>
     <style>
+        /* --- Общие стили --- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
-
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-
         body {
             background: #0a0a12;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            padding: 10px;
             background-image: radial-gradient(ellipse at top, #1a1a2e 0%, #0a0a12 70%);
-            user-select: none;
+            overflow: hidden;
         }
-
-        .game-container {
+        #app {
+            max-width: 420px;
             width: 100%;
-            max-width: 430px;
-            height: 100%;
-            max-height: 850px;
             background: rgba(255, 255, 255, 0.03);
             backdrop-filter: blur(12px);
-            padding: 16px 14px 10px;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            border-radius: 0;
+            border-radius: 32px;
+            padding: 20px 16px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            transition: all 0.3s ease;
         }
 
-        /* ============ ВЕРХНЯЯ ПАНЕЛЬ ============ */
+        /* --- Верхняя панель --- */
         .header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 6px 2px 8px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            flex-shrink: 0;
-            margin-top: 4px;
+            margin-bottom: 10px;
+            padding: 0 4px;
         }
-
-        .header-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
+        .stat {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 6px 14px;
+            border-radius: 40px;
+            color: #8395a7;
             font-size: 14px;
             font-weight: 600;
-            color: #8395a7;
-        }
-
-        .header-item .value {
-            color: #ffd700;
-            font-size: 17px;
-            min-width: 35px;
-        }
-
-        .header-item .icon {
-            font-size: 18px;
-        }
-
-        /* ============ ЭПОХА ============ */
-        .era-display {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 10px;
-            padding: 4px 10px;
-            margin: 3px 0;
-            border: 1px solid rgba(255, 215, 0, 0.08);
-            flex-shrink: 0;
-        }
-
-        .era-display .era-icon {
-            font-size: 16px;
-        }
-        .era-display .era-name {
-            font-size: 13px;
-            font-weight: 700;
-            color: #ffd700;
-        }
-        .era-display .era-next {
-            font-size: 10px;
-            color: #636e72;
-        }
-
-        .level-progress {
-            margin: 3px 0 4px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            padding: 2px 8px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
             display: flex;
             align-items: center;
             gap: 6px;
-            flex-shrink: 0;
         }
-
-        .level-progress .level-text {
-            font-size: 10px;
-            font-weight: 700;
-            color: #8395a7;
-            white-space: nowrap;
-            min-width: 35px;
-        }
-
-        .level-progress .level-text span {
+        .stat .icon { font-size: 18px; }
+        .stat .value {
             color: #ffd700;
+            font-size: 16px;
+            min-width: 20px;
         }
 
-        .level-progress .level-bar {
+        /* --- Информация об эпохе --- */
+        .era-display {
+            margin-bottom: 8px;
+            padding: 6px 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 30px;
+            display: inline-block;
+            border: 1px solid rgba(255, 215, 0, 0.08);
+        }
+        .era-name {
+            color: #ffd700;
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .era-sub {
+            color: #8395a7;
+            font-size: 12px;
+            margin-left: 6px;
+        }
+
+        /* --- Прогресс уровня --- */
+        .progress-container {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 40px;
+            padding: 4px 8px;
+            margin: 10px 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .progress-label {
+            color: #c8d6e5;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .progress-bar {
             flex: 1;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.05);
+            height: 6px;
+            background: rgba(255, 255, 255, 0.06);
             border-radius: 20px;
             overflow: hidden;
         }
-
-        .level-progress .level-fill {
+        .progress-fill {
             height: 100%;
-            border-radius: 20px;
-            background: linear-gradient(90deg, #ffd700, #ff6b6b);
-            transition: width 0.3s ease;
             width: 0%;
+            background: linear-gradient(90deg, #ffd700, #ff6b6b);
+            border-radius: 20px;
+            transition: width 0.3s ease;
         }
-
-        .level-progress .level-percent {
-            font-size: 9px;
+        .progress-text {
             color: #8395a7;
-            min-width: 28px;
+            font-size: 12px;
+            font-weight: 600;
+            min-width: 50px;
             text-align: right;
         }
 
-        /* ============ КЛИК ============ */
-        .click-wrapper {
-            position: relative;
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 150px;
-            padding: 4px 0;
-        }
-
+        /* --- КНОПКА (изображение) --- */
         .click-area {
-            width: 170px;
-            height: 170px;
+            width: 190px;
+            height: 190px;
+            margin: 8px auto 14px;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #2a2a5e, #0f0f1f);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            background-size: cover;
+            background-position: center;
             cursor: pointer;
             border: 3px solid rgba(255, 215, 0, 0.2);
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.03), inset 0 -4px 15px rgba(0, 0, 0, 0.4);
-            transition: transform 0.07s, box-shadow 0.07s;
-            position: relative;
-            user-select: none;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.04);
+            transition: transform 0.1s ease, box-shadow 0.2s ease;
             will-change: transform;
-            touch-action: manipulation;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-
-        .click-area::before {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 50%;
-            background: conic-gradient(from 0deg, #ffd700, #ff6b6b, #ffd700);
-            opacity: 0.12;
-            z-index: -1;
-            animation: rotateBorder 8s linear infinite;
-        }
-
-        @keyframes rotateBorder {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
         .click-area:active {
             transform: scale(0.93);
             border-color: #ffd700;
-            box-shadow: 0 0 60px rgba(255, 215, 0, 0.08);
+            box-shadow: 0 0 60px rgba(255, 215, 0, 0.1);
         }
-
-        .click-area .emoji {
-            font-size: 50px;
-            line-height: 1;
-            filter: drop-shadow(0 2px 15px rgba(255, 215, 0, 0.1));
-            transition: transform 0.07s;
-            will-change: transform;
-        }
-
-        .click-area:active .emoji {
-            transform: scale(1.05);
-        }
-
-        .click-area .text {
-            font-size: 11px;
-            font-weight: 700;
-            margin-top: 2px;
-            color: #ffd700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-
+        /* Бейдж уровня на кнопке */
         .click-area .badge {
             position: absolute;
-            top: 6px;
-            right: 6px;
-            background: rgba(255, 215, 0, 0.1);
-            border-radius: 12px;
-            padding: 2px 8px;
-            font-size: 9px;
-            font-weight: 700;
+            top: -8px;
+            right: -8px;
+            background: #0a0a12;
             color: #ffd700;
-            border: 1px solid rgba(255, 215, 0, 0.05);
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 40px;
+            border: 2px solid #ffd700;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
         }
-
+        /* Буст-бейдж */
         .click-area .boost-badge {
             position: absolute;
-            bottom: 6px;
+            bottom: 8px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 11px;
-            font-weight: 800;
+            background: rgba(0, 0, 0, 0.7);
             color: #ff6b6b;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 2px 12px;
-            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 800;
+            padding: 4px 14px;
+            border-radius: 40px;
+            backdrop-filter: blur(4px);
             display: none;
             white-space: nowrap;
+            border: 1px solid rgba(255, 107, 107, 0.3);
         }
+        .click-area .boost-badge.show { display: block; }
 
-        .click-area .boost-badge.show {
-            display: block;
-        }
-
-        .click-area .energy-warning {
+        /* Предупреждение об энергии */
+        .energy-warning {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 13px;
-            font-weight: 800;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
+            padding: 8px 16px;
+            border-radius: 40px;
             color: #ff6b6b;
-            animation: warnPulse 0.5s ease-in-out infinite alternate;
+            font-weight: 800;
+            font-size: 14px;
+            border: 1px solid rgba(255, 107, 107, 0.5);
             display: none;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 4px 12px;
-            border-radius: 12px;
             white-space: nowrap;
-        }
-
-        .click-area .energy-warning.show {
-            display: block;
-        }
-
-        @keyframes warnPulse {
-            from {
-                opacity: 0.7;
-                transform: translate(-50%, -50%) scale(1);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1.05);
-            }
-        }
-
-        /* ============ ЛЕТАЮЩИЕ ЦИФРЫ ============ */
-        .fly-number {
-            position: fixed;
             pointer-events: none;
-            z-index: 999;
-            font-size: 28px;
-            font-weight: 800;
+        }
+        .energy-warning.show { display: block; }
+
+        /* --- Нижняя статистика --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            margin: 10px 0 12px;
+        }
+        .stats-grid .item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 8px 4px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        .stats-grid .num {
             color: #ffd700;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
-            animation: flyNumber 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-            will-change: transform, opacity;
-        }
-
-        .fly-number.big {
-            font-size: 40px;
-            color: #ff6b6b;
-            text-shadow: 0 0 40px rgba(255, 107, 107, 0.4);
-        }
-
-        .fly-number.era-up {
-            font-size: 34px;
-            color: #a29bfe;
-            text-shadow: 0 0 50px rgba(162, 155, 254, 0.5);
-        }
-
-        @keyframes flyNumber {
-            0% {
-                opacity: 1;
-                transform: translate(0, 0) scale(0.5);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(var(--tx), var(--ty)) scale(1.3);
-            }
-        }
-
-        /* ============ СТАТИСТИКА ============ */
-        .stats {
-            display: flex;
-            justify-content: space-between;
-            padding: 4px 4px 5px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            flex-shrink: 0;
-        }
-
-        .stats .item {
-            text-align: center;
-        }
-
-        .stats .item .num {
-            font-size: 15px;
+            font-size: 20px;
             font-weight: 800;
-            color: #ffd700;
             display: block;
             line-height: 1.2;
         }
-
-        .stats .item .label {
-            font-size: 8px;
+        .stats-grid .label {
             color: #8395a7;
+            font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.5px;
         }
 
-        /* ============ ЭНЕРГИЯ ============ */
+        /* --- Энергия --- */
         .energy-section {
-            margin: 3px 0 5px;
-            flex-shrink: 0;
+            margin: 6px 0 10px;
         }
-
         .energy-header {
             display: flex;
             justify-content: space-between;
-            font-size: 10px;
             color: #8395a7;
-            padding: 0 2px;
+            font-size: 12px;
+            padding: 0 4px;
         }
-
-        .energy-header .current {
-            color: #ffd700;
-            font-weight: 600;
-        }
-
+        .energy-header .current { color: #ffd700; font-weight: 600; }
         .energy-bar {
             width: 100%;
-            height: 4px;
+            height: 5px;
             background: rgba(255, 255, 255, 0.04);
             border-radius: 20px;
             overflow: hidden;
         }
-
         .energy-fill {
             height: 100%;
-            border-radius: 20px;
-            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
-            transition: width 0.3s ease;
             width: 100%;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border-radius: 20px;
+            transition: width 0.3s ease;
         }
 
-        /* ============ НИЖНЕЕ МЕНЮ (6 КНОПОК) ============ */
+        /* --- Нижнее меню --- */
         .bottom-menu {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 5px;
-            margin-top: 4px;
-            flex-shrink: 0;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-top: 8px;
         }
-
-        .bottom-menu .btn {
+        .bottom-menu button {
             background: rgba(255, 255, 255, 0.04);
             border: none;
-            border-radius: 14px;
-            padding: 12px 2px;
+            border-radius: 16px;
+            padding: 12px 0;
             font-size: 20px;
             cursor: pointer;
-            transition: all 0.1s;
+            transition: all 0.15s ease;
             color: #8395a7;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 2px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            will-change: transform;
-            touch-action: manipulation;
-        }
-
-        .bottom-menu .btn:active {
-            transform: scale(0.92);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .bottom-menu .btn .label {
-            font-size: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            color: #636e72;
+            border: 1px solid rgba(255, 255, 255, 0.02);
             font-weight: 600;
         }
-
-        .bottom-menu .btn.active {
+        .bottom-menu button .label {
+            font-size: 10px;
+            color: #636e72;
+            letter-spacing: 0.3px;
+        }
+        .bottom-menu button:active { transform: scale(0.93); background: rgba(255, 255, 255, 0.08); }
+        .bottom-menu button.active {
             color: #ffd700;
-            border-color: rgba(255, 215, 0, 0.12);
-            background: rgba(255, 215, 0, 0.04);
+            border-color: rgba(255, 215, 0, 0.1);
+            background: rgba(255, 215, 0, 0.03);
         }
 
-        .bottom-menu .btn.raid {
-            color: #fd79a8;
-            animation: raidPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes raidPulse {
-            0%,
-            100% {
-                opacity: 0.8;
-            }
-            50% {
-                opacity: 1;
-            }
-        }
-
-        .bottom-menu .btn.battle {
-            color: #ff6b6b;
-            animation: battlePulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes battlePulse {
-            0%,
-            100% {
-                opacity: 0.8;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.02);
-            }
-        }
-
-        .bottom-menu .btn.exchange {
-            color: #a29bfe;
-        }
-
-        /* ============ МОДАЛКИ ============ */
+        /* --- Модальные окна --- */
         .modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
+            backdrop-filter: blur(8px);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
-            padding: 14px;
-            animation: fadeIn 0.2s ease;
+            padding: 20px;
         }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
+        .modal-overlay.active { display: flex; }
         .modal {
             background: #16162e;
-            border-radius: 24px;
-            padding: 16px 14px;
+            border-radius: 28px;
+            padding: 24px 20px;
             max-width: 400px;
             width: 100%;
             max-height: 80vh;
             overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
-            animation: slideUp 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.7);
+            animation: slideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-
         @keyframes slideUp {
-            from {
-                transform: translateY(15px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
         .modal .head {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 16px;
         }
-
-        .modal .head h2 {
-            color: #ffd700;
-            font-size: 18px;
-            font-weight: 700;
-        }
-
+        .modal .head h2 { color: #ffd700; font-size: 20px; }
         .modal .head .close {
             background: none;
             border: none;
             color: #8395a7;
-            font-size: 22px;
+            font-size: 28px;
             cursor: pointer;
-            padding: 0 4px;
-            transition: 0.2s;
+            padding: 0 8px;
         }
-
-        .modal .head .close:active {
-            color: #ff6b6b;
-            transform: rotate(90deg);
-        }
-
         .modal .balance {
             text-align: center;
             color: #8395a7;
-            font-size: 12px;
-            margin-bottom: 10px;
-            padding: 6px;
+            margin-bottom: 16px;
+            font-size: 14px;
             background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
+            padding: 8px;
+            border-radius: 40px;
         }
+        .modal .balance span { color: #ffd700; font-weight: 700; }
 
-        .modal .balance span {
-            color: #ffd700;
-            font-weight: 700;
-        }
-
-        /* ============ ЭЛЕМЕНТЫ СПИСКОВ ============ */
+        /* --- Элементы списков в модалках --- */
         .item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            padding: 8px 12px;
-            margin-bottom: 5px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            transition: 0.2s;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
         }
-
-        .item:active {
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        .item .info {
-            flex: 1;
-        }
-
-        .item .info .name {
-            font-size: 13px;
-            font-weight: 600;
-            color: #c8d6e5;
-        }
-
-        .item .info .desc {
-            font-size: 10px;
-            color: #8395a7;
-            margin-top: 1px;
-        }
-
-        .item .info .desc .highlight {
-            color: #ffd700;
-        }
-
+        .item .info { text-align: left; }
+        .item .info .name { color: #c8d6e5; font-weight: 600; font-size: 15px; }
+        .item .info .desc { color: #8395a7; font-size: 12px; }
+        .item .info .price { color: #ffd700; font-weight: 600; }
         .item .action-btn {
             background: linear-gradient(135deg, #ffd700, #f0a500);
             border: none;
-            border-radius: 10px;
-            padding: 5px 16px;
-            font-size: 11px;
+            border-radius: 30px;
+            padding: 6px 18px;
             font-weight: 700;
+            font-size: 13px;
             color: #0a0a12;
             cursor: pointer;
-            transition: transform 0.07s;
-            min-width: 60px;
-            text-align: center;
+            transition: transform 0.1s;
         }
-
-        .item .action-btn:active {
-            transform: scale(0.92);
-        }
-
+        .item .action-btn:active { transform: scale(0.92); }
         .item .action-btn.owned {
             background: #00b894;
             color: #fff;
             cursor: default;
         }
-
         .item .action-btn.disabled {
             background: #2d3436;
             color: #636e72;
             cursor: not-allowed;
         }
 
-        .item .action-btn.stars-btn {
-            background: linear-gradient(135deg, #a29bfe, #6c5ce7);
-            color: #fff;
-        }
-
-        .item .action-btn.stars-btn:active {
-            transform: scale(0.92);
-        }
-
-        .item .action-btn.stars-btn.disabled {
-            background: #2d3436;
-            color: #636e72;
-            cursor: not-allowed;
-        }
-
-        .item .action-btn.battle-btn {
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-            color: #fff;
-        }
-
-        .item .action-btn.battle-btn:active {
-            transform: scale(0.92);
-        }
-
-        /* ============ БИТВА ============ */
-        .battle-result {
-            text-align: center;
-            padding: 16px;
-            border-radius: 14px;
-            margin: 8px 0;
-        }
-
-        .battle-result.win {
-            background: rgba(0, 184, 148, 0.15);
-            border: 2px solid rgba(0, 184, 148, 0.3);
-        }
-
-        .battle-result.lose {
-            background: rgba(255, 107, 107, 0.15);
-            border: 2px solid rgba(255, 107, 107, 0.3);
-        }
-
-        .battle-result .big {
-            font-size: 26px;
-            font-weight: 800;
-        }
-
-        .battle-result .big.win {
-            color: #00b894;
-        }
-        .battle-result .big.lose {
-            color: #ff6b6b;
-        }
-
-        .battle-result .amount {
-            font-size: 20px;
-            font-weight: 700;
-            color: #ffd700;
-            margin: 6px 0;
-        }
-
-        /* ============ ТОСТЫ ============ */
-        .toast-container {
-            position: fixed;
-            top: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 3000;
-            pointer-events: none;
-        }
-
-        .toast {
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 8px 20px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            margin-top: 4px;
-            animation: toastIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            text-align: center;
-            min-width: 120px;
-            max-width: 85%;
-        }
-
-        .toast.success {
-            border-color: rgba(0, 184, 148, 0.25);
-        }
-        .toast.error {
-            border-color: rgba(255, 107, 107, 0.25);
-        }
-        .toast.level {
-            border-color: rgba(255, 215, 0, 0.25);
-            background: rgba(255, 215, 0, 0.08);
-            font-size: 15px;
-        }
-        .toast.boost {
-            border-color: rgba(255, 107, 107, 0.25);
-            background: rgba(255, 107, 107, 0.08);
-            font-size: 14px;
-        }
-        .toast.battle {
-            border-color: rgba(255, 107, 107, 0.3);
-            background: rgba(255, 107, 107, 0.1);
-            font-size: 16px;
-        }
-
-        @keyframes toastIn {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-15px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0) scale(1);
-            }
-        }
-
-        .toast.fade-out {
-            animation: toastOut 0.2s ease forwards;
-        }
-
-        @keyframes toastOut {
-            to {
-                opacity: 0;
-                transform: translateX(-50%) translateY(-10px) scale(0.95);
-            }
-        }
-
-        /* ============ АДАПТИВ ============ */
+        /* --- Адаптив --- */
         @media (max-width: 400px) {
-            .click-area {
-                width: 150px;
-                height: 150px;
-            }
-            .click-area .emoji {
-                font-size: 40px;
-            }
-            .bottom-menu .btn {
-                font-size: 17px;
-                padding: 10px 2px;
-            }
-            .bottom-menu .btn .label {
-                font-size: 7px;
-            }
-            .header-item {
-                font-size: 12px;
-            }
-            .header-item .value {
-                font-size: 14px;
-            }
-            .fly-number {
-                font-size: 22px;
-            }
+            .click-area { width: 150px; height: 150px; }
+            .stat { font-size: 12px; padding: 4px 10px; }
+            .stat .value { font-size: 14px; }
         }
-
-        @media (max-width: 360px) {
-            .click-area {
-                width: 130px;
-                height: 130px;
-            }
-            .click-area .emoji {
-                font-size: 32px;
-            }
-            .click-area .text {
-                font-size: 9px;
-            }
-            .header-item {
-                font-size: 10px;
-            }
-            .header-item .value {
-                font-size: 12px;
-            }
-            .stats .item .num {
-                font-size: 13px;
-            }
-        }
-
         @media (min-width: 500px) {
-            .click-area {
-                width: 220px;
-                height: 220px;
-            }
-            .click-area .emoji {
-                font-size: 65px;
-            }
-            .fly-number {
-                font-size: 34px;
-            }
+            .click-area { width: 220px; height: 220px; }
         }
     </style>
 </head>
 <body>
-    <div class="game-container" id="app">
+    <div id="app">
         <!-- ============ ВЕРХНЯЯ ПАНЕЛЬ ============ -->
         <div class="header">
-            <div class="header-item"><span class="icon">🏆</span><span class="value" id="level">1</span></div>
-            <div class="header-item"><span class="icon">💰</span><span class="value" id="coins">0</span></div>
-            <div class="header-item"><span class="icon">⚡</span><span class="value" id="energyDisplay">500</span></div>
+            <div class="stat"><span class="icon">🏆</span> Lv.<span class="value" id="levelDisplay">1</span></div>
+            <div class="stat"><span class="icon">💰</span> <span class="value" id="coinsDisplay">0</span></div>
+            <div class="stat"><span class="icon">⚡</span> <span class="value" id="energyDisplay">100</span></div>
         </div>
 
         <!-- ============ ЭПОХА ============ -->
         <div class="era-display">
-            <span class="era-icon" id="eraIcon">🏚️</span>
-            <span class="era-name" id="eraName">Деревня</span>
-            <span class="era-next" id="eraNext">▶ Lv.5</span>
+            <span class="era-name" id="eraName">🗡️ Сын крестьянина</span>
+            <span class="era-sub" id="eraLevel">1–4</span>
         </div>
 
         <!-- ============ ПРОГРЕСС ============ -->
-        <div class="level-progress">
-            <div class="level-text">Lv.<span id="levelDisplay">1</span></div>
-            <div class="level-bar"><div class="level-fill" id="levelProgressFill" style="width:0%"></div></div>
-            <div class="level-percent" id="levelPercent">0%</div>
+        <div class="progress-container">
+            <span class="progress-label" id="progressLabel">0 XP</span>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <span class="progress-text" id="progressPercent">0%</span>
         </div>
 
-        <!-- ============ КЛИК ============ -->
-        <div class="click-wrapper">
-            <div class="click-area" id="clickArea">
-                <span class="badge" id="badge">Lv.1</span>
-                <span class="emoji" id="clickEmoji">⚔️</span>
-                <span class="text">ТАПАЙ</span>
-                <span class="boost-badge" id="boostBadge"></span>
-                <span class="energy-warning" id="energyWarning">⛔ НЕТ ЭНЕРГИИ</span>
-            </div>
+        <!-- ============ КНОПКА ============ -->
+        <div class="click-area" id="clickArea">
+            <div class="badge" id="levelBadge">Lv.1</div>
+            <div class="boost-badge" id="boostBadge"></div>
+            <div class="energy-warning" id="energyWarning">⛔ НЕТ ЭНЕРГИИ</div>
         </div>
 
         <!-- ============ СТАТИСТИКА ============ -->
-        <div class="stats">
-            <div class="item"><span class="num" id="clicks">0</span><span class="label">Кликов</span></div>
-            <div class="item"><span class="num" id="perClick">1</span><span class="label">За клик</span></div>
-            <div class="item"><span class="num" id="bosses">0</span><span class="label">Боссов</span></div>
+        <div class="stats-grid">
+            <div class="item"><span class="num" id="totalClicks">0</span><span class="label">Кликов</span></div>
+            <div class="item"><span class="num" id="clickPower">1</span><span class="label">За клик</span></div>
+            <div class="item"><span class="num" id="stageDisplay">1</span><span class="label">Стадия</span></div>
         </div>
 
         <!-- ============ ЭНЕРГИЯ ============ -->
         <div class="energy-section">
-            <div class="energy-header"><span>⚡ Энергия</span><span class="current"><span id="energyCurrent">500</span>/500</span></div>
+            <div class="energy-header"><span>⚡ Энергия</span><span class="current"><span id="energyCurrent">100</span>/100</span></div>
             <div class="energy-bar"><div class="energy-fill" id="energyFill" style="width:100%"></div></div>
         </div>
 
         <!-- ============ НИЖНЕЕ МЕНЮ ============ -->
         <div class="bottom-menu">
-            <button class="btn active" id="shopBtn">🛒<span class="label">Маг.</span></button>
-            <button class="btn" id="boostsBtn">⚡<span class="label">Бусты</span></button>
-            <button class="btn" id="skillsBtn">📚<span class="label">Навыки</span></button>
-            <button class="btn battle" id="battleBtn">⚔️<span class="label">Битва</span></button>
-            <button class="btn" id="airdropBtn">💎<span class="label">Aird.</span></button>
-            <button class="btn exchange" id="exchangeBtn">🔄<span class="label">Обм.</span></button>
+            <button class="active" id="shopBtn">🛒<span class="label">Магазин</span></button>
+            <button id="skillsBtn">⚡<span class="label">Навыки</span></button>
+            <button id="infoBtn">📜<span class="label">Инфо</span></button>
+            <button id="resetBtn">🔄<span class="label">Сброс</span></button>
         </div>
     </div>
 
     <!-- ============ МОДАЛКИ ============ -->
-    <div class="modal-overlay" id="shopModal"><div class="modal"><div class="head"><h2>🛒 Магазин</h2><button class="close" id="closeShop">✕</button></div><div class="balance">💰 <span id="shopBalance">0</span></div><div id="shopList"></div></div></div>
-    <div class="modal-overlay" id="boostsModal"><div class="modal"><div class="head"><h2>⚡ Бусты</h2><button class="close" id="closeBoosts">✕</button></div><div class="balance">💰 <span id="boostsBalance">0</span></div><div id="boostsList"></div></div></div>
-    <div class="modal-overlay" id="skillsModal"><div class="modal"><div class="head"><h2>📚 Навыки</h2><button class="close" id="closeSkills">✕</button></div><div class="balance">💰 <span id="skillsBalance">0</span></div><div id="skillsList"></div></div></div>
-    <div class="modal-overlay" id="battleModal"><div class="modal"><div class="head"><h2>⚔️ Битва</h2><button class="close" id="closeBattle">✕</button></div><div id="battleContent"></div></div></div>
-    <div class="modal-overlay" id="exchangeModal"><div class="modal"><div class="head"><h2>🔄 Обмен</h2><button class="close" id="closeExchange">✕</button></div><div class="balance">💰 <span id="exchangeBalance">0</span></div><div id="exchangeList"></div></div></div>
-    <div class="modal-overlay" id="airdropModal"><div class="modal"><div class="head"><h2>💎 Airdrop</h2><button class="close" id="closeAirdrop">✕</button></div><div id="airdropContent"></div></div></div>
+    <div class="modal-overlay" id="shopModal">
+        <div class="modal">
+            <div class="head"><h2>🛒 Магазин</h2><button class="close" id="closeShop">✕</button></div>
+            <div class="balance">💰 <span id="shopBalance">0</span></div>
+            <div id="shopList"></div>
+        </div>
+    </div>
 
-    <div class="toast-container" id="toastContainer"></div>
+    <div class="modal-overlay" id="skillsModal">
+        <div class="modal">
+            <div class="head"><h2>⚡ Навыки</h2><button class="close" id="closeSkills">✕</button></div>
+            <div class="balance">💰 <span id="skillsBalance">0</span></div>
+            <div id="skillsList"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="infoModal">
+        <div class="modal">
+            <div class="head"><h2>📜 Информация</h2><button class="close" id="closeInfo">✕</button></div>
+            <div id="infoContent"></div>
+        </div>
+    </div>
 
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.ready();
-        tg.requestFullscreen();
-
-        // ============= ЭПОХИ =============
-        const ERAS = [
-            { id: 0, name: 'Деревня', icon: '🏚️', minLevel: 1, maxLevel: 4, bonus: 0 },
-            { id: 1, name: 'Каменный век', icon: '🪨', minLevel: 5, maxLevel: 9, bonus: 1 },
-            { id: 2, name: 'Бронзовый век', icon: '⚒️', minLevel: 10, maxLevel: 14, bonus: 2 },
-            { id: 3, name: 'Железный век', icon: '🏛️', minLevel: 15, maxLevel: 19, bonus: 4 },
-            { id: 4, name: 'Феодализм', icon: '⚜️', minLevel: 20, maxLevel: 24, bonus: 6 },
-            { id: 5, name: 'Ренессанс', icon: '👑', minLevel: 25, maxLevel: 29, bonus: 10 },
-            { id: 6, name: 'Просвещение', icon: '🚀', minLevel: 30, maxLevel: 34, bonus: 15 },
-            { id: 7, name: 'Империя', icon: '💎', minLevel: 35, maxLevel: 39, bonus: 20 },
-            { id: 8, name: 'Золотой век', icon: '🌌', minLevel: 40, maxLevel: 999, bonus: 30 }
-        ];
-
-        function getEra(level) {
-            for (let era of ERAS) {
-                if (level >= era.minLevel && level <= era.maxLevel) return era;
-            }
-            return ERAS[ERAS.length - 1];
-        }
-
-        function getNextEra(level) {
-            for (let era of ERAS) {
-                if (level < era.minLevel) return era;
-            }
-            return null;
-        }
-
-        // ============= ОПЫТ =============
-        function getExpForLevel(lvl) {
-            if (lvl <= 1) return 0;
-            return lvl * 100;
-        }
-
-        function getExpForNext() {
-            if (state.level >= MAX_LEVEL) return Infinity;
-            return getExpForLevel(state.level + 1);
-        }
-
-        // ============= ДАННЫЕ =============
-        const MAX_LEVEL = 100;
-
-        // ============= БУСТЫ (10 ШТУК) =============
-        const BOOSTS = [
-            { id: 'x2_2min', name: '⚡ Двойной клик', price: 150, multiplier: 2, duration: 120, desc: 'x2 монет на 2 минуты' },
-            { id: 'x3_2min', name: '🔥 Тройной клик', price: 400, multiplier: 3, duration: 120, desc: 'x3 монет на 2 минуты' },
-            { id: 'x5_2min', name: '💎 Легендарный клик', price: 1200, multiplier: 5, duration: 120, desc: 'x5 монет на 2 минуты' },
-            { id: 'x2exp_5min', name: '📚 Мудрость', price: 300, multiplier: 1, duration: 300, desc: 'x2 опыт на 5 минут', isExp: true },
-            { id: 'x2_10min', name: '⏳ Замедление', price: 800, multiplier: 2, duration: 600, desc: 'x2 монет на 10 минут' },
-            { id: 'x8_1min', name: '🚀 Режим бога', price: 2500, multiplier: 8, duration: 60, desc: 'x8 монет на 1 минуту' },
-            { id: 'army_boost', name: '⚔️ Ярость', price: 500, duration: 0, desc: '+50% сила армии на 1 бой', isArmy: true },
-            { id: 'shield_boost', name: '🛡️ Неуязвимость', price: 800, duration: 0, desc: 'Защита от 1 поражения', isShield: true },
-            { id: 'auto_boost', name: '🌀 Ускорение', price: 600, duration: 300, desc: 'x2 скорость автокликера на 5 минут', isAuto: true },
-            { id: 'energy_boost', name: '⚡ Энергетик', price: 150, duration: 0, desc: '+50 энергии мгновенно', isEnergy: true }
-        ];
-
-        // ============= НАВЫКИ (10 ШТУК) =============
-        const SKILLS_DATA = [
-            { id: 'click_upgrade', name: '⚡ Сила клика', basePrice: 50, priceMultiplier: 2, maxLevel: 50, desc: (lvl) => `+${lvl * 0.5} монеты за клик` },
-            { id: 'income', name: '💰 Банкир', basePrice: 100, priceMultiplier: 1.5, maxLevel: 100, desc: (lvl) => `+${lvl} монет/час пассивно` },
-            { id: 'bookworm', name: '📚 Книжный червь', basePrice: 200, priceMultiplier: 2, maxLevel: 30, desc: (lvl) => `+${lvl * 3}% к опыту` },
-            { id: 'luck', name: '💎 Удача', basePrice: 300, priceMultiplier: 2, maxLevel: 25, desc: (lvl) => `+${lvl}% шанс x2 монет` },
-            { id: 'tactics', name: '⚔️ Тактика', basePrice: 500, priceMultiplier: 2, maxLevel: 20, desc: (lvl) => `+${lvl * 2}% шанс победы в битве` },
-            { id: 'strength', name: '💪 Сила', basePrice: 700, priceMultiplier: 2, maxLevel: 40, desc: (lvl) => `+${lvl}% к силе армии` },
-            { id: 'endurance', name: '🛡️ Выносливость', basePrice: 900, priceMultiplier: 2, maxLevel: 30, desc: (lvl) => `-${lvl * 0.5}% потери при поражении` },
-            { id: 'wisdom', name: '🧠 Мудрость', basePrice: 1200, priceMultiplier: 2, maxLevel: 20, desc: (lvl) => `+${lvl * 2}% к опыту` },
-            { id: 'magic', name: '🧙 Магия', basePrice: 10000, priceMultiplier: 0, maxLevel: 1, desc: () => 'x1.5 ко всем бонусам', isPermanent: true },
-            { id: 'dragon_soul', name: '🐉 Душа дракона', basePrice: 50000, priceMultiplier: 0, maxLevel: 1, desc: () => 'x2 к силе армии', isPermanent: true }
-        ];
-
-        // ============= МАГАЗИН =============
-        const SHOP_ITEMS = [
-            { id: 'spear', name: '⚔️ Копьё воина', price: 1000, desc: '+0.5 монеты за клик', type: 'permanent', bonus: 0.5 },
-            { id: 'shield', name: '🛡️ Щит героя', price: 5000, desc: 'Защита от потери монет в битвах', type: 'permanent', bonus: 0 },
-            { id: 'bow', name: '🏹 Лук эльфов', price: 15000, desc: '+2 монеты за клик', type: 'permanent', bonus: 2 },
-            { id: 'sword', name: '🗡️ Меч короля', price: 50000, desc: '+5 монеты за клик', type: 'permanent', bonus: 5 },
-            { id: 'dragon_egg', name: '🐉 Яйцо дракона', price: 200000, desc: '+15 монет за клик', type: 'permanent', bonus: 15 },
-            { id: 'crown', name: '👑 Корона императора', price: 1000000, desc: 'x2 ко всем бонусам', type: 'permanent', bonus: 2 },
-            { id: 'star', name: '🌟 Звезда судьбы', price: 5000000, desc: 'x3 ко всем бонусам', type: 'permanent', bonus: 3 },
-            { id: 'auto1', name: '🖥️ Автокликер I', price: 0, desc: '0.5 клик/сек (за 5 ⭐)', type: 'auto', bonus: 0.5, stars: 5 },
-            { id: 'auto2', name: '🖥️ Автокликер II', price: 0, desc: '1 клик/сек (за 15 ⭐)', type: 'auto', bonus: 1, stars: 15 },
-            { id: 'auto3', name: '🖥️ Автокликер III', price: 0, desc: '2 клик/сек (за 40 ⭐)', type: 'auto', bonus: 2, stars: 40 },
-            { id: 'auto4', name: '🖥️ Автокликер IV', price: 0, desc: '5 клик/сек (за 100 ⭐)', type: 'auto', bonus: 5, stars: 100 },
-            { id: 'auto5', name: '🖥️ Автокликер V', price: 0, desc: '10 клик/сек (за 250 ⭐)', type: 'auto', bonus: 10, stars: 250 }
-        ];
-
-        // ============= ОБМЕН =============
-        const EXCHANGE_OFFERS = [
-            { level: 50, coins: 100000, stars: 10 },
-            { level: 60, coins: 200000, stars: 20 },
-            { level: 70, coins: 500000, stars: 50 },
-            { level: 80, coins: 1000000, stars: 100 },
-            { level: 90, coins: 2000000, stars: 200 },
-            { level: 100, coins: 5000000, stars: 500 }
-        ];
-
-        // ============= ФУНКЦИИ =============
-        function getClickBonus(level) {
-            if (level <= 0) return 0;
-            return level * 0.5;
-        }
-
-        function getClickPrice(level) {
-            if (level <= 0) return 50;
-            return Math.floor(50 * Math.pow(1.5, level));
-        }
-
-        function getPassiveIncome() {
-            let inc = 0;
-            const incomeLevel = state.skills.income || 0;
-            inc += incomeLevel;
-            const crown = state.shopItems.crown || 0;
-            const star = state.shopItems.star || 0;
-            if (crown > 0) inc *= 2;
-            if (star > 0) inc *= 3;
-            return inc;
-        }
-
-        function getTotalClickBonus() {
-            let total = 1;
-            const clickLevel = state.skills.click_upgrade || 0;
-            total += clickLevel * 0.5;
-            const spear = state.shopItems.spear || 0;
-            const bow = state.shopItems.bow || 0;
-            const sword = state.shopItems.sword || 0;
-            const dragon = state.shopItems.dragon_egg || 0;
-            total += spear * 0.5 + bow * 2 + sword * 5 + dragon * 15;
-            const era = getEra(state.level);
-            total += era.bonus || 0;
-            const crown = state.shopItems.crown || 0;
-            const star = state.shopItems.star || 0;
-            if (crown > 0) total *= 2;
-            if (star > 0) total *= 3;
-            return total;
-        }
-
-        function getExpMultiplier() {
-            let mult = 1;
-            const bookworm = state.skills.bookworm || 0;
-            mult *= (1 + bookworm * 0.03);
-            const wisdom = state.skills.wisdom || 0;
-            mult *= (1 + wisdom * 0.02);
-            const magic = state.skills.magic || 0;
-            if (magic > 0) mult *= 1.5;
-            return mult;
-        }
-
-        function getArmyPower() {
-            let power = state.level;
-            const strength = state.skills.strength || 0;
-            power *= (1 + strength * 0.01);
-            const dragonSoul = state.skills.dragon_soul || 0;
-            if (dragonSoul > 0) power *= 2;
-            return Math.floor(power);
-        }
-
-        function getBattleChance() {
-            const tactics = state.skills.tactics || 0;
-            const baseChance = 50 + tactics * 2;
-            const endurance = state.skills.endurance || 0;
-            const armyPower = getArmyPower();
-            const enemyPower = state.level * 3 + 10;
-            const powerChance = Math.min(30, (armyPower / (enemyPower + 1)) * 30);
-            return Math.min(95, baseChance + powerChance);
-        }
-
-        function getEnduranceBonus() {
-            const level = state.skills.endurance || 0;
-            return level * 0.5;
-        }
-
-        // ============= СОСТОЯНИЕ =============
-        const state = {
-            coins: 0,
-            energy: 500,
-            maxEnergy: 500,
-            level: 1,
-            exp: 0,
-            clicks: 0,
-            earnedToday: 0,
-            boostActive: null,
-            boostTimer: null,
-            skills: {},
-            shopItems: {},
-            lastExchange: {},
-            style: 'default',
-            bossesDefeated: 0,
-            autoclickLevel: 0,
-            autoclickTimer: null,
-            boostArmy: false,
-            boostShield: false,
-            boostAuto: false,
-            battleCooldown: 0
+        // ============================================================
+        //  НОВАЯ ТАКТИКА: 6 СТАДИЙ РАЗВИТИЯ (1–6)
+        //  Ссылки на ваши изображения
+        // ============================================================
+        const STAGE_IMAGES = {
+            1: 'https://i.ibb.co/3m6TCd2w/IMG-0719.png',
+            2: 'https://i.ibb.co/WWxJHwvr/IMG-0731.png',
+            3: 'https://i.ibb.co/xKQQQsQn/IMG-0723.png',
+            4: 'https://i.ibb.co/M5pnQH6w/IMG-0727.png', // Ссылка добавлена вручную из вашего сообщения
+            5: 'https://i.ibb.co/96K13rS/IMG-0727.png',
+            6: 'https://i.ibb.co/PsNS6PyS/IMG-0730.png'
         };
 
-        // ============= DOM =============
-        const $ = id => document.getElementById(id);
-        const coinsEl = $('coins');
-        const energyDisplay = $('energyDisplay');
-        const energyFill = $('energyFill');
-        const energyCurrent = $('energyCurrent');
-        const levelEl = $('level');
-        const levelDisplay = $('levelDisplay');
-        const levelProgressFill = $('levelProgressFill');
-        const levelPercent = $('levelPercent');
-        const badge = $('badge');
-        const clickEmoji = $('clickEmoji');
-        const clicksEl = $('clicks');
-        const perClickEl = $('perClick');
-        const bossesEl = $('bosses');
-        const clickArea = $('clickArea');
-        const eraIcon = $('eraIcon');
-        const eraName = $('eraName');
-        const eraNext = $('eraNext');
-        const boostBadge = $('boostBadge');
-        const energyWarning = $('energyWarning');
+        const STAGE_NAMES = {
+            1: '🗡️ Сын крестьянина',
+            2: '🛡️ Оруженосец',
+            3: '⚔️ Младший рыцарь',
+            4: '🏰 Рыцарь-лорд',
+            5: '👑 Барон',
+            6: '⚜️ Виконт'
+        };
 
-        // ============= ТОСТЫ =============
-        function toast(text, type = 'success', duration = 1800) {
-            const c = $('toastContainer');
-            const el = document.createElement('div');
-            el.className = `toast ${type}`;
-            el.textContent = text;
-            c.appendChild(el);
-            setTimeout(() => {
-                el.classList.add('fade-out');
-                setTimeout(() => el.remove(), 200);
-            }, duration);
+        // Какая стадия соответствует уровню
+        function getStage(level) {
+            if (level <= 4) return 1;
+            if (level <= 9) return 2;
+            if (level <= 14) return 3;
+            if (level <= 19) return 4;
+            if (level <= 24) return 5;
+            return 6;
         }
 
-        // ============= ЛЕТАЮЩИЕ ЦИФРЫ =============
-        function flyNumber(x, y, text, type = 'normal') {
-            const el = document.createElement('div');
-            let cls = 'fly-number';
-            if (type === 'big') cls += ' big';
-            if (type === 'era') cls += ' era-up';
-            el.className = cls;
-            el.textContent = text;
-            el.style.left = (x - 15) + 'px';
-            el.style.top = (y - 15) + 'px';
-            el.style.setProperty('--tx', (Math.random() - 0.5) * 150 + 'px');
-            el.style.setProperty('--ty', -Math.random() * 150 - 50 + 'px');
-            document.body.appendChild(el);
-            setTimeout(() => el.remove(), 800);
+        // Опыт для перехода на следующий уровень
+        function getExpForLevel(level) {
+            return Math.floor(100 + (level - 1) * 25);
         }
 
-        // ============= ОБНОВЛЕНИЕ UI =============
+        // ============================================================
+        //  СОСТОЯНИЕ ИГРЫ
+        // ============================================================
+        const state = {
+            coins: 0,
+            energy: 100,
+            maxEnergy: 100,
+            level: 1,
+            exp: 0,
+            totalClicks: 0,
+            clickPower: 1,
+            boostActive: false,
+            boostTimer: null,
+            // Купленные улучшения (навыки)
+            skills: {
+                clickBonus: 0,   // +1 к силе клика за уровень
+                income: 0,       // пассивный доход в минуту
+                energyRegen: 0,  // +1 к регенерации энергии
+                luck: 0          // шанс на двойные монеты
+            }
+        };
+
+        // ============================================================
+        //  DOM ЭЛЕМЕНТЫ
+        // ============================================================
+        const clickArea = document.getElementById('clickArea');
+        const levelDisplay = document.getElementById('levelDisplay');
+        const coinsDisplay = document.getElementById('coinsDisplay');
+        const energyDisplay = document.getElementById('energyDisplay');
+        const energyCurrent = document.getElementById('energyCurrent');
+        const energyFill = document.getElementById('energyFill');
+        const progressFill = document.getElementById('progressFill');
+        const progressPercent = document.getElementById('progressPercent');
+        const progressLabel = document.getElementById('progressLabel');
+        const eraName = document.getElementById('eraName');
+        const eraLevel = document.getElementById('eraLevel');
+        const levelBadge = document.getElementById('levelBadge');
+        const boostBadge = document.getElementById('boostBadge');
+        const energyWarning = document.getElementById('energyWarning');
+        const totalClicksEl = document.getElementById('totalClicks');
+        const clickPowerEl = document.getElementById('clickPower');
+        const stageDisplayEl = document.getElementById('stageDisplay');
+
+        // ============================================================
+        //  ФУНКЦИИ ОБНОВЛЕНИЯ UI
+        // ============================================================
         function updateUI() {
-            coinsEl.textContent = Math.floor(state.coins);
+            // Баланс и энергия
+            coinsDisplay.textContent = Math.floor(state.coins);
             energyDisplay.textContent = Math.floor(state.energy);
             energyCurrent.textContent = Math.floor(state.energy);
             const energyPercent = Math.min(100, (state.energy / state.maxEnergy) * 100);
             energyFill.style.width = energyPercent + '%';
-            levelEl.textContent = state.level;
-            levelDisplay.textContent = state.level;
-            badge.textContent = 'Lv.' + state.level;
 
-            const expNeeded = getExpForNext();
-            if (state.level >= MAX_LEVEL) {
-                levelProgressFill.style.width = '100%';
-                levelPercent.textContent = 'MAX';
+            // Уровень и прогресс
+            levelDisplay.textContent = state.level;
+            const expNeeded = getExpForLevel(state.level + 1);
+            const expPercent = Math.min(100, (state.exp / expNeeded) * 100);
+            progressFill.style.width = expPercent + '%';
+            progressPercent.textContent = Math.floor(expPercent) + '%';
+            progressLabel.textContent = `${state.exp} / ${expNeeded} XP`;
+
+            // Стадия
+            const stage = getStage(state.level);
+            stageDisplayEl.textContent = stage;
+            levelBadge.textContent = `Lv.${state.level}`;
+            eraName.textContent = STAGE_NAMES[stage] || '🗡️ Сын крестьянина';
+            const maxLvl = [4, 9, 14, 19, 24, Infinity];
+            const minLvl = [1, 5, 10, 15, 20, 25];
+            eraLevel.textContent = `${minLvl[stage-1]}–${maxLvl[stage-1] === Infinity ? '∞' : maxLvl[stage-1]}`;
+
+            // Кнопка (изображение)
+            const imgUrl = STAGE_IMAGES[stage];
+            if (imgUrl) {
+                clickArea.style.backgroundImage = `url('${imgUrl}')`;
+                clickArea.style.backgroundSize = 'cover';
+                clickArea.style.backgroundPosition = 'center';
             } else {
-                const p = Math.min(100, (state.exp / expNeeded) * 100);
-                levelProgressFill.style.width = p + '%';
-                levelPercent.textContent = Math.floor(p) + '%';
+                clickArea.style.backgroundImage = 'radial-gradient(circle at 30% 30%, #2a2a5e, #0f0f1f)';
             }
 
-            clicksEl.textContent = state.clicks;
-            perClickEl.textContent = getTotalClickBonus().toFixed(1);
-            bossesEl.textContent = state.bossesDefeated;
+            // Статистика
+            totalClicksEl.textContent = state.totalClicks;
+            clickPowerEl.textContent = state.clickPower.toFixed(1);
 
-            const era = getEra(state.level);
-            const nextEra = getNextEra(state.level);
-            eraIcon.textContent = era.icon;
-            eraName.textContent = era.name;
-            eraNext.textContent = nextEra ? '▶ Lv.' + nextEra.minLevel : '🏆 MAX';
-
+            // Буст
             if (state.boostActive) {
-                const boost = BOOSTS.find(b => b.id === state.boostActive);
-                if (boost) {
-                    const mult = boost.isExp ? 'x2 EXP' : 'x' + boost.multiplier;
-                    boostBadge.textContent = '🔥 ' + mult;
-                    boostBadge.classList.add('show');
-                }
+                boostBadge.textContent = '🔥 x2';
+                boostBadge.classList.add('show');
             } else {
                 boostBadge.classList.remove('show');
             }
 
+            // Предупреждение об энергии
             if (state.energy <= 0) {
                 energyWarning.classList.add('show');
             } else {
@@ -1188,75 +604,10 @@
             }
         }
 
-        // ============= ПРОВЕРКА УРОВНЯ =============
-        function checkLevelUp() {
-            if (state.level >= MAX_LEVEL) return false;
-            const needed = getExpForNext();
-            if (state.exp >= needed) {
-                state.exp -= needed;
-                state.level += 1;
-                const era = getEra(state.level);
-                toast('🎉 Lv.' + state.level + '! ' + era.icon + ' ' + era.name, 'level', 2000);
-
-                const prevEra = getEra(state.level - 1);
-                if (era.id !== prevEra.id) {
-                    const bonus = getEra(state.level).bonus || 0;
-                    toast('🏛️ НОВАЯ ЭПОХА! +' + bonus + ' монет за клик!', 'era', 3000);
-                    flyNumber(window.innerWidth / 2, window.innerHeight / 2, '✨ +' + bonus + ' 🪙', 'era');
-                }
-
-                if (state.level === MAX_LEVEL) {
-                    toast('👑 МАКСИМАЛЬНЫЙ УРОВЕНЬ!', 'level', 3000);
-                }
-
-                updateUI();
-                return true;
-            }
-            return false;
-        }
-
-        // ============= АВТОКЛИКЕР =============
-        function startAutoclick() {
-            if (state.autoclickTimer) clearInterval(state.autoclickTimer);
-            const autoItems = ['auto1', 'auto2', 'auto3', 'auto4', 'auto5'];
-            let totalSpeed = 0;
-            autoItems.forEach((id, idx) => {
-                if (state.shopItems[id]) {
-                    const speeds = [0.5, 1, 2, 5, 10];
-                    totalSpeed += speeds[idx];
-                }
-            });
-            if (totalSpeed > 0) {
-                state.autoclickTimer = setInterval(() => {
-                    if (state.energy <= 0) return;
-                    let multiplier = 1;
-                    if (state.boostActive) {
-                        const boost = BOOSTS.find(b => b.id === state.boostActive);
-                        if (boost && !boost.isExp && !boost.isAuto) {
-                            multiplier = boost.multiplier;
-                        }
-                    }
-                    if (state.boostAuto) {
-                        multiplier *= 2;
-                    }
-                    const totalBonus = getTotalClickBonus();
-                    const earned = totalBonus * multiplier;
-                    state.coins += earned;
-                    state.energy -= 1;
-                    let expGain = 1;
-                    const expMult = getExpMultiplier();
-                    expGain = Math.floor(expGain * expMult);
-                    if (state.level < MAX_LEVEL) {
-                        state.exp += expGain;
-                        checkLevelUp();
-                    }
-                    updateUI();
-                }, 1000 / totalSpeed);
-            }
-        }
-
-        // ============= КЛИК =============
-        function handleClick(e) {
+        // ============================================================
+        //  ОСНОВНАЯ МЕХАНИКА КЛИКА
+        // ============================================================
+        function handleClick() {
             if (state.energy <= 0) {
                 energyWarning.classList.add('show');
                 setTimeout(() => {
@@ -1265,545 +616,278 @@
                 return;
             }
 
-            let multiplier = 1;
-            let expMultiplier = 1;
-
-            if (state.boostActive) {
-                const boost = BOOSTS.find(b => b.id === state.boostActive);
-                if (boost) {
-                    if (boost.isExp) {
-                        expMultiplier = 2;
-                    } else if (!boost.isAuto) {
-                        multiplier = boost.multiplier;
-                    }
-                }
-            }
-
-            const totalBonus = getTotalClickBonus();
-            const luck = state.skills.luck || 0;
-            const expMult = getExpMultiplier();
-
-            let earned = totalBonus * multiplier;
-
-            if (Math.random() * 100 < luck) {
+            // Базовый доход
+            let earned = state.clickPower;
+            // Бонус от удачи
+            if (Math.random() * 100 < state.skills.luck) {
                 earned *= 2;
-                flyNumber(e.clientX || window.innerWidth / 2, e.clientY || window.innerHeight / 2, '💎 x2', 'big');
+                // Можно добавить визуальный эффект
             }
+            // Буст (x2)
+            if (state.boostActive) earned *= 2;
 
             state.coins += earned;
             state.energy -= 1;
+            state.totalClicks += 1;
+            state.exp += 1;
 
-            state.clicks += 1;
-            state.earnedToday += earned;
-
-            let expGain = 1;
-            expGain = Math.floor(expGain * expMultiplier * expMult);
-            if (state.level < MAX_LEVEL) {
-                state.exp += expGain;
-                checkLevelUp();
+            // Проверка повышения уровня
+            const expNeeded = getExpForLevel(state.level + 1);
+            if (state.exp >= expNeeded) {
+                state.exp -= expNeeded;
+                state.level += 1;
+                // Бонус за новый уровень
+                state.clickPower += 0.2;
+                // Визуальное оповещение
+                if (getStage(state.level) !== getStage(state.level - 1)) {
+                    // Новая стадия!
+                    const newStage = getStage(state.level);
+                    const name = STAGE_NAMES[newStage] || 'Новая стадия';
+                    alert(`🎉 НОВАЯ СТАДИЯ! Вы достигли ${name}!`);
+                } else {
+                    // Просто новый уровень
+                    const msg = `🎉 Уровень ${state.level}!`;
+                    // Используем toast (можно добавить позже)
+                }
             }
 
-            const rect = clickArea.getBoundingClientRect();
-            const cx = rect.left + rect.width / 2;
-            const cy = rect.top + rect.height / 2;
-
-            const text = earned >= 1 ? '+' + Math.floor(earned) : '+' + earned.toFixed(1);
-            const isBig = multiplier > 1 || earned > 10;
-            flyNumber(cx + (Math.random() - 0.5) * 80, cy + (Math.random() - 0.5) * 80, text, isBig ? 'big' : 'normal');
-
-            if (multiplier > 1) {
-                clickArea.style.borderColor = '#ff6b6b';
-                setTimeout(() => { clickArea.style.borderColor = ''; }, 200);
-            }
+            // Анимация нажатия
+            clickArea.style.transform = 'scale(0.93)';
+            setTimeout(() => { clickArea.style.transform = ''; }, 100);
 
             updateUI();
         }
 
-        // ============= МОДАЛКИ =============
-        function openModal(id) { $(id).classList.add('active'); }
+        // ============================================================
+        //  МАГАЗИН (УЛУЧШЕНИЯ)
+        // ============================================================
+        const shopItems = [
+            { id: 'click1', name: '🗡️ Улучшение клика', price: 50, desc: '+0.5 к силе клика', action: () => { state.clickPower += 0.5; } },
+            { id: 'click2', name: '⚡ Усиление клика', price: 150, desc: '+1 к силе клика', action: () => { state.clickPower += 1; } },
+            { id: 'energy1', name: '💎 Энергетик', price: 100, desc: '+25 к макс. энергии', action: () => { state.maxEnergy += 25; state.energy += 25; } },
+            { id: 'luck1', name: '🍀 Удача', price: 200, desc: '+5% шанс x2 монет', action: () => { state.skills.luck += 5; } },
+            { id: 'income1', name: '💰 Пассивный доход', price: 300, desc: '+5 монет/мин', action: () => { state.skills.income += 5; } }
+        ];
 
-        function closeModal(id) { $(id).classList.remove('active'); }
-
-        // ============= МАГАЗИН =============
-        function openShop() {
-            const list = $('shopList');
+        function renderShop() {
+            const list = document.getElementById('shopList');
             list.innerHTML = '';
-
-            // Покупка энергии (500 за 2500)
-            const energyDiv = document.createElement('div');
-            energyDiv.className = 'item';
-            energyDiv.innerHTML = `
-                <div class="info">
-                    <div class="name">⚡ Пополнить энергию</div>
-                    <div class="desc">+500 энергии за 2500 монет</div>
-                </div>
-                <button class="action-btn ${state.coins < 2500 ? 'disabled' : ''}" ${state.coins < 2500 ? 'disabled' : ''}>
-                    Купить 2500💰
-                </button>
-            `;
-            const energyBtn = energyDiv.querySelector('.action-btn');
-            energyBtn.addEventListener('click', () => {
-                if (state.coins < 2500) { toast('⛔ Нет монет', 'error', 800); return; }
-                if (state.energy >= state.maxEnergy) { toast('⚡ Энергия уже полная', 'error', 800); return; }
-                state.coins -= 2500;
-                state.energy = state.maxEnergy;
-                updateUI();
-                openShop();
-                toast('⚡ +500 энергии!', 'success', 1000);
-            });
-            list.appendChild(energyDiv);
-
-            // Товары
-            SHOP_ITEMS.forEach(item => {
-                const owned = state.shopItems[item.id] || 0;
-                const canBuy = (item.type === 'auto' ? true : state.coins >= item.price) && !owned;
-
+            shopItems.forEach(item => {
+                const owned = state.skills[item.id] || false;
+                const canBuy = state.coins >= item.price && !owned;
                 const div = document.createElement('div');
                 div.className = 'item';
-                let btnText = owned ? '✅ Куплен' : 'Купить';
-                let btnClass = 'action-btn';
-                if (owned) btnClass += ' owned';
-                else if (!canBuy) btnClass += ' disabled';
-
-                let priceText = '';
-                if (item.type === 'auto') {
-                    priceText = item.stars + ' ⭐';
-                    if (!owned) btnText = 'Купить за ⭐';
-                } else {
-                    priceText = item.price + '💰';
-                }
-
                 div.innerHTML = `
                     <div class="info">
                         <div class="name">${item.name}</div>
                         <div class="desc">${item.desc}</div>
-                        <div class="desc">${owned ? '✅' : priceText}</div>
+                        <div class="price">💰 ${item.price}</div>
                     </div>
-                    <button class="${btnClass}" ${owned || !canBuy ? 'disabled' : ''}>
-                        ${btnText}
+                    <button class="action-btn ${owned ? 'owned' : (!canBuy ? 'disabled' : '')}" ${!canBuy ? 'disabled' : ''}>
+                        ${owned ? '✅ Куплено' : 'Купить'}
                     </button>
                 `;
                 const btn = div.querySelector('.action-btn');
-                btn.addEventListener('click', () => {
-                    if (owned) return;
-                    if (item.type === 'auto') {
-                        toast('⭐ Купить за звёзды! (в разработке)', 'level', 1500);
-                        return;
-                    }
-                    if (state.coins < item.price) { toast('⛔ Нет монет', 'error', 800); return; }
-                    state.coins -= item.price;
-                    state.shopItems[item.id] = 1;
-                    if (item.type === 'auto') {
-                        startAutoclick();
-                    }
-                    updateUI();
-                    openShop();
-                    toast('🎉 ' + item.name + ' куплен!', 'success', 1500);
-                });
-                list.appendChild(div);
-            });
-
-            $('shopBalance').textContent = Math.floor(state.coins);
-            openModal('shopModal');
-        }
-
-        // ============= БУСТЫ =============
-        function openBoosts() {
-            const list = $('boostsList');
-            list.innerHTML = '';
-
-            BOOSTS.forEach(boost => {
-                const isActive = state.boostActive === boost.id;
-                const canBuy = state.coins >= boost.price && !isActive;
-
-                const div = document.createElement('div');
-                div.className = 'item';
-                let descText = boost.desc;
-
-                div.innerHTML = `
-                    <div class="info">
-                        <div class="name">${boost.name}</div>
-                        <div class="desc">${descText}</div>
-                        <div class="desc">💰 ${boost.price} монет</div>
-                    </div>
-                    <button class="action-btn ${isActive ? 'owned' : (!canBuy ? 'disabled' : '')}" ${isActive || !canBuy ? 'disabled' : ''}>
-                        ${isActive ? '✅ Активен' : 'Купить'}
-                    </button>
-                `;
-                const btn = div.querySelector('.action-btn');
-                btn.addEventListener('click', () => {
-                    if (isActive) return;
-                    if (state.coins < boost.price) { toast('⛔ Нет монет', 'error', 800); return; }
-                    if (boost.isEnergy) {
-                        state.coins -= boost.price;
-                        state.energy = Math.min(state.maxEnergy, state.energy + 50);
+                if (!owned && canBuy) {
+                    btn.addEventListener('click', () => {
+                        state.coins -= item.price;
+                        state.skills[item.id] = true;
+                        item.action();
+                        renderShop();
                         updateUI();
-                        openBoosts();
-                        toast('⚡ +50 энергии!', 'success', 1000);
-                        return;
-                    }
-                    if (boost.isArmy) {
-                        state.coins -= boost.price;
-                        state.boostArmy = true;
-                        updateUI();
-                        openBoosts();
-                        toast('⚔️ Ярость активирована!', 'boost', 1500);
-                        return;
-                    }
-                    if (boost.isShield) {
-                        state.coins -= boost.price;
-                        state.boostShield = true;
-                        updateUI();
-                        openBoosts();
-                        toast('🛡️ Неуязвимость активирована!', 'boost', 1500);
-                        return;
-                    }
-                    if (boost.isAuto) {
-                        state.coins -= boost.price;
-                        state.boostAuto = true;
-                        setTimeout(() => {
-                            state.boostAuto = false;
-                            updateUI();
-                            toast('⏳ Ускорение закончилось!', 'error', 1500);
-                        }, boost.duration * 1000);
-                        updateUI();
-                        openBoosts();
-                        toast('🌀 Ускорение активировано!', 'boost', 1500);
-                        return;
-                    }
-                    state.coins -= boost.price;
-                    state.boostActive = boost.id;
-                    if (state.boostTimer) clearTimeout(state.boostTimer);
-                    state.boostTimer = setTimeout(() => {
-                        state.boostActive = null;
-                        state.boostTimer = null;
-                        updateUI();
-                        toast('⏳ Усиление закончилось!', 'error', 1500);
-                    }, boost.duration * 1000);
-                    updateUI();
-                    openBoosts();
-                    toast('🔥 ' + boost.name + ' активирован!', 'boost', 1500);
-                });
-                list.appendChild(div);
-            });
-
-            $('boostsBalance').textContent = Math.floor(state.coins);
-            openModal('boostsModal');
-        }
-
-        // ============= НАВЫКИ =============
-        function openSkills() {
-            const list = $('skillsList');
-            list.innerHTML = '';
-
-            SKILLS_DATA.forEach(skill => {
-                const level = state.skills[skill.id] || 0;
-                const isPermanent = skill.isPermanent && level >= 1;
-                const isMaxed = !skill.isPermanent && level >= skill.maxLevel;
-
-                let price;
-                if (skill.id === 'click_upgrade') {
-                    price = getClickPrice(level);
-                } else {
-                    price = Math.floor(skill.basePrice * Math.pow(skill.priceMultiplier || 1, level));
+                    });
                 }
-
-                const canBuy = state.coins >= price && !isPermanent && !isMaxed;
-
-                const div = document.createElement('div');
-                div.className = 'item';
-                div.innerHTML = `
-                    <div class="info">
-                        <div class="name">${skill.name}</div>
-                        <div class="desc">${skill.desc(level)} ${isPermanent ? '✅' : isMaxed ? 'MAX' : ''}</div>
-                        <div class="desc">${isPermanent ? 'Куплен' : isMaxed ? 'Максимум' : price + '💰'} | Ур.${level}/${skill.maxLevel}</div>
-                    </div>
-                    <button class="action-btn ${isPermanent ? 'owned' : isMaxed ? 'owned' : (!canBuy ? 'disabled' : '')}" 
-                            ${isPermanent || isMaxed || !canBuy ? 'disabled' : ''}>
-                        ${isPermanent ? '✅' : isMaxed ? 'MAX' : 'Купить'}
-                    </button>
-                `;
-                const btn = div.querySelector('.action-btn');
-                btn.addEventListener('click', () => {
-                    if (isPermanent || isMaxed) return;
-                    if (state.coins < price) { toast('⛔ Нет монет', 'error', 800); return; }
-                    state.coins -= price;
-                    state.skills[skill.id] = (state.skills[skill.id] || 0) + 1;
-                    updateUI();
-                    openSkills();
-                    toast('⚡ ' + skill.name + ' улучшен!', 'success', 1000);
-                });
                 list.appendChild(div);
             });
-
-            $('skillsBalance').textContent = Math.floor(state.coins);
-            openModal('skillsModal');
+            document.getElementById('shopBalance').textContent = Math.floor(state.coins);
         }
 
-        // ============= БИТВА =============
-        function openBattle() {
-            const now = Date.now();
-            if (now - state.battleCooldown < 60000) {
-                const left = Math.ceil((60000 - (now - state.battleCooldown)) / 1000);
-                toast('⏳ Битва доступна через ' + left + ' сек', 'error', 1500);
-                return;
-            }
-
-            if (state.coins < 100) {
-                toast('⛔ Нужно минимум 100 монет для битвы!', 'error', 1500);
-                return;
-            }
-
-            const content = $('battleContent');
-            const armyPower = getArmyPower();
-            const enemyPower = state.level * 3 + 10 + Math.floor(Math.random() * 20);
-            const winChance = getBattleChance();
-            const win = Math.random() * 100 < winChance;
-
-            const bet = state.coins;
-
-            let html = `
-                <div style="text-align:center;margin:8px 0;">
-                    <div style="font-size:24px;font-weight:800;color:#ffd700;">⚔️ БИТВА</div>
-                    <div style="color:#8395a7;font-size:13px;margin:4px 0;">Твоя сила: ${armyPower}</div>
-                    <div style="color:#8395a7;font-size:13px;">Сила врага: ${enemyPower}</div>
-                    <div style="color:#ffd700;font-size:15px;margin:6px 0;">🎯 Шанс победы: ${Math.floor(winChance)}%</div>
-                    <div style="color:#ff6b6b;font-size:13px;">⚠️ Ставка: ВСЕ монеты (${Math.floor(bet)}💰)</div>
+        // ============================================================
+        //  НАВЫКИ (ПРОКАЧКА)
+        // ============================================================
+        function renderSkills() {
+            const list = document.getElementById('skillsList');
+            list.innerHTML = '';
+            // Навык "Сила клика"
+            const clickCost = 30 + state.skills.clickBonus * 20;
+            const clickLevel = state.skills.clickBonus;
+            const clickDiv = document.createElement('div');
+            clickDiv.className = 'item';
+            clickDiv.innerHTML = `
+                <div class="info">
+                    <div class="name">🗡️ Сила клика (ур.${clickLevel})</div>
+                    <div class="desc">+1 к силе клика за уровень</div>
+                    <div class="price">💰 ${clickCost}</div>
                 </div>
+                <button class="action-btn ${state.coins < clickCost ? 'disabled' : ''}" ${state.coins < clickCost ? 'disabled' : ''}>
+                    Купить
+                </button>
             `;
-
-            if (win) {
-                const reward = Math.floor(bet * 1.5);
-                state.coins += reward - bet;
-                html += `
-                    <div class="battle-result win">
-                        <div class="big win">⚔️ ПОБЕДА!</div>
-                        <div class="amount">💰 ${reward.toLocaleString()} монет</div>
-                        <div style="color:#00b894;">+${(reward - bet).toLocaleString()} монет</div>
-                    </div>
-                `;
-                toast('⚔️ ПОБЕДА! +' + (reward - bet).toLocaleString() + ' монет!', 'battle', 2500);
-                flyNumber(window.innerWidth / 2, window.innerHeight / 2, '💎 +' + (reward - bet).toLocaleString(), 'big');
-            } else {
-                const endurance = getEnduranceBonus();
-                if (state.boostShield) {
-                    state.boostShield = false;
-                    html += `
-                        <div class="battle-result lose">
-                            <div class="big lose">🛡️ ОТРАЖЕНО!</div>
-                            <div style="color:#00b894;">Щит спас твои монеты!</div>
-                        </div>
-                    `;
-                    toast('🛡️ Щит спас монеты!', 'success', 2000);
-                } else if (endurance > 0) {
-                    const saved = Math.floor(bet * (endurance / 100));
-                    const loss = bet - saved;
-                    state.coins = saved;
-                    html += `
-                        <div class="battle-result lose">
-                            <div class="big lose">💀 ПОРАЖЕНИЕ!</div>
-                            <div class="amount">💔 Потеряно ${loss.toLocaleString()} монет</div>
-                            <div style="color:#00b894;">🛡️ Выносливость спасла ${saved.toLocaleString()} монет</div>
-                        </div>
-                    `;
-                    toast('💀 Поражение! -' + loss.toLocaleString() + ' монет', 'error', 2000);
-                } else {
-                    state.coins = 0;
-                    html += `
-                        <div class="battle-result lose">
-                            <div class="big lose">💀 ПОРАЖЕНИЕ!</div>
-                            <div class="amount">💔 Все монеты потеряны!</div>
-                            <div style="color:#ff6b6b;">Ты потерял ${bet.toLocaleString()} монет</div>
-                        </div>
-                    `;
-                    toast('💀 ВСЕ МОНЕТЫ ПОТЕРЯНЫ!', 'error', 2500);
-                }
-            }
-
-            state.battleCooldown = Date.now();
-            updateUI();
-
-            content.innerHTML = html +
-                `<button class="action-btn battle-btn" style="width:100%;padding:12px;margin-top:10px;border:none;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;" id="battleCloseBtn">✕ Закрыть</button>`;
-            document.getElementById('battleCloseBtn').addEventListener('click', () => closeModal('battleModal'));
-            openModal('battleModal');
-        }
-
-        // ============= ОБМЕН =============
-        function openExchange() {
-            const list = $('exchangeList');
-            list.innerHTML = '';
-
-            EXCHANGE_OFFERS.forEach(offer => {
-                const lastExchange = state.lastExchange[offer.level] || 0;
-                const cooldown = 7 * 24 * 60 * 60 * 1000;
-                const now = Date.now();
-                const isOnCooldown = now - lastExchange < cooldown;
-                const available = state.level >= offer.level && state.coins >= offer.coins && !isOnCooldown;
-
-                let cooldownText = '';
-                if (isOnCooldown) {
-                    const left = Math.ceil((cooldown - (now - lastExchange)) / (24 * 60 * 60 * 1000));
-                    cooldownText = '⏳ ' + left + ' дн.';
-                }
-
-                const div = document.createElement('div');
-                div.className = 'item';
-                div.innerHTML = `
-                    <div class="info">
-                        <div class="name">${offer.coins.toLocaleString()} → ${offer.stars} ⭐</div>
-                        <div class="desc">🔒 Lv.${offer.level}</div>
-                        <div class="desc">${cooldownText ? cooldownText : '✅ Доступно'}</div>
-                    </div>
-                    <button class="action-btn exchange-btn ${!available ? 'disabled' : ''}" ${!available ? 'disabled' : ''}>
-                        Обменять
-                    </button>
-                `;
-                const btn = div.querySelector('.action-btn');
-                btn.addEventListener('click', () => {
-                    if (!available) return;
-                    if (state.coins < offer.coins) { toast('⛔ Нет монет', 'error', 800); return; }
-                    if (state.level < offer.level) { toast('⛔ Нужен Lv.' + offer.level, 'error', 800); return; }
-
-                    state.coins -= offer.coins;
-                    state.lastExchange[offer.level] = Date.now();
-
-                    const user = tg.initDataUnsafe?.user;
-                    const username = user?.username || 'Аноним';
-                    const userId = user?.id || 'Неизвестно';
-
-                    tg.sendData(JSON.stringify({
-                        action: 'exchange',
-                        userId: userId,
-                        username: username,
-                        level: state.level,
-                        coins: offer.coins,
-                        stars: offer.stars
-                    }));
-
+            const btn = clickDiv.querySelector('.action-btn');
+            btn.addEventListener('click', () => {
+                if (state.coins >= clickCost) {
+                    state.coins -= clickCost;
+                    state.skills.clickBonus += 1;
+                    state.clickPower += 1;
+                    renderSkills();
                     updateUI();
-                    openExchange();
-                    toast('📨 Запрос отправлен админу!', 'exchange', 2500);
-                });
-                list.appendChild(div);
+                }
             });
+            list.appendChild(clickDiv);
 
-            $('exchangeBalance').textContent = Math.floor(state.coins);
-            openModal('exchangeModal');
+            // Навык "Регенерация энергии"
+            const regenCost = 50 + state.skills.energyRegen * 30;
+            const regenLevel = state.skills.energyRegen;
+            const regenDiv = document.createElement('div');
+            regenDiv.className = 'item';
+            regenDiv.innerHTML = `
+                <div class="info">
+                    <div class="name">⚡ Регенерация (ур.${regenLevel})</div>
+                    <div class="desc">+1 к регенерации энергии в минуту</div>
+                    <div class="price">💰 ${regenCost}</div>
+                </div>
+                <button class="action-btn ${state.coins < regenCost ? 'disabled' : ''}" ${state.coins < regenCost ? 'disabled' : ''}>
+                    Купить
+                </button>
+            `;
+            const regenBtn = regenDiv.querySelector('.action-btn');
+            regenBtn.addEventListener('click', () => {
+                if (state.coins >= regenCost) {
+                    state.coins -= regenCost;
+                    state.skills.energyRegen += 1;
+                    renderSkills();
+                    updateUI();
+                }
+            });
+            list.appendChild(regenDiv);
+
+            document.getElementById('skillsBalance').textContent = Math.floor(state.coins);
         }
 
-        // ============= AIRDROP =============
-        function openAirdrop() {
-            const content = $('airdropContent');
-
-            if (state.level >= MAX_LEVEL) {
-                content.innerHTML = `
-                    <div style="text-align:center;padding:8px;">
-                        <div style="font-size:28px;color:#ffd700;font-weight:800;">🎉 100 УРОВЕНЬ!</div>
-                        <div style="color:#c8d6e5;margin:8px 0;">🪙 1000 TOKENS</div>
-                        <div style="color:#a29bfe;margin:4px 0;">🏆 NFT "Покоритель"</div>
-                        <button class="action-btn" style="margin-top:12px;padding:10px 20px;border:none;border-radius:12px;background:linear-gradient(135deg,#ffd700,#f0a500);color:#0a0a12;font-weight:700;font-size:14px;cursor:pointer;" id="claimAirdropBtn">💎 ЗАБРАТЬ</button>
-                    </div>
-                `;
-                document.getElementById('claimAirdropBtn').addEventListener('click', () => {
-                    toast('💎 Airdrop получен!', 'success', 2500);
-                    closeModal('airdropModal');
-                });
-            } else {
-                const p = Math.floor((state.level / MAX_LEVEL) * 100);
-                content.innerHTML = `
-                    <div style="text-align:center;padding:8px;">
-                        <div style="font-size:28px;">💎</div>
-                        <div style="color:#c8d6e5;margin:8px 0;">100 уровень → 1000 токенов + NFT</div>
-                        <div style="margin:8px 0;background:rgba(0,0,0,0.2);border-radius:10px;padding:4px;">
-                            <div style="height:4px;background:rgba(255,255,255,0.05);border-radius:20px;overflow:hidden;">
-                                <div style="height:100%;width:${p}%;background:linear-gradient(90deg,#6c5ce7,#fd79a8);border-radius:20px;"></div>
-                            </div>
-                        </div>
-                        <div style="color:#8395a7;font-size:12px;">${state.level}/${MAX_LEVEL} (${p}%)</div>
-                    </div>
-                `;
-            }
-            openModal('airdropModal');
+        // ============================================================
+        //  ИНФОРМАЦИЯ
+        // ============================================================
+        function renderInfo() {
+            const content = document.getElementById('infoContent');
+            const stage = getStage(state.level);
+            const name = STAGE_NAMES[stage] || 'Неизвестно';
+            content.innerHTML = `
+                <p style="color:#c8d6e5;font-size:16px;margin-bottom:8px;">📖 <strong>Твой путь:</strong></p>
+                <p style="color:#ffd700;font-size:18px;margin-bottom:12px;">${name}</p>
+                <p style="color:#8395a7;font-size:14px;">Уровень: <strong style="color:#ffd700;">${state.level}</strong></p>
+                <p style="color:#8395a7;font-size:14px;">Стадия: <strong style="color:#ffd700;">${stage} из 6</strong></p>
+                <p style="color:#8395a7;font-size:14px;">Кликов: <strong style="color:#ffd700;">${state.totalClicks}</strong></p>
+                <p style="color:#8395a7;font-size:14px;">Сила клика: <strong style="color:#ffd700;">${state.clickPower.toFixed(1)}</strong></p>
+                <p style="color:#8395a7;font-size:14px;">Энергия: <strong style="color:#ffd700;">${Math.floor(state.energy)}/${state.maxEnergy}</strong></p>
+                <hr style="border-color:rgba(255,255,255,0.05);margin:12px 0;">
+                <p style="color:#636e72;font-size:12px;">🎯 Следующая стадия: ${stage < 6 ? STAGE_NAMES[stage+1] : 'Максимум!'}</p>
+            `;
         }
 
-        // ============= АВТОМАТИКА =============
+        // ============================================================
+        //  АВТОМАТИЧЕСКИЕ ПРОЦЕССЫ
+        // ============================================================
+        // Регенерация энергии (каждую секунду)
         setInterval(() => {
             if (state.energy < state.maxEnergy) {
-                state.energy += 500 / 600;
-                if (state.energy > state.maxEnergy) state.energy = state.maxEnergy;
+                const regenAmount = 1 + state.skills.energyRegen / 60;
+                state.energy = Math.min(state.maxEnergy, state.energy + regenAmount);
                 updateUI();
             }
         }, 1000);
 
+        // Пассивный доход (каждую минуту)
         setInterval(() => {
-            const inc = getPassiveIncome();
-            if (inc > 0) {
-                state.coins += inc;
+            if (state.skills.income > 0) {
+                state.coins += state.skills.income;
                 updateUI();
             }
         }, 60000);
 
-        // ============= СОХРАНЕНИЕ =============
-        function saveState() { localStorage.setItem('guild_state', JSON.stringify(state)); }
-
-        function loadState() {
-            try {
-                const s = localStorage.getItem('guild_state');
-                if (s) {
-                    const data = JSON.parse(s);
-                    Object.assign(state, data);
-                    updateUI();
-                    startAutoclick();
-                }
-            } catch (e) {}
-        }
-
-        const today = new Date().toDateString();
-        if (localStorage.getItem('guild_reset') !== today) {
-            state.earnedToday = 0;
-            localStorage.setItem('guild_reset', today);
-        }
-
-        // ============ СОБЫТИЯ =============
+        // ============================================================
+        //  СОБЫТИЯ КНОПОК
+        // ============================================================
         clickArea.addEventListener('click', handleClick);
 
-        $('shopBtn').addEventListener('click', openShop);
-        $('closeShop').addEventListener('click', () => closeModal('shopModal'));
-        $('shopModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('shopModal'); });
+        document.getElementById('shopBtn').addEventListener('click', () => {
+            renderShop();
+            document.getElementById('shopModal').classList.add('active');
+        });
+        document.getElementById('closeShop').addEventListener('click', () => {
+            document.getElementById('shopModal').classList.remove('active');
+        });
 
-        $('boostsBtn').addEventListener('click', openBoosts);
-        $('closeBoosts').addEventListener('click', () => closeModal('boostsModal'));
-        $('boostsModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('boostsModal'); });
+        document.getElementById('skillsBtn').addEventListener('click', () => {
+            renderSkills();
+            document.getElementById('skillsModal').classList.add('active');
+        });
+        document.getElementById('closeSkills').addEventListener('click', () => {
+            document.getElementById('skillsModal').classList.remove('active');
+        });
 
-        $('skillsBtn').addEventListener('click', openSkills);
-        $('closeSkills').addEventListener('click', () => closeModal('skillsModal'));
-        $('skillsModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('skillsModal'); });
+        document.getElementById('infoBtn').addEventListener('click', () => {
+            renderInfo();
+            document.getElementById('infoModal').classList.add('active');
+        });
+        document.getElementById('closeInfo').addEventListener('click', () => {
+            document.getElementById('infoModal').classList.remove('active');
+        });
 
-        $('battleBtn').addEventListener('click', openBattle);
-        $('closeBattle').addEventListener('click', () => closeModal('battleModal'));
-        $('battleModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('battleModal'); });
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            if (confirm('⚠️ Вы уверены? Весь прогресс будет сброшен!')) {
+                localStorage.removeItem('eraGameState');
+                location.reload();
+            }
+        });
 
-        $('exchangeBtn').addEventListener('click', openExchange);
-        $('closeExchange').addEventListener('click', () => closeModal('exchangeModal'));
-        $('exchangeModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('exchangeModal'); });
+        // Закрытие модалок по клику на фон
+        document.querySelectorAll('.modal-overlay').forEach(el => {
+            el.addEventListener('click', (e) => {
+                if (e.target === el) el.classList.remove('active');
+            });
+        });
 
-        $('airdropBtn').addEventListener('click', openAirdrop);
-        $('closeAirdrop').addEventListener('click', () => closeModal('airdropModal'));
-        $('airdropModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeModal('airdropModal'); });
+        // ============================================================
+        //  СОХРАНЕНИЕ И ЗАГРУЗКА
+        // ============================================================
+        function saveGame() {
+            const data = { ...state };
+            localStorage.setItem('eraGameState', JSON.stringify(data));
+        }
 
-        // ============ ЗАПУСК =============
-        loadState();
+        function loadGame() {
+            const saved = localStorage.getItem('eraGameState');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    Object.assign(state, data);
+                } catch (e) {
+                    console.warn('Ошибка загрузки сохранения');
+                }
+            }
+        }
+
+        // Автосохранение каждые 15 секунд
+        setInterval(saveGame, 15000);
+
+        // ============================================================
+        //  ЗАПУСК
+        // ============================================================
+        loadGame();
         updateUI();
-        setInterval(saveState, 15000);
 
-        console.log('⚔️ Эпоха Империй (новая версия)');
-        console.log('🏆 Уровень:', state.level, '/', MAX_LEVEL);
-        console.log('🏛️ Эпоха:', getEra(state.level).name);
-        console.log('💰 Баланс:', Math.floor(state.coins));
-        console.log('⚡ Энергия:', Math.floor(state.energy), '/', state.maxEnergy);
-        console.log('⚔️ Сила армии:', getArmyPower());
-        console.log('🎯 Шанс победы:', Math.floor(getBattleChance()), '%');
+        // Бонус: буст на 10 секунд при старте
+        setTimeout(() => {
+            state.boostActive = true;
+            updateUI();
+            setTimeout(() => {
+                state.boostActive = false;
+                updateUI();
+            }, 10000);
+        }, 500);
+
+        console.log('✅ Игра загружена! Новая тактика с 6 стадиями.');
+        console.log('📊 Текущая стадия:', getStage(state.level), STAGE_NAMES[getStage(state.level)]);
     </script>
 </body>
 </html>
